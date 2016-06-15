@@ -1,18 +1,16 @@
 ## how to run
 
 1. command1
-tbwx_mobile/frontend/app
+dmd_web/app
 * http-server  开启一个web服务器 （没使用webpack自带的dev server，感觉麻烦）
-
-2. command2
-tbwx_mobile/frontend
-* webpack --watch
 * 也可以npm start
 
-### deploy
-前提： 在目录下的deploy文件下，需要clone最终发布的git地址，生成app***的文件夹
+2. command2
+dmd_web/app
+* webpack --watch
 
-tbwx_mobile/frontend
+### deploy
+前提： 在目录下的deploy文件下
 gulp clean
 gulp copy
 gulp git
