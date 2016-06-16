@@ -8,7 +8,7 @@ var BUILD_PATH = path.resolve(ROOT_PATH, 'app/build');
 module.exports = {
     entry: {
         index: path.resolve(APP_PATH, 'index.js'),
-        vendor1: ['superagent', 'q', 'vue']
+		vendor:['superagent', 'q', 'vue']
     },
     output: {
         path: BUILD_PATH,
@@ -16,27 +16,31 @@ module.exports = {
     },
     module: {
         perLoaders: [{
-            test: /\.js?$/,
+            test: /\.js$/,
             include: APP_PATH,
             loader: 'jshint-loader'
         }],
         loaders: [{
-            test: /\.jsx?$/,
+            test: /\.(js|jsx|es6)$/,
             loader: 'babel',
             include: APP_PATH,
             query: {
                 presets: ['es2015']
             }
-        }, {
+        },{
             test: /\.vue$/,
             loader: 'vue'
         }]
     },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin({
-            names: ["vendor1"],
-            minChunks: Infinity
-        })
-        // new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js')
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false,
+            },
+            output: {
+                comments: false,
+            },
+        }),
+		new webpack.optimize.CommonsChunkPlugin(/* chunkName= */"vendor", /* filename= */"vendor.bundle.js")
     ]
 };
