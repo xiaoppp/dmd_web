@@ -1,0 +1,73 @@
+body{background:#26272C; }
+
+/********* By Lcj Start **********/
+
+/* 提示 开始 */
+#show_alert{width:100%; height:100%; position:fixed; top:0; left:0; z-index:1000000; background:rgba(0,0,0,.7); overflow:hidden; display:none; }
+#show_alert div{width:360px; margin:auto; margin-top:15%; background:#fff; }
+#show_alert div h5{width:100%; height:36px; line-height:36px; background:#eee; }
+#show_alert div h5 b{margin-left:15px; font-size:1.1em; color:#888; }
+#show_alert div p{width:80%; min-height:40px; line-height:20px; margin:auto; margin-top:15px; margin-bottom:10px; text-indent:0; }
+#show_alert div p span{color:#555; font-size:14px; }
+#show_alert div dd{width:100%; height:38px; line-height:30px; text-align:center; padding-bottom:5px; }
+#show_alert div dd button{width:80px; height:30px; font-size:1.2em; border:0; outline:none; background:#fff; color:#555; }
+#show_alert div dd button:hover{color:red; }
+
+#show_big_img{width:100%; height:100%; position:fixed; top:0; left:0; z-index:1000001; background:rgba(0,0,0,.7); overflow:hidden; display:none; }
+#show_big_img dd{width:100%; height:100%; overflow:hidden; background-size:auto 94% !important; }
+/* 提示 结束 */
+
+/* 分页 开始 */
+#pager{margin-top:40px; margin-bottom:20px; }
+#pager ul{width:660px; margin:auto; clear:both; overflow:hidden; }
+#pager ul li{float:left; line-height:35px; margin-right:30px; font-size:13px; color:grey; }
+#pager ul li a{font-size:13px; }
+/* 分页 结束 */
+
+/********* By Lcj End **********/
+
+/* 顶部开始 start */
+.topC{width:100%; height:90px; background:#33363F; clear:both; }
+.topC .logoa{float:left; margin-left:20px; line-height:90px; }
+.topC .logoa img{height:60px; }
+.topC .rt{float:right; line-height:90px; margin-right:30px; font-size:16px; color:#fff; }
+.topC .imga img{width:60px; height:60px; border-radius:31px; }
+.topC .dengji{padding-left:24px; background:url(../images/dengji.png) no-repeat left center; }
+.topC .tuichu{padding-left:24px; background:url(../images/tuichu.png) no-repeat left center; }
+/* 顶部开始 end */
+
+/* 左侧菜单 start */
+.imain{min-height:770px; }
+.imain .imi{display:inline-block; }
+.imain .ilft{width:17%; height:100%; }
+.imain .irit{width:82.5%; float:right; vertical-align:top; }
+.imain .irit .rmain{width:98%; margin:auto; margin-top:20px; }
+.imain .ilft a{display:block; width:100%; height:60px; line-height:60px; margin-bottom:4px; background:#1D1E22 no-repeat 28% center; }
+.imain .ilft a span{margin-left:45%; font-size:18px; color:#7A828D; }
+.imain .ilft a:hover{background-color:#FEC107; }
+.imain .ilft a:hover span{color:#fff; }
+.imain .ilft a.m1{background-image:url(../images/icon1.png); }
+.imain .ilft a.m1:hover{background-image:url(../images/icon1_on.png); }
+.imain .ilft a.m2{background-image:url(../images/icon2.png); }
+.imain .ilft a.m2:hover{background-image:url(../images/icon2_on.png); }
+.imain .ilft a.m3{background-image:url(../images/icon3.png); }
+.imain .ilft a.m3:hover{background-image:url(../images/icon3_on.png); }
+.imain .ilft a.m4{background-image:url(../images/icon4.png); }
+.imain .ilft a.m4:hover{background-image:url(../images/icon4_on.png); }
+.imain .ilft a.m5{background-image:url(../images/icon5.png); }
+.imain .ilft a.m5:hover{background-image:url(../images/icon5_on.png); }
+.imain .ilft a.m6{background-image:url(../images/icon6.png); }
+.imain .ilft a.m6:hover{background-image:url(../images/icon6_on.png); }
+.imain .ilft a.m7{background-image:url(../images/icon7.png); }
+.imain .ilft a.m7:hover{background-image:url(../images/icon7_on.png); }
+.imain .ilft a.m8{background-image:url(../images/icon8.png); }
+.imain .ilft a.m8:hover{background-image:url(../images/icon8_on.png); }
+.imain .ilft a.m9{background-image:url(../images/icon9.png); }
+.imain .ilft a.m9:hover{background-image:url(../images/icon9_on.png); }
+.imain .ilft a.m10{background-image:url(../images/icon10.png); }
+.imain .ilft a.m10:hover{background-image:url(../images/icon10_on.png); }
+.imain .ilft a.m11{background-image:url(../images/icon11.png); }
+.imain .ilft a.m11:hover{background-image:url(../images/icon11_on.png); }
+/* 左侧菜单 end */
+
+.rmain{min-height:700px; background:#26272C url(../images/bg.jpg) repeat-y center top; background-size:100% auto; }

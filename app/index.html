@@ -1,0 +1,48 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+    <link href="/css/base.css" rel="stylesheet">
+    <link href="/css/common.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+
+<body id="app123">
+    <div class="topC">
+        <a href="/" class="logoa"><img src="images/logo.png"></a>
+        <a class="rt tuichu" id="login_exit">退出</a>
+        <span class="rt chengxin">诚信&nbsp;
+					<img src="images/xin01.png">
+							<img src="images/xin01.png">
+							<img src="images/xin01.png">
+							<img src="images/xin01.png">
+							<img src="images/xin01.png">
+				</span>
+        <span class="rt dengji">二级会员</span>
+        <span class="rt">昵称：皇者团队十咖啡</span>
+        <a href="/?act=personal" class="rt imga"><img src="images/default1.jpg"></a>
+    </div>
+    <div class="imain">
+        <div class="imi ilft">
+            <a v-link="{ path: '/index'}" class="m1 on_center_index" data-index="1"><span>首&nbsp;&nbsp;页</span></a>
+            <a v-link="{ path: '/offer'}" class="m2 on_offer" data-index="2"><span>我要播种</span></a>
+            <a v-link="{ path: '/apply'}" class="m3 on_apply" data-index="3"><span>我要收获</span></a>
+            <a v-link="{ path: '/info'}" class="m4 on_personal" data-index="4"><span>我的资料</span></a>
+            <a v-link="{ path: '/team'}" class="m5 on_team" data-index="5"><span>我的团队</span></a>
+            <a v-link="{ path: '/income'}" class="m6 on_income" data-index="6"><span>我的资产</span></a>
+            <a v-link="{ path: '/record'}" class="m7 on_record" data-index="7"><span>交易记录</span></a>
+            <a v-link="{ path: '/news'}" class="m8 on_news" data-index="8"><span>新闻公告</span></a>
+            <a v-link="{ path: '/message'}" class="m9 on_message" data-index="9"><span>消息通知</span></a>
+            <a v-link="{ path: '/leavemsg' }" class="m10 on_leavemsg" data-index="10"><span>在线留言</span></a>
+            <a v-link="{ path: '/share'}" class="m11 on_share" data-index="11"><span>分享注册</span></a>
+        </div>
+        <div class="imi irit">
+            <router-view keep-alive transition transition-mode="out-in">
+            </router-view>
+        </div>
+
+        <script src="../build/vendor1.js"></script>
+        <script src="../build/index.js"></script>
+</body>
+
+</html>

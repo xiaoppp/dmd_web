@@ -1,0 +1,125 @@
+/**
+ * 后台管理
+ * @By LiChuanJiang
+ */
+
+@charset "utf-8";
+
+*{box-sizing:content-box; }
+
+/* 登录 开始 */
+#login_body{background:url(../images/admin/admin_login.jpg) no-repeat center top; min-height:1080px; }
+
+#loginWrap{width:303px; position:absolute; top:33%; left:50%; margin-left:-250px!important; background:rgba(0,0,0,.5); padding:45px 80px; border-radius:10px; box-shadow:0 0 20px #fff; }
+#loginWrap table tr{height:48px; }
+#loginWrap table tr td:first-child{width:60px; text-align:right; font-size:15px; color:#ddd; }
+#loginWrap table tr td:last-child{text-align:left; }
+#loginWrap table tr td .text{width:200px; height:26px; border-radius:5px; background:rgba(255,255,255,.7); transition-duration:.3s; }
+#loginWrap table tr td .text:focus{box-shadow:0 0 8px #eee; background:rgba(255,255,255,.8); transition-duration:.4s; }
+#captcha{width:70px; height:26px; border-radius:5px; background:rgba(255,255,255,.7); transition-duration:.3s; }
+#captcha:focus{box-shadow:0 0 8px #eee; background:rgba(255,255,255,.8); transition-duration:.4s; }
+#captchaImg{width:66px; height:28px; }
+#loginWrap .remember_label{position:relative; top:15px; right:-206px; z-index:3; color:#ccc; }
+#loginBtn{width:100px; height:35px; line-height:33px; font-size:15px; font-weight:bold; color:#555; border-radius: 20px; border: 1px solid #ccc; background: rgba(255,255,255,.7); box-shadow:0 0 6px #ddd; position:relative; top:15px; transition-duration:.3s; }
+#loginBtn:hover{box-shadow:0 0 15px #fff; color:#222; background:rgba(255,255,255,.9); transition-duration:.4s; }
+#login_tilte_b{position:absolute; top:-70px; left:140px; font-size:28px; color:#fff; letter-spacing:6px; text-shadow:0 0 6px #fff; }
+/* 登录 结束 */
+
+/* 提示 开始 */
+#show_alert{width:100%; height:100%; position:fixed; top:0; left:0; z-index:1000000; background:rgba(0,0,0,.5); overflow:hidden; display:none; }
+#show_alert div{width:360px; margin:auto; margin-top:15%; background:#fff; }
+#show_alert div h5{width:100%; height:36px; line-height:36px; background:#eee; }
+#show_alert div h5 b{margin-left:15px; font-size:1.1em; color:#888; }
+#show_alert div p{width:80%; min-height:40px; line-height:20px; margin:auto; margin-top:15px; margin-bottom:10px; }
+#show_alert div p span{color:#555; font-size:14px; }
+#show_alert div dd{width:100%; height:38px; line-height:30px; text-align:center; padding-bottom:5px; }
+#show_alert div dd button{width:80px; height:30px; font-size:1.2em; border:0; outline:none; background:#fff; color:#555; }
+#show_alert div dd button:hover{color:red; }
+
+#show_big_img{width:100%; height:100%; position:fixed; top:0; left:0; z-index:1000001; background:rgba(0,0,0,.5); overflow:hidden; display:none; }
+#show_big_img dd{width:100%; height:100%; overflow:hidden; background-size:auto 94% !important; }
+/* 提示 结束 */
+
+header{width:100%; height:120px; min-width:1200px; background:url(../images/admin/header_bg.jpg) repeat-x; box-shadow:0 0 10px #666; }
+#header{width:90%; height:100px; margin:auto; }
+#header h1{width:700px; line-height:77px; position:relative; top:20px; left:0; }
+#header h1 img{width:auto; height:70px; margin-left:20px; position:relative; top:-2px; left:0; }
+#header h1 span{margin-left:15px; font-size:32px; font-weight:bold; font-style:italic; color:#eee; letter-spacing:5px; text-shadow:3px 3px 5px #555; }
+#header h2{text-align:right; margin-top:7px; }
+#header h2 a{margin-right:25px; font-size:14px; font-weight:bold; color:#eee; }
+#header h2 a:hover{text-decoration:none; color:red; }
+#header h2 a img{width:23px; height:23px; margin-right:5px; vertical-align:middle; }
+
+section{width:100%; clear:both; overflow:hidden; }
+section table{width:100%; }
+section table tr{width:100%; }
+section table tr td{vertical-align:top; }
+section table tr td:first-child{width:200px; display:block; }
+section table tr td:last-child{width:100%; }
+#menuWrap{width:100%; min-height:500px; background:#83C0F3 url(../images/admin/left-bg.png) no-repeat center 85%; overflow-x:hidden; overflow-y:auto; box-shadow:0 0 10px #666; }
+#mainWrap{width:100%; min-height:500px; overflow:hidden; }
+
+#menuWrap ul{width:100%; margin:32px 0; }
+#menuWrap ul li{width:100%; margin-bottom:1px; }
+#menuWrap ul li h3{width:100%; height:40px; line-height:40px; text-align:center; background:#1486E2; }
+#menuWrap ul li h3:hover{background:#41A0EF; transition-duration:.3s; }
+#menuWrap ul li h3 span{font-size:15px; color:#eee; }
+#menuWrap ul li dl{display:none; }
+#menuWrap ul li dl dd{height:35px; line-height:35px; border-bottom:1px solid #ECF5FB; text-align:center; background:#CDE7F4; cursor:pointer; }
+#menuWrap ul li dl dd:last-child{border:0; }
+#menuWrap ul li dl dd:hover{background:#ADD9ED; transition-duration:.2s; }
+#menuWrap ul li dl dd b{font-size:13px; color:#074E94; }
+
+#iframeBody{width:100%; min-width:auto; min-width:1000px; overflow:auto; background:#EAF5FB; }
+
+
+
+/* 模块 开始 */
+.table_list{width:96%; margin:auto; margin-top:4%; }
+.table_list table{border:1px solid #A0D5F1; width:100%; }
+.table_list table tr{height:28px; }
+.table_list table tr:first-child{height:35px; background:#49A2DC;  }
+.table_list table tr th{font-size:15px; color:#fff; }
+.table_list table tr td{font-size:13px; border:1px solid #BCE1EF; }
+
+/* 分页 */
+#pager{margin-top:40px; margin-bottom:30px; }
+#pager ul{width:660px; margin:auto; clear:both; overflow:hidden; }
+#pager ul li{float:left; line-height:35px; margin-right:30px; font-size:13px; color:grey; }
+#pager ul li a{font-size:13px; }
+
+#admin_pwd{width:600px; margin:auto; margin-top:130px; }
+#admin_pwd table tr{height:40px; }
+#admin_pwd table tr td:first-child{text-align:right; }
+#admin_pwd table tr td:last-child{text-align:left; }
+#admin_pwd_btn{width:70px; height:30px; }
+#admin_pwd table tr td input[type='password']{height:26px; }
+
+.detailTable{width:900px; margin:auto; margin-top:4%; }
+.detailTable table tr{height:35px; }
+.detailTable table tr td{font-size:16px; color:#555; }
+.detailTable table tr td a{font-size:16px; }
+.detailTable table tr td span{font-size:16px; }
+.detailTable table tr td:first-child{text-align:right; color:#409FEE; }
+.detailTable table tr td:last-child{text-align:left; }
+.detailTable table tr td .btn{width:60px; height:24px; }
+.detailTable table tr td select{height:28px; }
+.detailTable table tr td .text{width:200px; height:24px; border-radius:4; }
+.detailTable table tr td .text2{width:100px; height:24px; border-radius:4; }
+.detailTable table tr td button{padding:6px 10px; font-size:16px; }
+
+#config table tr td li{height:60px; }
+#config table tr td button.btn2{padding:5px 5px; font-size:14px; }
+#config h3{margin-bottom:7px; font-size:14px; }
+#config h3 b{color:#4197DD; font-size:15px; }
+
+#members_list{margin-bottom:30px; }
+
+#goback{text-align:center; margin:50px auto; }
+#goback button{width:80px; height:32px; border-radius:6px; background:#1486E2; font-size:16px; color:#fff; border:0; }
+#goback button:hover{opacity:.8; }
+
+.cleardb{margin-top:50px; text-align:center; }
+.cleardb li{width:800px; margin:auto; margin-bottom:8px; text-align:left; font-size:14px; }
+.cleardb li b{font-size:15px; color:#4197DD; }
+.cleardb button{width:120px; height:30px; }
