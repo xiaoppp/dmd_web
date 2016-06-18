@@ -81,6 +81,9 @@
 .news_listC ul li a i{width:14px; height:12px; margin-right:6px; background-size:100% 100%; vertical-align:middle; }
 .news_listC ul li a i.w{background:url(../images/xin_1.png) no-repeat center center; }
 .news_listC ul li a i.ed{background:url(../images/xin_2.png) no-repeat center center; }
+.news_listC ul li.row-1{ background: rgb(49, 50, 55); }
+.news_listC ul li.row-0{ background: rgb(58, 59, 63); }
+
 #pager{width:660px; margin:auto; margin-top:30px; padding-left:40px; text-align:center; background:#3A3B3F; border-radius:26px; }
 #pager ul li{height:50px; line-height:50px; }
 #pager ul li a{color:#878E98; }

@@ -10,7 +10,8 @@ import income from '../components/income.vue';
 import record from '../components/record.vue';
 import news from '../components/news.vue';
 import newssingle from '../components/newssingle.vue';
-import message from '../components/message.vue';
+import messages from '../components/messages.vue';
+import messagesingle from '../components/messagesingle.vue';
 import leavemsg from '../components/leavemsg.vue';
 import share from '../components/share.vue';
 
@@ -54,8 +55,12 @@ router.map({
     '/leavemsg': {
         component: leavemsg
     },
-    '/message': {
-        component: message
+    '/messages': {
+        component: messages
+    },
+    '/message/:id': {
+        name:"messagesingle",
+        component: messagesingle
     },
     '/share': {
         component: share
