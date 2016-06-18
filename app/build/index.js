@@ -4,152 +4,165 @@ webpackJsonp([0],[
 
 	'use strict';
 
-	var _vue = __webpack_require__(10);
+	var _vue = __webpack_require__(1);
 
 	var _vue2 = _interopRequireDefault(_vue);
 
-	var _vueRouter = __webpack_require__(11);
+	var _router = __webpack_require__(3);
+
+	var _router2 = _interopRequireDefault(_router);
+
+	var _store = __webpack_require__(58);
+
+	var _store2 = _interopRequireDefault(_store);
+
+	__webpack_require__(60);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var App = _vue2.default.extend({
+	    props: {
+	        sid: {
+	            type: String,
+	            default: ""
+	        }
+	    },
+	    methods: {},
+	    created: function created() {},
+
+	    components: {},
+	    store: _store2.default
+	});
+
+	// start app
+	_router2.default.start(App, '#app');
+
+/***/ },
+/* 1 */,
+/* 2 */,
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _vue = __webpack_require__(1);
+
+	var _vue2 = _interopRequireDefault(_vue);
+
+	var _vueRouter = __webpack_require__(4);
 
 	var _vueRouter2 = _interopRequireDefault(_vueRouter);
 
-	var _index = __webpack_require__(12);
+	var _index = __webpack_require__(5);
 
 	var _index2 = _interopRequireDefault(_index);
 
-	var _offer = __webpack_require__(15);
+	var _offer = __webpack_require__(8);
 
 	var _offer2 = _interopRequireDefault(_offer);
 
-	var _apply = __webpack_require__(17);
+	var _apply = __webpack_require__(11);
 
 	var _apply2 = _interopRequireDefault(_apply);
 
-	var _info = __webpack_require__(24);
+	var _info = __webpack_require__(20);
 
 	var _info2 = _interopRequireDefault(_info);
 
-	var _team = __webpack_require__(26);
+	var _team = __webpack_require__(23);
 
 	var _team2 = _interopRequireDefault(_team);
 
-	var _income = __webpack_require__(28);
+	var _income = __webpack_require__(26);
 
 	var _income2 = _interopRequireDefault(_income);
 
-	var _record = __webpack_require__(36);
+	var _record = __webpack_require__(31);
 
 	var _record2 = _interopRequireDefault(_record);
 
-	var _news = __webpack_require__(30);
+	var _news = __webpack_require__(34);
 
 	var _news2 = _interopRequireDefault(_news);
 
-	var _message = __webpack_require__(32);
+	var _newssingle = __webpack_require__(46);
+
+	var _newssingle2 = _interopRequireDefault(_newssingle);
+
+	var _message = __webpack_require__(49);
 
 	var _message2 = _interopRequireDefault(_message);
 
-	var _leavemsg = __webpack_require__(38);
+	var _leavemsg = __webpack_require__(52);
 
 	var _leavemsg2 = _interopRequireDefault(_leavemsg);
 
-	var _share = __webpack_require__(34);
+	var _share = __webpack_require__(55);
 
 	var _share2 = _interopRequireDefault(_share);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	load();
+	_vue2.default.use(_vueRouter2.default);
 
-	function load(params) {
+	var router = new _vueRouter2.default({
+	    history: false,
+	    hashbang: true,
+	    root: "app/index.html"
+	});
 
-	    _vue2.default.use(_vueRouter2.default);
+	router.map({
+	    '/index': {
+	        component: _index2.default
+	    },
+	    '/offer': {
+	        component: _offer2.default
+	    },
+	    '/apply': {
+	        component: _apply2.default
+	    },
+	    '/info': {
+	        component: _info2.default
+	    },
+	    '/team': {
+	        component: _team2.default
+	    },
+	    '/income': {
+	        component: _income2.default
+	    },
+	    '/record': {
+	        component: _record2.default
+	    },
+	    '/news': {
+	        component: _news2.default
+	    },
+	    '/news/:id': {
+	        name: "newssingle",
+	        component: _newssingle2.default
+	    },
+	    '/leavemsg': {
+	        component: _leavemsg2.default
+	    },
+	    '/message': {
+	        component: _message2.default
+	    },
+	    '/share': {
+	        component: _share2.default
+	    }
+	});
 
-	    // Vue.filter('TaskIcon', (value) => {
-	    //     if (iconDic[value])
-	    //         return iconDic[value];
-	    // })
+	router.redirect({
+	    '*': '/index'
+	});
 
-	    var App = _vue2.default.extend({
-	        props: {
-	            sid: {
-	                type: String,
-	                default: ""
-	            }
-	        },
-	        methods: {},
-	        created: function created() {
-	            // store.on('exchange', (info) => {
-	            //     this.showMessage(info);
-	            // });
-	        },
-
-	        components: {
-	            // messageBox: require('../widgets/messageBox.vue')
-	        }
-	    });
-
-	    var router = new _vueRouter2.default({
-	        history: false,
-	        hashbang: true,
-	        root: "app/index.html"
-	    });
-
-	    router.map({
-	        '/index': {
-	            component: _index2.default
-	        },
-	        '/offer': {
-	            component: _offer2.default
-	        },
-	        '/apply': {
-	            component: _apply2.default
-	        },
-	        '/info': {
-	            component: _info2.default
-	        },
-	        '/team': {
-	            component: _team2.default
-	        },
-	        '/income': {
-	            component: _income2.default
-	        },
-	        '/record': {
-	            component: _record2.default
-	        },
-	        '/news': {
-	            component: _news2.default
-	        },
-	        '/leavemsg': {
-	            component: _leavemsg2.default
-	        },
-	        '/message': {
-	            component: _message2.default
-	        },
-	        '/share': {
-	            component: _share2.default
-	        }
-	    });
-
-	    router.redirect({
-	        '*': '/index'
-	    });
-
-	    // start app
-	    router.start(App, '#app123');
-	}
+	exports.default = router;
 
 /***/ },
-/* 1 */,
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */,
-/* 10 */,
-/* 11 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -2863,16 +2876,16 @@ webpackJsonp([0],[
 	}));
 
 /***/ },
-/* 12 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(13)
+	__vue_script__ = __webpack_require__(6)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app/js/views/index.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(14)
+	  console.warn("[vue-loader] app\\components\\index.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(7)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -2891,7 +2904,7 @@ webpackJsonp([0],[
 	})()}
 
 /***/ },
-/* 13 */
+/* 6 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2902,22 +2915,22 @@ webpackJsonp([0],[
 	exports.default = {};
 
 /***/ },
-/* 14 */
+/* 7 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"rmain\" style=\"background:#26272C;\">\n\n\t<div class=\"nifo\">\n\t\t<ul>\n\t\t\t<li><b>DMD币</b><span>0.00</span></li>\n\t\t\t<li><b>本金总额</b><span>0.00</span></li>\n\t\t\t<li><b>利息总额</b><span>0.00</span></li>\n\t\t\t<li><b>奖金总额</b><span>0.00</span></li>\n\t\t</ul>\n\t</div>\n\n\t<div class=\"anniu\">\n\t\t<a href=\"/?act=offer\"><img src=\"/images/btn_bozhong.png\"></a>\n\t\t<a href=\"/?act=apply\"><img src=\"/images/btn_shouhuo.png\"></a>\n\t</div>\n\n\t<div class=\"bzsh\">\n\t\t<a href=\"javascript:;\" class=\"bs bz\" title=\"查看详情\">\n\t\t\t<i>等待播种</i>\n\t\t</a>\n\t\t<a href=\"javascript:;\" class=\"bs sh\" title=\"查看详情\">\n\t\t\t<i class=\"i\">等待收获</i>\n\t\t</a>\n\t</div>\n</div>\n";
+	module.exports = "\r\n<div class=\"rmain\" style=\"background:#26272C;\">\r\n\r\n\t<div class=\"nifo\">\r\n\t\t<ul>\r\n\t\t\t<li><b>DMD币</b><span>0.00</span></li>\r\n\t\t\t<li><b>本金总额</b><span>0.00</span></li>\r\n\t\t\t<li><b>利息总额</b><span>0.00</span></li>\r\n\t\t\t<li><b>奖金总额</b><span>0.00</span></li>\r\n\t\t</ul>\r\n\t</div>\r\n\r\n\t<div class=\"anniu\">\r\n\t\t<a href=\"/?act=offer\"><img src=\"/images/btn_bozhong.png\"></a>\r\n\t\t<a href=\"/?act=apply\"><img src=\"/images/btn_shouhuo.png\"></a>\r\n\t</div>\r\n\r\n\t<div class=\"bzsh\">\r\n\t\t<a href=\"javascript:;\" class=\"bs bz\" title=\"查看详情\">\r\n\t\t\t<i>等待播种</i>\r\n\t\t</a>\r\n\t\t<a href=\"javascript:;\" class=\"bs sh\" title=\"查看详情\">\r\n\t\t\t<i class=\"i\">等待收获</i>\r\n\t\t</a>\r\n\t</div>\r\n</div>\r\n";
 
 /***/ },
-/* 15 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(16)
+	__vue_script__ = __webpack_require__(9)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app/js/views/offer.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(40)
+	  console.warn("[vue-loader] app\\components\\offer.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(10)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -2936,7 +2949,7 @@ webpackJsonp([0],[
 	})()}
 
 /***/ },
-/* 16 */
+/* 9 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2947,17 +2960,23 @@ webpackJsonp([0],[
 	exports.default = {};
 
 /***/ },
-/* 17 */
+/* 10 */
+/***/ function(module, exports) {
+
+	module.exports = "\r\n<div class=\"rmain\">\r\n  <div class=\"applyC\">\r\n  \t<h1><b>我要收获</b></h1>\r\n  \t<h2>请输入收获金额</h2>\r\n  \t<ul>\r\n  \t\t<li><input type=\"number\" class=\"text\" id=\"money\" min=\"500\" max=\"0\" step=\"100\"></li>\r\n  \t\t<li class=\"sm\">您的账户总额：0.00元，冻结总额：0.00元，正在提现总额：0.00元，可提现总额：0.00元。</li>\r\n  \t\t<li class=\"sm\">收获金额最少500元，不能大于账户可用总余额，且必须是100的整倍数。</li>\r\n  \t\t<li><input type=\"button\" class=\"btn\" id=\"apply_help_btn\" value=\" \"></li>\r\n  \t</ul>\r\n  </div>\t\r\n</div>\r\n";
+
+/***/ },
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__webpack_require__(18)
-	__vue_script__ = __webpack_require__(22)
+	__webpack_require__(12)
+	__vue_script__ = __webpack_require__(16)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app/js/views/apply.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(23)
+	  console.warn("[vue-loader] app\\components\\apply.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(19)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -2976,23 +2995,23 @@ webpackJsonp([0],[
 	})()}
 
 /***/ },
-/* 18 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(19);
+	var content = __webpack_require__(13);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(21)(content, {});
+	var update = __webpack_require__(15)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./apply.vue", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./apply.vue");
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./apply.vue", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./apply.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -3002,21 +3021,21 @@ webpackJsonp([0],[
 	}
 
 /***/ },
-/* 19 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(20)();
+	exports = module.exports = __webpack_require__(14)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.tips {\n    width: 92%;\n    margin: auto;\n    margin-bottom: 5px;\n    text-align: left;\n    font-size: 18px;\n    color: #FCC006;\n}\n\n.agree_label {\n    font-size: 18px;\n    color: #fff;\n}\n\n.agree_label .agree {\n    width: 20px;\n    height: 20px;\n}\n\n.agree_label .agree:checked {\n    -webkit-appearance: none;\n    background: #49A2DC url(/images/admin/checkbox_ed.png) no-repeat center center;\n    background-size: 100%;\n}\n", ""]);
+	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.tips {\n    width: 92%;\n    margin: auto;\n    margin-bottom: 5px;\n    text-align: left;\n    font-size: 18px;\n    color: #FCC006;\n}\n\n.agree_label {\n    font-size: 18px;\n    color: #fff;\n}\n\n.agree_label .agree {\n    width: 20px;\n    height: 20px;\n}\n\n.agree_label .agree:checked {\n    -webkit-appearance: none;\n    background: #49A2DC url(/images/admin/checkbox_ed.png) no-repeat center center;\n    background-size: 100%;\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 20 */
+/* 14 */
 /***/ function(module, exports) {
 
 	/*
@@ -3072,7 +3091,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 21 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -3294,33 +3313,79 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 22 */
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _getters = __webpack_require__(17);
+
+	var _actions = __webpack_require__(18);
+
+	console.log(_actions.changeName);
+
+	exports.default = {
+	    vuex: {
+	        getters: {
+	            getName: _getters.getName
+	        },
+	        actions: {
+	            changeName: _actions.changeName
+	        }
+	    }
+	};
+
+/***/ },
+/* 17 */
 /***/ function(module, exports) {
 
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
-	exports.default = {};
+	exports.getName = getName;
+	function getName(state) {
+	    return state.name;
+	}
 
 /***/ },
-/* 23 */
+/* 18 */
 /***/ function(module, exports) {
 
-	module.exports = "\n  <div>\n  <div class=\"rmain\">\n      <div class=\"offerC\">\n          <h1><b>我要播种</b></h1>\n          <h2>请选择播种金额</h2>\n          <ul>\n              <li>\n                  <a href=\"javascript:;\" class=\"money\" data-i=\"0\">\n                      <span>1000</span> 首次购买激活币\n                  </a>\n              </li>\n              <dd class=\"tips\">平台提示：</dd>\n              <li class=\"sm\">本平台只提供大家一个信息交流的渠道，平台不收取任何费用，资金在会员中流转，闲钱互助，风险自控！请在自愿的前提下完成交易。</li>\n              <center>\n                  <label class=\"agree_label\">\n                      <input type=\"checkbox\" class=\"agree\"> 我已阅读并同意</label>\n              </center>\n              <br>\n              <br>\n              <li>\n                  <input type=\"button\" class=\"btn\" id=\"offer_help_btn\" value=\" \">\n              </li>\n          </ul>\n      </div>\n  </div>\n</div>\n";
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var changeName = exports.changeName = function changeName(_ref) {
+	    var dispatch = _ref.dispatch;
+	    var state = _ref.state;
+
+	    dispatch('CHANGENAME', 1);
+	};
 
 /***/ },
-/* 24 */
+/* 19 */
+/***/ function(module, exports) {
+
+	module.exports = "\n  <div>\n      <button @click=\"changeName\">XXXX</button>\n      {{getName}}\n  <div class=\"rmain\">\n      <div class=\"offerC\">\n          <h1><b>我要播种</b></h1>\n          <h2>请选择播种金额</h2>\n          <ul>\n              <li>\n                  <a href=\"javascript:;\" class=\"money\" data-i=\"0\">\n                      <span>1000</span> 首次购买激活币\n                  </a>\n              </li>\n              <dd class=\"tips\">平台提示：</dd>\n              <li class=\"sm\">本平台只提供大家一个信息交流的渠道，平台不收取任何费用，资金在会员中流转，闲钱互助，风险自控！请在自愿的前提下完成交易。</li>\n              <center>\n                  <label class=\"agree_label\">\n                      <input type=\"checkbox\" class=\"agree\"> 我已阅读并同意</label>\n              </center>\n              <br>\n              <br>\n              <li>\n                  <input type=\"button\" class=\"btn\" id=\"offer_help_btn\" value=\" \">\n              </li>\n          </ul>\n      </div>\n  </div>\n</div>\n";
+
+/***/ },
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(25)
+	__vue_script__ = __webpack_require__(21)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app/js/views/info.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(41)
+	  console.warn("[vue-loader] app\\components\\info.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(22)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -3339,7 +3404,7 @@ webpackJsonp([0],[
 	})()}
 
 /***/ },
-/* 25 */
+/* 21 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -3350,16 +3415,22 @@ webpackJsonp([0],[
 	exports.default = {};
 
 /***/ },
-/* 26 */
+/* 22 */
+/***/ function(module, exports) {
+
+	module.exports = "\n    <div class=\"rmain\">\n        <div class=\"personalC\">\n            <h1><b>我的资料</b></h1>\n            <div class=\"sad\">\n                <a href=\"javascript:;\" class=\"on\" data-i=\"1\">个人资料</a>\n                <a href=\"javascript:;\" data-i=\"2\">登录密码</a>\n                <a href=\"javascript:;\" data-i=\"3\">安全密码</a>\n            </div>\n            <ul class=\"u1\">\n                <li>\n                    <span>推荐人姓名：</span>\n                    <em>赵瑞艮</em>\n                </li>\n                <li>\n                    <span>推荐人手机：</span>\n                    <em>15110671687</em>\n                </li>\n                <li>\n                    <span>账号/手机：</span>\n                    <em>15834048710</em>\n                </li>\n                <li>\n                    <span>昵称：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"nickname\" value=\"Wei\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>真实姓名：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"truename\" value=\"\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>支付宝：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"alipay\" value=\"\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>微信号：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"weixin\" value=\"\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>银行名称：</span>\n                    <em>\n\t\t\t\t                  <select id=\"bankSel\" class=\"text sel\">\n            \t\t\t\t\t\t\t\t\t<option value=\"ccb\">中国建设银行</option>\n            \t\t\t\t\t\t\t\t\t<option value=\"abc\">中国农业银行</option>\n            \t\t\t\t\t\t\t\t\t<option value=\"icbc\">中国工商银行</option>\n            \t\t\t\t\t\t\t\t\t<option value=\"boc\">中国银行</option>\n            \t\t\t\t\t\t\t\t\t<option value=\"psbc\">中国邮政银行</option>\n            \t\t\t\t\t\t\t\t\t<option value=\"bmc\">中国交通银行</option>\n            \t\t\t\t\t\t\t\t\t<option value=\"cmb\">中国招商银行</option>\n            \t\t\t\t\t\t\t\t\t<option value=\"cmbc\">中国民生银行</option>\n            \t\t\t\t\t\t\t\t\t<option value=\"cib\">中国兴业银行</option>\n            \t\t\t\t\t\t\t\t\t<option value=\"ceb\">中国光大银行</option>\n            \t\t\t\t\t\t\t\t\t<option value=\"other\">其它银行（写在分行前）</option>\n          \t\t\t\t\t\t\t\t</select>\n            \t\t\t</em>\n                </li>\n                <li>\n                    <span>分行名称：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"bank_addr\" value=\"\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>银行卡号：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"bank_num\" value=\"\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>安全密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"pay_pwd\" onfocus=\"this.type='password';\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>&nbsp;</span>\n                    <em><a href=\"javascript:;\" class=\"btn\" id=\"modify_personal_btn\">修改资料</a></em>\n                </li>\n            </ul>\n            <ul class=\"u2\">\n                <li>\n                    <span>原密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"old_pwd\" onfocus=\"this.type='password';\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>新密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"pwd\" onfocus=\"this.type='password';\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>确认密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"repwd\" onfocus=\"this.type='password';\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>安全密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"pay_pwd3\" onfocus=\"this.type='password';\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>&nbsp;</span>\n                    <em><a href=\"javascript:;\" class=\"btn\" id=\"modify_pwd_btn\">修改登录密码</a></em>\n                </li>\n                <li>\n                    <span></span>\n                    <em></em>\n                </li>\n            </ul>\n            <ul class=\"u3\">\n                <li>\n                    <span>原安全密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"old_pay_pwd\" onfocus=\"this.type='password';\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>新安全密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"pay_pwd4\" onfocus=\"this.type='password';\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>确认密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"pay_repwd\" onfocus=\"this.type='password';\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>&nbsp;</span>\n                    <em><a href=\"javascript:;\" class=\"btn\" id=\"modify_pay_pwd_btn\">修改安全密码</a></em>\n                </li>\n                <li>\n                    <span></span>\n                    <em></em>\n                </li>\n                <li>\n                    <span></span>\n                    <em></em>\n                </li>\n                <li>\n                    <span>手机号：</span>\n                    <em>15834048710<input type=\"hidden\" id=\"mobile\" value=\"15834048710\"></em>\n                </li>\n                <li>\n                    <span>图形验证码：</span>\n                  <em>\n                  \t<input type=\"text\" class=\"text\" id=\"captcha\" maxlength=\"4\" style=\"width:150px;\">\n            \t\t\t\t<a href=\"javascript:void(0);\" style=\"position:relative;\" class=\"validate\" title=\"切换图片\" onclick=\"document.getElementById('captchaImg').src='/core/captcha.php?ImgGetCaptcha=true#'+Math.random();\">\n            \t\t\t\t\t<img id=\"captchaImg\" style=\"width:157px; height:44px; box-shadow:0 0 5px #ccc;position:absolute;top:-44px;right:-156px;\" src=\"/core/captcha.php?ImgGetCaptcha=true\">\n            \t\t\t\t</a>\n            \t\t\t</em>\n                </li>\n                <li>\n                    <span>手机验证码：</span>\n                    <em>\n\t\t                  <input type=\"text\" id=\"mobile_checkcode\" class=\"text\" maxlength=\"6\" style=\"width:150px;\">\n  \t\t\t\t            <input type=\"button\" class=\"sbtn\" data-type=\"forget\" id=\"send_mobile_checkcode\" value=\"发送验证码\" style=\"border:0;outline:none;width:150px;height:45px;background:#FFC30D;color:#fff;\">\n  \t\t\t            </em>\n                </li>\n                <li>\n                    <span>新安全密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"pay_pwd5\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>&nbsp;</span>\n                    <em><a href=\"javascript:;\" class=\"btn\" id=\"reset_pay_pwd_btn\">重置安全密码</a></em>\n                </li>\n                <li>\n                    <span></span>\n                    <em></em>\n                </li>\n            </ul>\n        </div>\n    </div>\n  ";
+
+/***/ },
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(27)
+	__vue_script__ = __webpack_require__(24)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app/js/views/team.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(46)
+	  console.warn("[vue-loader] app\\components\\team.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(25)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -3378,7 +3449,7 @@ webpackJsonp([0],[
 	})()}
 
 /***/ },
-/* 27 */
+/* 24 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -3389,17 +3460,23 @@ webpackJsonp([0],[
 	exports.default = {};
 
 /***/ },
-/* 28 */
+/* 25 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"rmain\">\n\t<div class=\"teamC\">\n\t\t<h1><b>我的团队</b></h1>\n\t\t<div class=\"sad\">\n\t\t\t<a href=\"javascript:;\" class=\"on\" data-i=\"1\">我的团队</a>\n\t\t\t<a href=\"javascript:;\" data-i=\"2\">申请升级</a>\n\t\t</div>\n\t\t<ul class=\"u1\">\n\t\t\t<h2>\n\t\t\t<span>团队总人数：<b>0人</b></span>\n\t\t\t<span>直推人数：<b>0人</b></span>\n\t\t\t<span>有效会员人数：<b>0人</b></span>\n\t\t\t<span>无效会员人数：<b>0人</b></span>\n\t\t\t<!--span>团队总挂单金额：<b>0.00元</b></span-->\n\t\t\t<!--span>团队已完成打款金额：<b>0.00元</b></span-->\n\t\t</h2>\n\t\t\t<table>\n\t\t\t\t<thead>\n\t\t\t\t\t<tr>\n\t\t\t\t\t\t<th>编号</th>\n\t\t\t\t\t\t<th>会员手机</th>\n\t\t\t\t\t\t<th>会员昵称</th>\n\t\t\t\t\t\t<th>注册时间</th>\n\t\t\t\t\t\t<th>下级人数</th>\n\t\t\t\t\t\t<th>状态</th>\n\t\t\t\t\t\t<th>操作</th>\n\t\t\t\t\t</tr>\n\t\t\t\t</thead>\n\t\t\t\t<tbody>\n\t\t\t\t</tbody>\n\t\t\t</table>\n\t\t</ul>\n\t\t<ul class=\"u2\">\n\t\t\t<li>推荐1位，晋升M1（一级会员），可获1代收益</li>\n\t\t\t<li>推荐2位，晋升M2（二级会员），可获2代收益</li>\n\t\t\t<li>推荐5位，晋升M3（三级会员），可获3代收益</li>\n\t\t\t<li>推荐15位，团队100人，晋升M4（四级会员），可获4代收益</li>\n\t\t\t<li>推荐15位，团队100人，晋升高级经理，可获无限代收益</li>\n\t\t\t<li><a href=\"javascript:;\" class=\"btn\" id=\"team_apply_btn\">申请升级</a></li>\n\t\t\t<li class=\"imgli\">\n\t\t\t\t<br><img src=\"/images/team.png\"></li>\n\t\t</ul>\n\t</div>\n</div>\n";
+
+/***/ },
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__webpack_require__(48)
+	__webpack_require__(27)
 	__vue_script__ = __webpack_require__(29)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app/js/views/income.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(50)
+	  console.warn("[vue-loader] app\\components\\income.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(30)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -3418,144 +3495,82 @@ webpackJsonp([0],[
 	})()}
 
 /***/ },
-/* 29 */
-/***/ function(module, exports) {
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(28);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(15)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./income.vue", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./income.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(14)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.allzichan{text-align:center; position:relative; top:-23px; font-size:16px; color:#FEC107; }\r\n.allzichan i{margin-left:3%; font-size:16px; color:#fff; }\r\n#page{width:800px; margin:auto; margin-top:25px; padding-bottom:25px; text-align:center; }\r\n#page a{font-size:20px; color:#999; margin-left:50px; }\r\n#page a:hover{color:#fff; }\r\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
-	exports.default = {};
+
+	var _getters = __webpack_require__(17);
+
+	exports.default = {
+	    vuex: {
+	        getters: {
+	            getName: _getters.getName
+	        }
+	    }
+	};
 
 /***/ },
 /* 30 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(31)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app/js/views/news.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(44)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "./news.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
+	module.exports = "\r\n<div class=\"rmain\">\r\n{{getName}}\r\n\r\n<div class=\"incomeC\">\r\n\t<h1><b>我的资产</b></h1>\r\n\t<h2 class=\"allzichan\">\r\n\t\t<i>账户总资产：</i>￥32484.00\r\n\t\t<i>账户冻结总资产：</i>￥31284.00\r\n\t\t<i>账户正在提现总资产：</i>￥0.00\r\n\t\t<i>账户可提现总资产：</i>￥1200.00\r\n\t</h2>\r\n\t<div class=\"sad\">\r\n\t\t<a href=\"javascript:;\" class=\"on\" data-i=\"1\">本 金</a>\r\n\t\t<a href=\"javascript:;\" data-i=\"2\">利 息</a>\r\n\t\t<a href=\"javascript:;\" data-i=\"3\">团队奖励</a>\r\n\t\t<span style=\"position:relative;top:90px;float:right;color:#ccc;\">提现说明：首先扣除可提团队奖，不够再扣利息，利息不够再扣可提本金。</span>\r\n\t</div>\r\n\t<ul class=\"u1\">\r\n\t\t<h2>\r\n\t\t\t<span>本金总额：<b>￥31000.00</b></span>\r\n\t\t\t<span>本金冻结总额：<b>￥31000.00</b></span>\r\n\t\t\t<span>本金可提现总额：<b>￥0.00</b></span>\r\n\t\t</h2>\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>说明</th>\r\n\t\t\t\t\t<th>时间</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>30000.00</td>\r\n\t\t\t\t\t<td>成功播种￥30000.00元，本金将在冻结8天后自动收入现金余额</td>\r\n\t\t\t\t\t<td>2016-06-11 21:50:59</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr style=\"background: rgb(58, 59, 63);\">\r\n\t\t\t\t\t<td>1000.00</td>\r\n\t\t\t\t\t<td>成功购买激活币￥1000.00元，本金将在冻结30天后自动收入现金余额</td>\r\n\t\t\t\t\t<td>2016-06-04 22:50:23</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t</tbody>\r\n\t\t</table>\r\n\t</ul>\r\n\t<ul class=\"u2\">\r\n\t\t<h2>\r\n\t\t\t<span>利息总额：<b>￥1200.00</b></span>\r\n\t\t\t<span>利息可提现总额：<b>￥1200.00</b></span>\r\n\t\t</h2>\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>说明</th>\r\n\t\t\t\t\t<th>时间</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>300.00</td>\r\n\t\t\t\t\t<td>2016-06-16，获得利息￥300元。</td>\r\n\t\t\t\t\t<td>2016-06-16 18:43:12</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>300.00</td>\r\n\t\t\t\t\t<td>2016-06-15，获得利息￥300元。</td>\r\n\t\t\t\t\t<td>2016-06-15 12:23:37</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>300.00</td>\r\n\t\t\t\t\t<td>2016-06-14，获得利息￥300元。</td>\r\n\t\t\t\t\t<td>2016-06-14 20:11:52</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>300.00</td>\r\n\t\t\t\t\t<td>2016-06-13，获得利息￥300元。</td>\r\n\t\t\t\t\t<td>2016-06-13 00:03:37</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>-2400.00</td>\r\n\t\t\t\t\t<td>成功提现￥2400.00元，从利息余额中扣除￥2400.00元</td>\r\n\t\t\t\t\t<td>2016-06-12 15:39:53</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>0.00</td>\r\n\t\t\t\t\t<td>成功提现￥3000.00元，从利息余额中扣除￥0元</td>\r\n\t\t\t\t\t<td>2016-06-12 10:00:54</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>300.00</td>\r\n\t\t\t\t\t<td>2016-06-12，获得利息￥300元。</td>\r\n\t\t\t\t\t<td>2016-06-12 00:01:51</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>2100.00</td>\r\n\t\t\t\t\t<td>成功播种￥30000.00元，获得￥2100元利息</td>\r\n\t\t\t\t\t<td>2016-06-11 21:50:59</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t</tbody>\r\n\t\t</table>\r\n\t</ul>\r\n\t<ul class=\"u3\">\r\n\t\t<h2>\r\n\t\t\t<span>团队奖励总额：<b>￥284.00</b></span>\r\n\t\t\t<span>团队奖励冻结总额：<b>￥284.00</b></span>\r\n\t\t\t<span>团队奖励可提总额：<b>￥0.00</b></span>\r\n\t\t</h2>\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>说明</th>\r\n\t\t\t\t\t<th>时间</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody id=\"bonus_tbody\">\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>-3000.00</td>\r\n\t\t\t\t\t<td>成功提现￥3000.00元，从奖金余额中扣除￥3000.00元</td>\r\n\t\t\t\t\t<td>2016-06-12 10:00:54</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>7.00</td>\r\n\t\t\t\t\t<td>您成功播种￥30000.00元，在5小时内完成700.00的打款，奖励您￥7元。奖金冻结8天后自动计入奖金余额。</td>\r\n\t\t\t\t\t<td>2016-06-11 15:52:00</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>55.00</td>\r\n\t\t\t\t\t<td>您成功播种￥30000.00元，在5小时内完成5500.00的打款，奖励您￥55元。奖金冻结8天后自动计入奖金余额。</td>\r\n\t\t\t\t\t<td>2016-06-11 15:48:09</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>90.00</td>\r\n\t\t\t\t\t<td>您成功播种￥30000.00元，在4小时内完成9000.00的打款，奖励您￥90元。奖金冻结8天后自动计入奖金余额。</td>\r\n\t\t\t\t\t<td>2016-06-11 15:36:31</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>5.00</td>\r\n\t\t\t\t\t<td>您成功播种￥30000.00元，在4小时内完成500.00的打款，奖励您￥5元。奖金冻结8天后自动计入奖金余额。</td>\r\n\t\t\t\t\t<td>2016-06-11 14:55:18</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>56.00</td>\r\n\t\t\t\t\t<td>您成功播种￥30000.00元，在4小时内完成5600.00的打款，奖励您￥56元。奖金冻结8天后自动计入奖金余额。</td>\r\n\t\t\t\t\t<td>2016-06-11 14:54:55</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>42.00</td>\r\n\t\t\t\t\t<td>您成功播种￥30000.00元，在4小时内完成4200.00的打款，奖励您￥42元。奖金冻结8天后自动计入奖金余额。</td>\r\n\t\t\t\t\t<td>2016-06-11 14:44:02</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>24.00</td>\r\n\t\t\t\t\t<td>您成功播种￥30000.00元，在4小时内完成2400.00的打款，奖励您￥24元。奖金冻结8天后自动计入奖金余额。</td>\r\n\t\t\t\t\t<td>2016-06-11 14:43:50</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>5.00</td>\r\n\t\t\t\t\t<td>您成功播种￥30000.00元，在4小时内完成500.00的打款，奖励您￥5元。奖金冻结8天后自动计入奖金余额。</td>\r\n\t\t\t\t\t<td>2016-06-11 14:41:03</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>3000.00</td>\r\n\t\t\t\t\t<td>您的第1级下属 皇者团队十咖喱 成功播种￥30000.00元，奖励您￥3000元。</td>\r\n\t\t\t\t\t<td>2016-06-11 13:10:50</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t</tbody>\r\n\t\t</table>\r\n\r\n\t\t<div id=\"page\" page=\"2\">\r\n\t\t\t<a href=\"javascritp:;\" data-to=\"prov\">上一页</a>\r\n\t\t\t<a href=\"javascritp:;\" data-to=\"next\">下一页</a>\r\n\t\t</div>\r\n\r\n\t</ul>\r\n</div>\r\n\r\n</div>\r\n";
 
 /***/ },
 /* 31 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = {};
-
-/***/ },
-/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(33)
+	__vue_script__ = __webpack_require__(32)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app/js/views/message.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(43)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "./message.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 33 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = {};
-
-/***/ },
-/* 34 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(35)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app/js/views/share.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(45)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "./share.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 35 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = {};
-
-/***/ },
-/* 36 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(37)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app/js/views/record.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(47)
+	  console.warn("[vue-loader] app\\components\\record.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(33)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -3574,7 +3589,7 @@ webpackJsonp([0],[
 	})()}
 
 /***/ },
-/* 37 */
+/* 32 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -3585,16 +3600,282 @@ webpackJsonp([0],[
 	exports.default = {};
 
 /***/ },
-/* 38 */
+/* 33 */
+/***/ function(module, exports) {
+
+	module.exports = "\r\n<div class=\"rmain\">\r\n<div class=\"recordC\">\r\n\t<h1><b>交易记录</b></h1>\r\n\t<div class=\"sad\">\r\n\t\t<a href=\"javascript:;\" class=\"on\" data-i=\"1\">播种记录</a>\r\n\t\t<a href=\"javascript:;\" data-i=\"2\">收获记录</a>\r\n\t\t<a href=\"javascript:;\" data-i=\"3\">失败匹配记录</a>\r\n\t</div>\r\n\t<ul class=\"u1\">\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>编号</th>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>播种时间</th>\r\n\t\t\t\t\t<th>匹配人数</th>\r\n\t\t\t\t\t<th>完成时间</th>\r\n\t\t\t\t\t<th>状态</th>\r\n\t\t\t\t\t<th>操作</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>O100971465735712</td>\r\n\t\t\t\t\t<td>30000.00</td>\r\n\t\t\t\t\t<td>2016-06-12 20:48:32</td>\r\n\t\t\t\t\t<td>0人</td>\r\n\t\t\t\t\t<td>暂无</td>\r\n\t\t\t\t\t<td style=\"color:#FEC107;\">\r\n\t\t\t\t\t\t进行中...\t\t\t\t\t</td>\r\n\t\t\t\t\t<td><a href=\"/?act=offer&amp;op=offer2&amp;id=16435\" class=\"see\">查看</a></td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr style=\"background: rgb(58, 59, 63);\">\r\n\t\t\t\t\t<td>O100971465052090</td>\r\n\t\t\t\t\t<td>30000.00</td>\r\n\t\t\t\t\t<td>2016-06-04 22:54:50</td>\r\n\t\t\t\t\t<td>10人</td>\r\n\t\t\t\t\t<td>2016-06-11 21:50:59</td>\r\n\t\t\t\t\t<td style=\"color:#43C328;\">\r\n\t\t\t\t\t\t已完成\t\t\t\t\t</td>\r\n\t\t\t\t\t<td><a href=\"/?act=offer&amp;op=offer2&amp;id=11421\" class=\"see\">查看</a></td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>O100971465049826</td>\r\n\t\t\t\t\t<td>1000.00</td>\r\n\t\t\t\t\t<td>2016-06-04 22:17:06</td>\r\n\t\t\t\t\t<td>1人</td>\r\n\t\t\t\t\t<td>2016-06-04 22:50:23</td>\r\n\t\t\t\t\t<td style=\"color:#43C328;\">\r\n\t\t\t\t\t\t已完成\t\t\t\t\t</td>\r\n\t\t\t\t\t<td><a href=\"/?act=offer&amp;op=offer2&amp;id=11382\" class=\"see\">查看</a></td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t</tbody>\r\n\t\t</table>\r\n\t</ul>\r\n\t<ul class=\"u2\">\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>编号</th>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>收获时间</th>\r\n\t\t\t\t\t<th>匹配人数</th>\r\n\t\t\t\t\t<th>完成时间</th>\r\n\t\t\t\t\t<th>状态</th>\r\n\t\t\t\t\t<th>操作</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>A100971465696932</td>\r\n\t\t\t\t\t<td>2400.00</td>\r\n\t\t\t\t\t<td>2016-06-12 10:02:12</td>\r\n\t\t\t\t\t<td>1人</td>\r\n\t\t\t\t\t<td>2016-06-12 15:39:53</td>\r\n\t\t\t\t\t<td style=\"color:#43C328;\">\r\n\t\t\t\t\t\t已完成\t\t\t\t\t</td>\r\n\t\t\t\t\t<td><a href=\"/?act=apply&amp;op=apply2&amp;id=13259\" class=\"see\">查看</a></td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>A100971465633645</td>\r\n\t\t\t\t\t<td>3000.00</td>\r\n\t\t\t\t\t<td>2016-06-11 16:27:25</td>\r\n\t\t\t\t\t<td>1人</td>\r\n\t\t\t\t\t<td>2016-06-12 10:00:54</td>\r\n\t\t\t\t\t<td style=\"color:#43C328;\">\r\n\t\t\t\t\t\t已完成\t\t\t\t\t</td>\r\n\t\t\t\t\t<td><a href=\"/?act=apply&amp;op=apply2&amp;id=12746\" class=\"see\">查看</a></td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t</tbody>\r\n\t\t</table>\r\n\t</ul>\r\n\t<ul class=\"u3\">\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>类型</th>\r\n\t\t\t\t\t<th>编号</th>\r\n\t\t\t\t\t<th>匹配金额</th>\r\n\t\t\t\t\t<th>匹配时间</th>\r\n\t\t\t\t\t<th>对方姓名</th>\r\n\t\t\t\t\t<th>对方手机</th>\r\n\t\t\t\t\t<th>主单金额</th>\r\n\t\t\t\t\t<th>主单下单时间</th>\r\n\t\t\t\t\t<th>解除匹配时间</th>\r\n\t\t\t\t\t<th>原因</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody>\r\n\t\t\t\t\t\t</tbody>\r\n\t\t</table>\r\n\t</ul>\r\n</div>\r\n</div>\r\n";
+
+/***/ },
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(39)
+	__vue_script__ = __webpack_require__(35)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app/js/views/leavemsg.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(42)
+	  console.warn("[vue-loader] app\\components\\news.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(45)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "./news.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _api = __webpack_require__(36);
+
+	exports.default = {
+		data: function data() {
+			return {
+				model: [],
+				now: new Date()
+			};
+		},
+
+		route: {
+			data: function data(transition) {
+				_api.API.News().then(function (data) {
+					transition.next({ "model": data });
+				}).catch(function (err) {
+					console.log(err);
+				});
+			}
+		},
+		created: function created() {}
+	};
+
+/***/ },
+/* 36 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.API = undefined;
+	exports.HTTP_POST = HTTP_POST;
+	exports.HTTP_GET = HTTP_GET;
+	exports.HTTP_PUT = HTTP_PUT;
+	exports.HTTP_DELETE = HTTP_DELETE;
+
+	var _superagent = __webpack_require__(37);
+
+	var _superagent2 = _interopRequireDefault(_superagent);
+
+	var _q = __webpack_require__(43);
+
+	var _q2 = _interopRequireDefault(_q);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var API_HOST = 'http://192.168.1.102:3000/api/';
+
+	var API = exports.API = {
+	    News: function News() {
+	        return HTTP_GET(_Combine('news'));
+	    },
+	    NewSingle: function NewSingle(id) {
+	        return HTTP_GET(_Combine('news/' + id));
+	    }
+	};
+
+	//** Utilities
+
+	function _Combine(api) {
+	    return API_HOST + api;
+	}
+
+	//*** Abstract Tools
+
+	function HTTP_POST(url, data) {
+	    console.log('------------post', url);
+	    var deferred = _q2.default.defer();
+	    _superagent2.default.post(url).send(data).end(function (err, res) {
+	        if (err) {
+	            deferred.reject(err);
+	        } else {
+	            deferred.resolve(res);
+	        }
+	    });
+	    return deferred.promise;
+	}
+
+	function HTTP_GET(url, data) {
+	    console.log('------------get', url);
+	    var deferred = _q2.default.defer();
+	    _superagent2.default.get(url).timeout(6000).query(data).on('error', function (err) {}).end(function (err, res) {
+	        if (err) {
+	            deferred.reject("error");
+	        } else {
+	            deferred.resolve(res.body);
+	        }
+	    });
+	    return deferred.promise;
+	}
+
+	function HTTP_PUT(url, data) {
+	    console.log('--------------put', url);
+	    var deferred = _q2.default.defer();
+	    _superagent2.default.put(url).send(data).end(function (err, res) {
+	        if (err) {
+	            deferred.reject("error");
+	        } else {
+	            deferred.resolve(res);
+	        }
+	    });
+	    return deferred.promise;
+	}
+
+	function HTTP_DELETE(url, data) {
+	    console.log('delete', url);
+	    var deferred = _q2.default.defer();
+	    _superagent2.default.del(url).send(data).end(function (err, res) {
+	        if (err) {
+	            deferred.reject("error");
+	        } else {
+	            deferred.resolve(res);
+	        }
+	    });
+	    return deferred.promise;
+	}
+
+/***/ },
+/* 37 */,
+/* 38 */,
+/* 39 */,
+/* 40 */,
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */,
+/* 45 */
+/***/ function(module, exports) {
+
+	module.exports = "\r\n<div class=\"rmain\">\r\n<div class=\"news_listC\">\r\n\t{{GGG}}\r\n\t<h1><b>新闻公告</b></h1>\r\n\t<ul>\r\n\t\t<h2><span>标 题</span><b>时间</b></h2>\r\n\t\t<li v-for=\"item in model\" style=\"background: rgb(58, 59, 63);\">\r\n\t\t\t<a v-link=\"{name:'newssingle',params:{id:item.id}}\" href=\"#\">\r\n\t\t\t\t◎ {{item.title}}\r\n\t\t\t</a>\r\n\t\t\t<time>{{item.the_time|datetime}}</time>\r\n\t\t</li>\r\n\t</ul>\r\n</div>\r\n\r\n</div>\r\n";
+
+/***/ },
+/* 46 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(47)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] app\\components\\newssingle.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(48)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "./newssingle.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 47 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = {};
+
+/***/ },
+/* 48 */
+/***/ function(module, exports) {
+
+	module.exports = "\n    <div class=\"rmain\">\n<div class=\"news_detailC\">\n\t<h1><b>新闻公告</b></h1>\n\t<div class=\"detailC\">\n\t\t<h3>平衡市场机制出台</h3>\n\t\t<h4>\n\t\t\t<span>来源：</span><b>多米多统计部</b>\n\t\t\t<span>时间：</span><b>2016-06-12 10:18:43</b>\n\t\t\t<span>阅读次数：</span><b>4303</b>\n\t\t</h4>\n\t\t<div class=\"cententC\">\n\t\t\t<p><span style=\"font-family: 宋体;font-size: 19px\">平衡市场机制的出台：</span></p><p style=\"text-indent:37px\"><span style=\"font-family: 宋体;font-size: 19px\">为了能够有效地保证市场诚信会员的诚信匹配状态，平台是大家的，联合创造价值，会员的存在和满意度才是平台未来发展的根基。</span></p><p style=\"text-indent:37px\"><span style=\"font-family: 宋体;font-size: 19px\">经一致通过，现出台，【平台推荐账户】的举措。</span></p><p style=\"text-indent:37px\"><span style=\"font-family: 宋体;font-size: 19px\">说明：当<span style=\"font-family:Calibri\">A</span><span style=\"font-family:宋体\">会员匹配到</span><span style=\"font-family:Calibri\">B</span><span style=\"font-family:宋体\">会员超时不打款，</span><span style=\"font-family:Calibri\">B</span><span style=\"font-family:宋体\">账户冻结，之后系统自动筛查又匹配上</span><span style=\"font-family:Calibri\">C</span><span style=\"font-family:宋体\">会员，而</span><span style=\"font-family:Calibri\">C</span><span style=\"font-family:宋体\">会员在超时不打款的情况下（在拒绝付款或者</span><span style=\"font-family:Calibri\">48</span><span style=\"font-family:宋体\">小时后），平台出现推荐账户，为</span><span style=\"font-family:Calibri\">A</span><span style=\"font-family:宋体\">账户诚信打款。</span></span></p><p style=\"text-indent:37px\"><span style=\"font-family: 宋体;font-size: 19px\">注明：平台推荐账户属于最诚信账户，会员一定可以收到匹配款项。</span></p><p style=\"text-indent:37px\"><span style=\"font-family: 宋体;font-size: 19px\">&nbsp;</span></p><p><span style=\"font-family: 宋体;font-size: 19px\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;感谢会员的鼎力支持，平台和大家一起携手前进。</span></p><p><span style=\"font-family: 宋体;font-size: 19px\">&nbsp;</span></p><p><span style=\"font-family: 宋体;font-size: 19px\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 多米多统计部</span></p><p><span style=\"font-family: 宋体;font-size: 19px\"><br></span></p><p><span style=\"font-family: 宋体;font-size: 19px\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 2016年6月12日</span></p><p><span style=\"font-family: 宋体;font-size: 19px\"><br></span></p><p><span style=\"font-family: 宋体;font-size: 19px\">&nbsp;</span></p><p><br></p>\t\t</div>\n\t\n</div>\n</div>\n</div>\n";
+
+/***/ },
+/* 49 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(50)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] app\\components\\message.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(51)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "./message.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 50 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = {};
+
+/***/ },
+/* 51 */
+/***/ function(module, exports) {
+
+	module.exports = "\r\n<div class=\"rmain\">\r\n<div class=\"news_listC\">\r\n\t<h1><b>消息通知</b></h1>\r\n\t<ul>\r\n\t\t<h2><span>标 题</span><b>时间</b></h2>\r\n\t\t</ul>\r\n</div>\r\n</div>\r\n";
+
+/***/ },
+/* 52 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(53)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] app\\components\\leavemsg.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(54)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -3613,7 +3894,7 @@ webpackJsonp([0],[
 	})()}
 
 /***/ },
-/* 39 */
+/* 53 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -3624,98 +3905,127 @@ webpackJsonp([0],[
 	exports.default = {};
 
 /***/ },
-/* 40 */
+/* 54 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"rmain\">\n  <div class=\"applyC\">\n  \t<h1><b>我要收获</b></h1>\n  \t<h2>请输入收获金额</h2>\n  \t<ul>\n  \t\t<li><input type=\"number\" class=\"text\" id=\"money\" min=\"500\" max=\"0\" step=\"100\"></li>\n  \t\t<li class=\"sm\">您的账户总额：0.00元，冻结总额：0.00元，正在提现总额：0.00元，可提现总额：0.00元。</li>\n  \t\t<li class=\"sm\">收获金额最少500元，不能大于账户可用总余额，且必须是100的整倍数。</li>\n  \t\t<li><input type=\"button\" class=\"btn\" id=\"apply_help_btn\" value=\" \"></li>\n  \t</ul>\n  </div>\t\n</div>\n";
+	module.exports = "\r\n<div class=\"rmain\">\r\n<div class=\"leavemsgC\">\r\n\t<h1><b>在线留言</b></h1>\r\n\t<div class=\"sad\">\r\n\t\t<a href=\"javascript:;\" class=\"on\" data-i=\"1\">在线留言</a>\r\n\t\t<a href=\"javascript:;\" data-i=\"2\">留言反馈</a>\r\n\t</div>\r\n\t<ul class=\"u1\">\r\n\t\t<div class=\"inpwp\">\r\n\t\t\t<form action=\"/?act=leavemsg&amp;op=to_leavemsg\" method=\"post\" enctype=\"multipart/form-data\" target=\"dynamic_creation_upload_iframe_form\">\r\n\t\t\t\t<li>\r\n\t\t\t\t\t<span>留言标题：</span>\r\n\t\t\t\t\t<em><input type=\"text\" class=\"text til\" name=\"title\" required=\"true\" maxlength=\"32\"></em>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li>\r\n\t\t\t\t\t<span>问题类型：</span>\r\n\t\t\t\t\t<em>\r\n\t\t\t\t\t\t<select name=\"msgtype\" class=\"text selC\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"complaint\">意见或建议</option>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"ask\">信息咨询</option>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"thaw\">申请账号解冻</option>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"report\">投诉举报</option>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</em>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li>\r\n\t\t\t\t\t<span>上传图片：</span>\r\n\t\t\t\t\t<em>\r\n\t\t\t\t\t\t<a href=\"javascript:;\" class=\"fila\">选择图片\r\n\t\t\t\t\t\t\t<input type=\"file\" name=\"imgfile\" id=\"uploadimgfile\">\r\n\t\t\t\t\t\t</a>\r\n\t\t\t\t\t\t<b class=\"imgb\"><img class=\"show_big_img\" src=\"/images/bgblack.png\" id=\"showimg\" style=\"width:auto;max-height:40px;position:relative;top:2px;left:25px;\"></b>\r\n\t\t\t\t\t</em>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li class=\"ctd\">\r\n\t\t\t\t\t<span>留言内容：</span>\r\n\t\t\t\t\t<em><textarea class=\"ctt\" name=\"content\" required=\"true\" maxlength=\"360\"></textarea></em>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li>\r\n\t\t\t\t\t<span></span>\r\n\t\t\t\t\t<em><input type=\"submit\" class=\"btn\" value=\"提交留言\"></em>\r\n\t\t\t\t</li>\r\n\t\t\t</form>\r\n\t\t</div>\r\n\t</ul>\r\n\t<ul class=\"u2\">\r\n\t\t</ul>\r\n</div>\r\n\r\n</div>\r\n";
 
 /***/ },
-/* 41 */
-/***/ function(module, exports) {
-
-	module.exports = "\n    <div class=\"rmain\">\n        <div class=\"personalC\">\n            <h1><b>我的资料</b></h1>\n            <div class=\"sad\">\n                <a href=\"javascript:;\" class=\"on\" data-i=\"1\">个人资料</a>\n                <a href=\"javascript:;\" data-i=\"2\">登录密码</a>\n                <a href=\"javascript:;\" data-i=\"3\">安全密码</a>\n            </div>\n            <ul class=\"u1\">\n                <li>\n                    <span>推荐人姓名：</span>\n                    <em>赵瑞艮</em>\n                </li>\n                <li>\n                    <span>推荐人手机：</span>\n                    <em>15110671687</em>\n                </li>\n                <li>\n                    <span>账号/手机：</span>\n                    <em>15834048710</em>\n                </li>\n                <li>\n                    <span>昵称：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"nickname\" value=\"Wei\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>真实姓名：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"truename\" value=\"\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>支付宝：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"alipay\" value=\"\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>微信号：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"weixin\" value=\"\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>银行名称：</span>\n                    <em>\n\t\t\t\t                  <select id=\"bankSel\" class=\"text sel\">\n            \t\t\t\t\t\t\t\t\t<option value=\"ccb\">中国建设银行</option>\n            \t\t\t\t\t\t\t\t\t<option value=\"abc\">中国农业银行</option>\n            \t\t\t\t\t\t\t\t\t<option value=\"icbc\">中国工商银行</option>\n            \t\t\t\t\t\t\t\t\t<option value=\"boc\">中国银行</option>\n            \t\t\t\t\t\t\t\t\t<option value=\"psbc\">中国邮政银行</option>\n            \t\t\t\t\t\t\t\t\t<option value=\"bmc\">中国交通银行</option>\n            \t\t\t\t\t\t\t\t\t<option value=\"cmb\">中国招商银行</option>\n            \t\t\t\t\t\t\t\t\t<option value=\"cmbc\">中国民生银行</option>\n            \t\t\t\t\t\t\t\t\t<option value=\"cib\">中国兴业银行</option>\n            \t\t\t\t\t\t\t\t\t<option value=\"ceb\">中国光大银行</option>\n            \t\t\t\t\t\t\t\t\t<option value=\"other\">其它银行（写在分行前）</option>\n          \t\t\t\t\t\t\t\t</select>\n            \t\t\t</em>\n                </li>\n                <li>\n                    <span>分行名称：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"bank_addr\" value=\"\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>银行卡号：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"bank_num\" value=\"\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>安全密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"pay_pwd\" onfocus=\"this.type='password';\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>&nbsp;</span>\n                    <em><a href=\"javascript:;\" class=\"btn\" id=\"modify_personal_btn\">修改资料</a></em>\n                </li>\n            </ul>\n            <ul class=\"u2\">\n                <li>\n                    <span>原密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"old_pwd\" onfocus=\"this.type='password';\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>新密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"pwd\" onfocus=\"this.type='password';\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>确认密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"repwd\" onfocus=\"this.type='password';\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>安全密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"pay_pwd3\" onfocus=\"this.type='password';\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>&nbsp;</span>\n                    <em><a href=\"javascript:;\" class=\"btn\" id=\"modify_pwd_btn\">修改登录密码</a></em>\n                </li>\n                <li>\n                    <span></span>\n                    <em></em>\n                </li>\n            </ul>\n            <ul class=\"u3\">\n                <li>\n                    <span>原安全密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"old_pay_pwd\" onfocus=\"this.type='password';\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>新安全密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"pay_pwd4\" onfocus=\"this.type='password';\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>确认密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"pay_repwd\" onfocus=\"this.type='password';\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>&nbsp;</span>\n                    <em><a href=\"javascript:;\" class=\"btn\" id=\"modify_pay_pwd_btn\">修改安全密码</a></em>\n                </li>\n                <li>\n                    <span></span>\n                    <em></em>\n                </li>\n                <li>\n                    <span></span>\n                    <em></em>\n                </li>\n                <li>\n                    <span>手机号：</span>\n                    <em>15834048710<input type=\"hidden\" id=\"mobile\" value=\"15834048710\"></em>\n                </li>\n                <li>\n                    <span>图形验证码：</span>\n                  <em>\n                  \t<input type=\"text\" class=\"text\" id=\"captcha\" maxlength=\"4\" style=\"width:150px;\">\n            \t\t\t\t<a href=\"javascript:void(0);\" style=\"position:relative;\" class=\"validate\" title=\"切换图片\" onclick=\"document.getElementById('captchaImg').src='/core/captcha.php?ImgGetCaptcha=true#'+Math.random();\">\n            \t\t\t\t\t<img id=\"captchaImg\" style=\"width:157px; height:44px; box-shadow:0 0 5px #ccc;position:absolute;top:-44px;right:-156px;\" src=\"/core/captcha.php?ImgGetCaptcha=true\">\n            \t\t\t\t</a>\n            \t\t\t</em>\n                </li>\n                <li>\n                    <span>手机验证码：</span>\n                    <em>\n\t\t                  <input type=\"text\" id=\"mobile_checkcode\" class=\"text\" maxlength=\"6\" style=\"width:150px;\">\n  \t\t\t\t            <input type=\"button\" class=\"sbtn\" data-type=\"forget\" id=\"send_mobile_checkcode\" value=\"发送验证码\" style=\"border:0;outline:none;width:150px;height:45px;background:#FFC30D;color:#fff;\">\n  \t\t\t            </em>\n                </li>\n                <li>\n                    <span>新安全密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"pay_pwd5\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>&nbsp;</span>\n                    <em><a href=\"javascript:;\" class=\"btn\" id=\"reset_pay_pwd_btn\">重置安全密码</a></em>\n                </li>\n                <li>\n                    <span></span>\n                    <em></em>\n                </li>\n            </ul>\n        </div>\n    </div>\n  ";
-
-/***/ },
-/* 42 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<div class=\"rmain\">\n<div class=\"leavemsgC\">\n\t<h1><b>在线留言</b></h1>\n\t<div class=\"sad\">\n\t\t<a href=\"javascript:;\" class=\"on\" data-i=\"1\">在线留言</a>\n\t\t<a href=\"javascript:;\" data-i=\"2\">留言反馈</a>\n\t</div>\n\t<ul class=\"u1\">\n\t\t<div class=\"inpwp\">\n\t\t\t<form action=\"/?act=leavemsg&amp;op=to_leavemsg\" method=\"post\" enctype=\"multipart/form-data\" target=\"dynamic_creation_upload_iframe_form\">\n\t\t\t\t<li>\n\t\t\t\t\t<span>留言标题：</span>\n\t\t\t\t\t<em><input type=\"text\" class=\"text til\" name=\"title\" required=\"true\" maxlength=\"32\"></em>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<span>问题类型：</span>\n\t\t\t\t\t<em>\n\t\t\t\t\t\t<select name=\"msgtype\" class=\"text selC\">\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"complaint\">意见或建议</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"ask\">信息咨询</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"thaw\">申请账号解冻</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<option value=\"report\">投诉举报</option>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</select>\n\t\t\t\t\t</em>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<span>上传图片：</span>\n\t\t\t\t\t<em>\n\t\t\t\t\t\t<a href=\"javascript:;\" class=\"fila\">选择图片\n\t\t\t\t\t\t\t<input type=\"file\" name=\"imgfile\" id=\"uploadimgfile\">\n\t\t\t\t\t\t</a>\n\t\t\t\t\t\t<b class=\"imgb\"><img class=\"show_big_img\" src=\"/images/bgblack.png\" id=\"showimg\" style=\"width:auto;max-height:40px;position:relative;top:2px;left:25px;\"></b>\n\t\t\t\t\t</em>\n\t\t\t\t</li>\n\t\t\t\t<li class=\"ctd\">\n\t\t\t\t\t<span>留言内容：</span>\n\t\t\t\t\t<em><textarea class=\"ctt\" name=\"content\" required=\"true\" maxlength=\"360\"></textarea></em>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<span></span>\n\t\t\t\t\t<em><input type=\"submit\" class=\"btn\" value=\"提交留言\"></em>\n\t\t\t\t</li>\n\t\t\t</form>\n\t\t</div>\n\t</ul>\n\t<ul class=\"u2\">\n\t\t</ul>\n</div>\n\n</div>\n";
-
-/***/ },
-/* 43 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<div class=\"rmain\">\n<div class=\"news_listC\">\n\t<h1><b>消息通知</b></h1>\n\t<ul>\n\t\t<h2><span>标 题</span><b>时间</b></h2>\n\t\t</ul>\n</div>\n</div>\n";
-
-/***/ },
-/* 44 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<div class=\"rmain\">\n<div class=\"news_listC\">\n\t<h1><b>新闻公告</b></h1>\n\t<ul>\n\t\t<h2><span>标 题</span><b>时间</b></h2>\n\t\t\t<li style=\"background: rgb(58, 59, 63);\"><a href=\"/?act=news&amp;op=detail&amp;id=30\">◎ 平衡市场机制出台</a><time>2016-06-12 10:18:43</time></li>\n\t\t\t<li style=\"background: rgb(49, 50, 55);\"><a href=\"/?act=news&amp;op=detail&amp;id=29\">◎ 多米多奖励机制补充说明</a><time>2016-06-10 22:03:01</time></li>\n\t\t\t<li style=\"background: rgb(58, 59, 63);\"><a href=\"/?act=news&amp;op=detail&amp;id=28\">◎ 【多米多】奖励机制</a><time>2016-06-10 20:44:30</time></li>\n\t\t\t<li style=\"background: rgb(49, 50, 55);\"><a href=\"/?act=news&amp;op=detail&amp;id=27\">◎ 数据修复，暂停收获</a><time>2016-06-04 13:11:08</time></li>\n\t\t\t<li style=\"background: rgb(58, 59, 63);\"><a href=\"/?act=news&amp;op=detail&amp;id=26\">◎ 经理人考核、晋升方案</a><time>2016-06-01 17:40:01</time></li>\n\t\t\t<li style=\"background: rgb(49, 50, 55);\"><a href=\"/?act=news&amp;op=detail&amp;id=25\">◎ 关于利息和奖金优化数据</a><time>2016-06-01 11:59:21</time></li>\n\t\t\t<li style=\"background: rgb(58, 59, 63);\"><a href=\"/?act=news&amp;op=detail&amp;id=24\">◎ 优化数据，暂停2个小时注册</a><time>2016-05-29 14:05:19</time></li>\n\t\t\t<li style=\"background: rgb(49, 50, 55);\"><a href=\"/?act=news&amp;op=detail&amp;id=23\">◎ 通   知</a><time>2016-05-28 14:33:36</time></li>\n\t\t\t<li style=\"background: rgb(58, 59, 63);\"><a href=\"/?act=news&amp;op=detail&amp;id=22\">◎ 新闻公告</a><time>2016-05-23 23:59:56</time></li>\n\t\t\t<li style=\"background: rgb(49, 50, 55);\"><a href=\"/?act=news&amp;op=detail&amp;id=21\">◎ 新闻公告</a><time>2016-05-22 02:53:11</time></li>\n\t\t</ul>\n</div>\n\n</div>\n";
-
-/***/ },
-/* 45 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<div class=\"rmain\">\n  <div class=\"shareC\">\n  \t<h1><b>分享注册</b></h1>\n  \t<ul>\n  \t\t<li><div id=\"code\" style=\"width:300px;height:300px;margin:auto;padding:20px 5px 0 5px;background:#fff;\"><canvas width=\"256\" height=\"256\"></canvas></div></li>\n  \t\t<li>\n  \t\t\t<em id=\"link\" class=\"copye\">http://114.55.114.236/?act=reg&amp;refer=15834048710</em>\n  \t\t\t<br><br><br>\n  \t\t\t<a href=\"javascript:void(0);\" id=\"copy_link\" class=\"btn copy_link\" data-clipboard-target=\"#link\" aria-label=\"复制成功！\">[点击复制]</a>\n  \t\t</li>\n  \t\t<li></li>\n  \t</ul>\n  </div>\n</div>\n";
-
-/***/ },
-/* 46 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<div class=\"rmain\">\n\t<div class=\"teamC\">\n\t\t<h1><b>我的团队</b></h1>\n\t\t<div class=\"sad\">\n\t\t\t<a href=\"javascript:;\" class=\"on\" data-i=\"1\">我的团队</a>\n\t\t\t<a href=\"javascript:;\" data-i=\"2\">申请升级</a>\n\t\t</div>\n\t\t<ul class=\"u1\">\n\t\t\t<h2>\n\t\t\t<span>团队总人数：<b>0人</b></span>\n\t\t\t<span>直推人数：<b>0人</b></span>\n\t\t\t<span>有效会员人数：<b>0人</b></span>\n\t\t\t<span>无效会员人数：<b>0人</b></span>\n\t\t\t<!--span>团队总挂单金额：<b>0.00元</b></span-->\n\t\t\t<!--span>团队已完成打款金额：<b>0.00元</b></span-->\n\t\t</h2>\n\t\t\t<table>\n\t\t\t\t<thead>\n\t\t\t\t\t<tr>\n\t\t\t\t\t\t<th>编号</th>\n\t\t\t\t\t\t<th>会员手机</th>\n\t\t\t\t\t\t<th>会员昵称</th>\n\t\t\t\t\t\t<th>注册时间</th>\n\t\t\t\t\t\t<th>下级人数</th>\n\t\t\t\t\t\t<th>状态</th>\n\t\t\t\t\t\t<th>操作</th>\n\t\t\t\t\t</tr>\n\t\t\t\t</thead>\n\t\t\t\t<tbody>\n\t\t\t\t</tbody>\n\t\t\t</table>\n\t\t</ul>\n\t\t<ul class=\"u2\">\n\t\t\t<li>推荐1位，晋升M1（一级会员），可获1代收益</li>\n\t\t\t<li>推荐2位，晋升M2（二级会员），可获2代收益</li>\n\t\t\t<li>推荐5位，晋升M3（三级会员），可获3代收益</li>\n\t\t\t<li>推荐15位，团队100人，晋升M4（四级会员），可获4代收益</li>\n\t\t\t<li>推荐15位，团队100人，晋升高级经理，可获无限代收益</li>\n\t\t\t<li><a href=\"javascript:;\" class=\"btn\" id=\"team_apply_btn\">申请升级</a></li>\n\t\t\t<li class=\"imgli\">\n\t\t\t\t<br><img src=\"/images/team.png\"></li>\n\t\t</ul>\n\t</div>\n</div>\n";
-
-/***/ },
-/* 47 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<div class=\"rmain\">\n<div class=\"recordC\">\n\t<h1><b>交易记录</b></h1>\n\t<div class=\"sad\">\n\t\t<a href=\"javascript:;\" class=\"on\" data-i=\"1\">播种记录</a>\n\t\t<a href=\"javascript:;\" data-i=\"2\">收获记录</a>\n\t\t<a href=\"javascript:;\" data-i=\"3\">失败匹配记录</a>\n\t</div>\n\t<ul class=\"u1\">\n\t\t<table>\n\t\t\t<thead>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>编号</th>\n\t\t\t\t\t<th>金额</th>\n\t\t\t\t\t<th>播种时间</th>\n\t\t\t\t\t<th>匹配人数</th>\n\t\t\t\t\t<th>完成时间</th>\n\t\t\t\t\t<th>状态</th>\n\t\t\t\t\t<th>操作</th>\n\t\t\t\t</tr>\n\t\t\t</thead>\n\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t<td>O100971465735712</td>\n\t\t\t\t\t<td>30000.00</td>\n\t\t\t\t\t<td>2016-06-12 20:48:32</td>\n\t\t\t\t\t<td>0人</td>\n\t\t\t\t\t<td>暂无</td>\n\t\t\t\t\t<td style=\"color:#FEC107;\">\n\t\t\t\t\t\t进行中...\t\t\t\t\t</td>\n\t\t\t\t\t<td><a href=\"/?act=offer&amp;op=offer2&amp;id=16435\" class=\"see\">查看</a></td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t\t<tr style=\"background: rgb(58, 59, 63);\">\n\t\t\t\t\t<td>O100971465052090</td>\n\t\t\t\t\t<td>30000.00</td>\n\t\t\t\t\t<td>2016-06-04 22:54:50</td>\n\t\t\t\t\t<td>10人</td>\n\t\t\t\t\t<td>2016-06-11 21:50:59</td>\n\t\t\t\t\t<td style=\"color:#43C328;\">\n\t\t\t\t\t\t已完成\t\t\t\t\t</td>\n\t\t\t\t\t<td><a href=\"/?act=offer&amp;op=offer2&amp;id=11421\" class=\"see\">查看</a></td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t<td>O100971465049826</td>\n\t\t\t\t\t<td>1000.00</td>\n\t\t\t\t\t<td>2016-06-04 22:17:06</td>\n\t\t\t\t\t<td>1人</td>\n\t\t\t\t\t<td>2016-06-04 22:50:23</td>\n\t\t\t\t\t<td style=\"color:#43C328;\">\n\t\t\t\t\t\t已完成\t\t\t\t\t</td>\n\t\t\t\t\t<td><a href=\"/?act=offer&amp;op=offer2&amp;id=11382\" class=\"see\">查看</a></td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t</tbody>\n\t\t</table>\n\t</ul>\n\t<ul class=\"u2\">\n\t\t<table>\n\t\t\t<thead>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>编号</th>\n\t\t\t\t\t<th>金额</th>\n\t\t\t\t\t<th>收获时间</th>\n\t\t\t\t\t<th>匹配人数</th>\n\t\t\t\t\t<th>完成时间</th>\n\t\t\t\t\t<th>状态</th>\n\t\t\t\t\t<th>操作</th>\n\t\t\t\t</tr>\n\t\t\t</thead>\n\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t<td>A100971465696932</td>\n\t\t\t\t\t<td>2400.00</td>\n\t\t\t\t\t<td>2016-06-12 10:02:12</td>\n\t\t\t\t\t<td>1人</td>\n\t\t\t\t\t<td>2016-06-12 15:39:53</td>\n\t\t\t\t\t<td style=\"color:#43C328;\">\n\t\t\t\t\t\t已完成\t\t\t\t\t</td>\n\t\t\t\t\t<td><a href=\"/?act=apply&amp;op=apply2&amp;id=13259\" class=\"see\">查看</a></td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t<td>A100971465633645</td>\n\t\t\t\t\t<td>3000.00</td>\n\t\t\t\t\t<td>2016-06-11 16:27:25</td>\n\t\t\t\t\t<td>1人</td>\n\t\t\t\t\t<td>2016-06-12 10:00:54</td>\n\t\t\t\t\t<td style=\"color:#43C328;\">\n\t\t\t\t\t\t已完成\t\t\t\t\t</td>\n\t\t\t\t\t<td><a href=\"/?act=apply&amp;op=apply2&amp;id=12746\" class=\"see\">查看</a></td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t</tbody>\n\t\t</table>\n\t</ul>\n\t<ul class=\"u3\">\n\t\t<table>\n\t\t\t<thead>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>类型</th>\n\t\t\t\t\t<th>编号</th>\n\t\t\t\t\t<th>匹配金额</th>\n\t\t\t\t\t<th>匹配时间</th>\n\t\t\t\t\t<th>对方姓名</th>\n\t\t\t\t\t<th>对方手机</th>\n\t\t\t\t\t<th>主单金额</th>\n\t\t\t\t\t<th>主单下单时间</th>\n\t\t\t\t\t<th>解除匹配时间</th>\n\t\t\t\t\t<th>原因</th>\n\t\t\t\t</tr>\n\t\t\t</thead>\n\t\t\t<tbody>\n\t\t\t\t\t\t</tbody>\n\t\t</table>\n\t</ul>\n</div>\n</div>\n";
-
-/***/ },
-/* 48 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(49);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(21)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./income.vue", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./income.vue");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(56)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] app\\components\\share.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(57)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
 	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "./share.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
 
 /***/ },
-/* 49 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(20)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.allzichan{text-align:center; position:relative; top:-23px; font-size:16px; color:#FEC107; }\n.allzichan i{margin-left:3%; font-size:16px; color:#fff; }\n#page{width:800px; margin:auto; margin-top:25px; padding-bottom:25px; text-align:center; }\n#page a{font-size:20px; color:#999; margin-left:50px; }\n#page a:hover{color:#fff; }\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 50 */
+/* 56 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"rmain\">\n\n\n<div class=\"incomeC\">\n\t<h1><b>我的资产</b></h1>\n\t<h2 class=\"allzichan\">\n\t\t<i>账户总资产：</i>￥32484.00\n\t\t<i>账户冻结总资产：</i>￥31284.00\n\t\t<i>账户正在提现总资产：</i>￥0.00\n\t\t<i>账户可提现总资产：</i>￥1200.00\n\t</h2>\n\t<div class=\"sad\">\n\t\t<a href=\"javascript:;\" class=\"on\" data-i=\"1\">本 金</a>\n\t\t<a href=\"javascript:;\" data-i=\"2\">利 息</a>\n\t\t<a href=\"javascript:;\" data-i=\"3\">团队奖励</a>\n\t\t<span style=\"position:relative;top:90px;float:right;color:#ccc;\">提现说明：首先扣除可提团队奖，不够再扣利息，利息不够再扣可提本金。</span>\n\t</div>\n\t<ul class=\"u1\">\n\t\t<h2>\n\t\t\t<span>本金总额：<b>￥31000.00</b></span>\n\t\t\t<span>本金冻结总额：<b>￥31000.00</b></span>\n\t\t\t<span>本金可提现总额：<b>￥0.00</b></span>\n\t\t</h2>\n\t\t<table>\n\t\t\t<thead>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>金额</th>\n\t\t\t\t\t<th>说明</th>\n\t\t\t\t\t<th>时间</th>\n\t\t\t\t</tr>\n\t\t\t</thead>\n\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t<td>30000.00</td>\n\t\t\t\t\t<td>成功播种￥30000.00元，本金将在冻结8天后自动收入现金余额</td>\n\t\t\t\t\t<td>2016-06-11 21:50:59</td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t\t<tr style=\"background: rgb(58, 59, 63);\">\n\t\t\t\t\t<td>1000.00</td>\n\t\t\t\t\t<td>成功购买激活币￥1000.00元，本金将在冻结30天后自动收入现金余额</td>\n\t\t\t\t\t<td>2016-06-04 22:50:23</td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t</tbody>\n\t\t</table>\n\t</ul>\n\t<ul class=\"u2\">\n\t\t<h2>\n\t\t\t<span>利息总额：<b>￥1200.00</b></span>\n\t\t\t<span>利息可提现总额：<b>￥1200.00</b></span>\n\t\t</h2>\n\t\t<table>\n\t\t\t<thead>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>金额</th>\n\t\t\t\t\t<th>说明</th>\n\t\t\t\t\t<th>时间</th>\n\t\t\t\t</tr>\n\t\t\t</thead>\n\t\t\t<tbody>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t<td>300.00</td>\n\t\t\t\t\t<td>2016-06-16，获得利息￥300元。</td>\n\t\t\t\t\t<td>2016-06-16 18:43:12</td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t<td>300.00</td>\n\t\t\t\t\t<td>2016-06-15，获得利息￥300元。</td>\n\t\t\t\t\t<td>2016-06-15 12:23:37</td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t<td>300.00</td>\n\t\t\t\t\t<td>2016-06-14，获得利息￥300元。</td>\n\t\t\t\t\t<td>2016-06-14 20:11:52</td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t<td>300.00</td>\n\t\t\t\t\t<td>2016-06-13，获得利息￥300元。</td>\n\t\t\t\t\t<td>2016-06-13 00:03:37</td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t<td>-2400.00</td>\n\t\t\t\t\t<td>成功提现￥2400.00元，从利息余额中扣除￥2400.00元</td>\n\t\t\t\t\t<td>2016-06-12 15:39:53</td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t<td>0.00</td>\n\t\t\t\t\t<td>成功提现￥3000.00元，从利息余额中扣除￥0元</td>\n\t\t\t\t\t<td>2016-06-12 10:00:54</td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t<td>300.00</td>\n\t\t\t\t\t<td>2016-06-12，获得利息￥300元。</td>\n\t\t\t\t\t<td>2016-06-12 00:01:51</td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t<td>2100.00</td>\n\t\t\t\t\t<td>成功播种￥30000.00元，获得￥2100元利息</td>\n\t\t\t\t\t<td>2016-06-11 21:50:59</td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t</tbody>\n\t\t</table>\n\t</ul>\n\t<ul class=\"u3\">\n\t\t<h2>\n\t\t\t<span>团队奖励总额：<b>￥284.00</b></span>\n\t\t\t<span>团队奖励冻结总额：<b>￥284.00</b></span>\n\t\t\t<span>团队奖励可提总额：<b>￥0.00</b></span>\n\t\t</h2>\n\t\t<table>\n\t\t\t<thead>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>金额</th>\n\t\t\t\t\t<th>说明</th>\n\t\t\t\t\t<th>时间</th>\n\t\t\t\t</tr>\n\t\t\t</thead>\n\t\t\t<tbody id=\"bonus_tbody\">\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t<td>-3000.00</td>\n\t\t\t\t\t<td>成功提现￥3000.00元，从奖金余额中扣除￥3000.00元</td>\n\t\t\t\t\t<td>2016-06-12 10:00:54</td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t<td>7.00</td>\n\t\t\t\t\t<td>您成功播种￥30000.00元，在5小时内完成700.00的打款，奖励您￥7元。奖金冻结8天后自动计入奖金余额。</td>\n\t\t\t\t\t<td>2016-06-11 15:52:00</td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t<td>55.00</td>\n\t\t\t\t\t<td>您成功播种￥30000.00元，在5小时内完成5500.00的打款，奖励您￥55元。奖金冻结8天后自动计入奖金余额。</td>\n\t\t\t\t\t<td>2016-06-11 15:48:09</td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t<td>90.00</td>\n\t\t\t\t\t<td>您成功播种￥30000.00元，在4小时内完成9000.00的打款，奖励您￥90元。奖金冻结8天后自动计入奖金余额。</td>\n\t\t\t\t\t<td>2016-06-11 15:36:31</td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t<td>5.00</td>\n\t\t\t\t\t<td>您成功播种￥30000.00元，在4小时内完成500.00的打款，奖励您￥5元。奖金冻结8天后自动计入奖金余额。</td>\n\t\t\t\t\t<td>2016-06-11 14:55:18</td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t<td>56.00</td>\n\t\t\t\t\t<td>您成功播种￥30000.00元，在4小时内完成5600.00的打款，奖励您￥56元。奖金冻结8天后自动计入奖金余额。</td>\n\t\t\t\t\t<td>2016-06-11 14:54:55</td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t<td>42.00</td>\n\t\t\t\t\t<td>您成功播种￥30000.00元，在4小时内完成4200.00的打款，奖励您￥42元。奖金冻结8天后自动计入奖金余额。</td>\n\t\t\t\t\t<td>2016-06-11 14:44:02</td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t<td>24.00</td>\n\t\t\t\t\t<td>您成功播种￥30000.00元，在4小时内完成2400.00的打款，奖励您￥24元。奖金冻结8天后自动计入奖金余额。</td>\n\t\t\t\t\t<td>2016-06-11 14:43:50</td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t<td>5.00</td>\n\t\t\t\t\t<td>您成功播种￥30000.00元，在4小时内完成500.00的打款，奖励您￥5元。奖金冻结8天后自动计入奖金余额。</td>\n\t\t\t\t\t<td>2016-06-11 14:41:03</td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t\t<tr>\n\t\t\t\t\t<td>3000.00</td>\n\t\t\t\t\t<td>您的第1级下属 皇者团队十咖喱 成功播种￥30000.00元，奖励您￥3000元。</td>\n\t\t\t\t\t<td>2016-06-11 13:10:50</td>\n\t\t\t\t</tr>\n\t\t\t\t\t\t</tbody>\n\t\t</table>\n\n\t\t<div id=\"page\" page=\"2\">\n\t\t\t<a href=\"javascritp:;\" data-to=\"prov\">上一页</a>\n\t\t\t<a href=\"javascritp:;\" data-to=\"next\">下一页</a>\n\t\t</div>\n\n\t</ul>\n</div>\n\n</div>\n";
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = {};
+
+/***/ },
+/* 57 */
+/***/ function(module, exports) {
+
+	module.exports = "\r\n<div class=\"rmain\">\r\n  <div class=\"shareC\">\r\n  \t<h1><b>分享注册</b></h1>\r\n  \t<ul>\r\n  \t\t<li><div id=\"code\" style=\"width:300px;height:300px;margin:auto;padding:20px 5px 0 5px;background:#fff;\"><canvas width=\"256\" height=\"256\"></canvas></div></li>\r\n  \t\t<li>\r\n  \t\t\t<em id=\"link\" class=\"copye\">http://114.55.114.236/?act=reg&amp;refer=15834048710</em>\r\n  \t\t\t<br><br><br>\r\n  \t\t\t<a href=\"javascript:void(0);\" id=\"copy_link\" class=\"btn copy_link\" data-clipboard-target=\"#link\" aria-label=\"复制成功！\">[点击复制]</a>\r\n  \t\t</li>\r\n  \t\t<li></li>\r\n  \t</ul>\r\n  </div>\r\n</div>\r\n";
+
+/***/ },
+/* 58 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _vue = __webpack_require__(1);
+
+	var _vue2 = _interopRequireDefault(_vue);
+
+	var _vuex = __webpack_require__(59);
+
+	var _vuex2 = _interopRequireDefault(_vuex);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// 告诉 vue “使用” vuex
+	_vue2.default.use(_vuex2.default);
+
+	// 创建一个对象来保存应用启动时的初始状态
+	var state = {
+	  // TODO: 放置初始状态
+	  name: "GGG"
+	};
+
+	// 创建一个对象存储一系列我们接下来要写的 mutation 函数
+	var mutations = {
+	  // TODO: 放置我们的状态变更函数
+
+	  CHANGENAME: function CHANGENAME(state, amount) {
+	    state.name = state.name + "OK";
+	  }
+	};
+
+	// 整合初始状态和变更函数，我们就得到了我们所需的 store
+	// 至此，这个 store 就可以连接到我们的应用中
+	exports.default = new _vuex2.default.Store({
+	  state: state,
+	  mutations: mutations
+	});
+
+/***/ },
+/* 59 */,
+/* 60 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _vue = __webpack_require__(1);
+
+	var _vue2 = _interopRequireDefault(_vue);
+
+	var _moment = __webpack_require__(61);
+
+	var _moment2 = _interopRequireDefault(_moment);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	_vue2.default.filter('datetime', function (input) {
+	    return (0, _moment2.default)(input).format('YYYY-MM-DD hh:mm:ss');
+	});
+
+	exports.default = "";
 
 /***/ }
 ]);

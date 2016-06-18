@@ -8,7 +8,7 @@ var BUILD_PATH = path.resolve(ROOT_PATH, 'app/build');
 module.exports = {
     entry: {
         index: path.resolve(APP_PATH, 'index.js'),
-        vendor1: ['superagent', 'q', 'vue']
+        vendor1: ['superagent', 'q', 'vue','vuex','moment']
     },
     output: {
         path: BUILD_PATH,

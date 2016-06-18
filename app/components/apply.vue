@@ -1,5 +1,7 @@
 <template>
     <div>
+        <button @click="changeName">XXXX</button>
+        {{getName}}
     <div class="rmain">
         <div class="offerC">
             <h1><b>我要播种</b></h1>
@@ -27,7 +29,22 @@
   </div>
 </template>
 <script>
-    export default {}
+
+    import {getName} from '../js/getters';
+    import {changeName} from '../js/actions';
+    
+    console.log(changeName);
+
+    export default {
+        vuex:{
+            getters:{
+                getName:getName
+            },
+            actions: {
+                changeName: changeName
+            }
+        }
+    }
 </script>
 <style>
     .tips {
