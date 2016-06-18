@@ -3,7 +3,11 @@
   <div class="shareC">
   	<h1><b>分享注册</b></h1>
   	<ul>
-  		<li><div id="code" style="width:300px;height:300px;margin:auto;padding:20px 5px 0 5px;background:#fff;"><canvas width="256" height="256"></canvas></div></li>
+  		<li>
+			  <div id="qrcode" style="width:300px;height:300px;margin:auto;padding:20px 5px 0 5px;background:#fff;">
+
+				  </div>
+				</li>
   		<li>
   			<em id="link" class="copye">http://114.55.114.236/?act=reg&amp;refer=15834048710</em>
   			<br><br><br>
@@ -15,5 +19,18 @@
 </div>
 </template>
 <script>
-export default {}
+
+import {QRCode} from 'qrcodejs';
+
+export default {
+	props: ['mobile'],
+	// computed: {
+	// 	 function() {
+	// 		return "http://"+location.host+"/register?mobile="+this.mobile;
+	// 	}
+	// },
+	created:function(){
+		new QRCode(document.getElementById("qrcode"), "http://jindo.dev.naver.com/collie");
+	}
+}
 </script>

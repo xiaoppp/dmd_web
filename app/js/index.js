@@ -13,6 +13,8 @@ let page = new VuePagination({
      pageSize: 10
 });
 
+//page.init();
+
 const App = Vue.extend({
         props: {
             sid: {

@@ -43,7 +43,30 @@
 			</form>
 		</div>
 	</ul>
-	<ul class="u2" v-show="flag">
+	<ul class="u2" v-show=!flag>
+		<li class="mymsg" v-for="item in replyModel">
+			<h4><img class="lgim" v-bind:src=getSrc>
+			{{item.old.title}}<i>{{item.the_time|datetime}}</i></h4>
+			<div class="nrd">
+				{{item.old.content}}
+				<hr style="width:100%;margin-top:10px;margin-bottom:10px;border-bottom:1px dashed #43C328;">
+				<div v-if="item.new">
+					<h4>
+						<img class="lgim" src="/images/logo2.png"> 
+							多米多客服
+						<i>{{item.new.the_time|datetime}}</i>
+					</h4>
+					<span style="color:#949CB3">{{item.new.content}}</span>
+				</div>
+				<div v-if="!item.new">
+					<h4>
+						<img class="lgim" src="/images/logo2.png"> 
+							多米多客服
+					</h4>
+					<span style="color:#949CB3">没有回复哦</span>
+				</div>
+			</div>
+		</li>
 	</ul>
 </div>
 
@@ -52,20 +75,37 @@
 
 <script>
 
-import {MsgTypes} from '../js/constants' 
-import {API} from '../js/api';
+import {MsgTypes} from '../js/constants';
+import {API, GET_MEMBER_LOGIN_INFO} from '../js/api';
 
 export default {
 	data(){
 		return {
 			MsgTypes,
-			model:{},
+			model:{msgtype:'complaint'},
+			replyModel:[],
 			flag:true,
+			who:{}
+		}
+	},
+	computed:{
+		getSrc: function () {
+			return "/images/default"+this.who.sex+".jpg";
+    	}
+	},
+	route:{
+		data:function(transition){
+			API.MessageReplies().then(function(data){
+				console.log(data);
+				transition.next({'replyModel': data,'who': GET_MEMBER_LOGIN_INFO()});
+			}).catch(function(err){
+			});
 		}
 	},
 	methods:{
 		submit(event){
 			API.PostMsg(this.model).then(function(data){
+				alert("保存成功！");
 				console.log(data);
 			}).catch(function(err){
 				console.log(err);

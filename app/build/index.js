@@ -16,11 +16,11 @@ webpackJsonp([0],[
 
 	var _router2 = _interopRequireDefault(_router);
 
-	var _store = __webpack_require__(64);
+	var _store = __webpack_require__(65);
 
 	var _store2 = _interopRequireDefault(_store);
 
-	__webpack_require__(66);
+	__webpack_require__(67);
 
 	__webpack_require__(59);
 
@@ -31,6 +31,8 @@ webpackJsonp([0],[
 	var page = new _vuePagination2.default({
 	    pageSize: 10
 	});
+
+	//page.init();
 
 	var App = _vue2.default.extend({
 	    props: {
@@ -3740,7 +3742,7 @@ webpackJsonp([0],[
 	    },
 	    MessageReplies: function MessageReplies() {
 	        var who = GET_MEMBER_LOGIN_INFO();
-	        return HTTP_GET(_Combine('message/reply/', who.id));
+	        return HTTP_GET(_Combine('messages/reply/', who.id));
 	    },
 	    PostMsg: function PostMsg(model) {
 	        var who = GET_MEMBER_LOGIN_INFO();
@@ -3748,7 +3750,7 @@ webpackJsonp([0],[
 	        model.to_member_id = 0;
 	        model.state = 0;
 	        console.log(model);
-	        return HTTP_POST('message/action/leavemsg', model);
+	        return HTTP_POST(_Combine('message/action/leavemsg'), model);
 	    }
 	};
 
@@ -3774,7 +3776,7 @@ webpackJsonp([0],[
 	        if (err) {
 	            deferred.reject(err);
 	        } else {
-	            deferred.resolve(res);
+	            deferred.resolve(res.body);
 	        }
 	    });
 	    return deferred.promise;
@@ -3800,7 +3802,7 @@ webpackJsonp([0],[
 	        if (err) {
 	            deferred.reject("error");
 	        } else {
-	            deferred.resolve(res);
+	            deferred.resolve(res.body);
 	        }
 	    });
 	    return deferred.promise;
@@ -3813,7 +3815,7 @@ webpackJsonp([0],[
 	        if (err) {
 	            deferred.reject("error");
 	        } else {
-	            deferred.resolve(res);
+	            deferred.resolve(res.body);
 	        }
 	    });
 	    return deferred.promise;
@@ -3822,7 +3824,7 @@ webpackJsonp([0],[
 	//** LocalStrorage
 
 	function GET_MEMBER_LOGIN_INFO() {
-	    return { id: 4132, token: '' };
+	    return { id: 4132, token: '', sex: 1, tel: '18742538743', username: '18742538743' };
 	}
 
 /***/ },
@@ -4082,14 +4084,30 @@ webpackJsonp([0],[
 		data: function data() {
 			return {
 				MsgTypes: _constants.MsgTypes,
-				model: {},
-				flag: true
+				model: { msgtype: 'complaint' },
+				replyModel: [],
+				flag: true,
+				who: {}
 			};
 		},
 
+		computed: {
+			getSrc: function getSrc() {
+				return "/images/default" + this.who.sex + ".jpg";
+			}
+		},
+		route: {
+			data: function data(transition) {
+				_api.API.MessageReplies().then(function (data) {
+					console.log(data);
+					transition.next({ 'replyModel': data, 'who': (0, _api.GET_MEMBER_LOGIN_INFO)() });
+				}).catch(function (err) {});
+			}
+		},
 		methods: {
 			submit: function submit(event) {
 				_api.API.PostMsg(this.model).then(function (data) {
+					alert("保存成功！");
 					console.log(data);
 				}).catch(function (err) {
 					console.log(err);
@@ -4113,7 +4131,7 @@ webpackJsonp([0],[
 /* 60 */
 /***/ function(module, exports) {
 
-	module.exports = "\r\n<div class=\"rmain\">\r\n<div class=\"leavemsgC\">\r\n\t<h1><b>在线留言</b></h1>\r\n\t<div class=\"sad\">\r\n\t\t<a href=\"javascript:void(0);\" :class=\"{'on': flag}\" @click=\"flag=true\">在线留言</a>\r\n\t\t<a href=\"javascript:void(0);\" :class=\"{'on': !flag}\" @click=\"flag=false\">留言反馈</a>\r\n\t</div>\r\n\t<ul class=\"u1\" v-show=\"flag\">\r\n\t\t<div class=\"inpwp\">\r\n\t\t\t<form role=\"form\">\r\n\t\t\t\t<li>\r\n\t\t\t\t\t<span>留言标题：</span>\r\n\t\t\t\t\t<em><input type=\"text\" class=\"text til\" v-model=\"model.title\" name=\"title\" required=\"true\" maxlength=\"32\"></em>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li>\r\n\t\t\t\t\t<span>问题类型：</span>\r\n\t\t\t\t\t<em>\r\n\t\t\t\t\t\t<select name=\"msgtype\" v-model=\"model.msgtype\" class=\"text selC\">\t\r\n\t\t\t\t\t\t\t<option v-for=\"item in MsgTypes\" value=\"{{item.value}}\">{{item.text}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</em>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li>\r\n\t\t\t\t\t<span>上传图片：</span>\r\n\t\t\t\t\t<em>\r\n\t\t\t\t\t\t<a href=\"javascript:;\" class=\"fila\">选择图片\r\n\t\t\t\t\t\t\t<input type=\"file\" name=\"imgfile\" id=\"uploadimgfile\">\r\n\t\t\t\t\t\t</a>\r\n\t\t\t\t\t\t<b class=\"imgb\">\r\n\t\t\t\t\t\t\t<img class=\"show_big_img\" src=\"/images/bgblack.png\" id=\"showimg\" style=\"width:auto;max-height:40px;position:relative;top:2px;left:25px;\">\r\n\t\t\t\t\t\t</b>\r\n\t\t\t\t\t</em>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li class=\"ctd\">\r\n\t\t\t\t\t<span>留言内容：</span>\r\n\t\t\t\t\t<em><textarea class=\"ctt\" v-model=\"model.content\" name=\"content\" required=\"true\" maxlength=\"360\"></textarea></em>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li>\r\n\t\t\t\t\t<span></span>\r\n\t\t\t\t\t<em><input type=\"button\" @click=\"submit\" class=\"btn\" value=\"提交留言\"></em>\r\n\t\t\t\t</li>\r\n\t\t\t</form>\r\n\t\t</div>\r\n\t</ul>\r\n\t<ul class=\"u2\" v-show=\"flag\">\r\n\t</ul>\r\n</div>\r\n\r\n</div>\r\n";
+	module.exports = "\r\n<div class=\"rmain\">\r\n<div class=\"leavemsgC\">\r\n\t<h1><b>在线留言</b></h1>\r\n\t<div class=\"sad\">\r\n\t\t<a href=\"javascript:void(0);\" :class=\"{'on': flag}\" @click=\"flag=true\">在线留言</a>\r\n\t\t<a href=\"javascript:void(0);\" :class=\"{'on': !flag}\" @click=\"flag=false\">留言反馈</a>\r\n\t</div>\r\n\t<ul class=\"u1\" v-show=\"flag\">\r\n\t\t<div class=\"inpwp\">\r\n\t\t\t<form role=\"form\">\r\n\t\t\t\t<li>\r\n\t\t\t\t\t<span>留言标题：</span>\r\n\t\t\t\t\t<em><input type=\"text\" class=\"text til\" v-model=\"model.title\" name=\"title\" required=\"true\" maxlength=\"32\"></em>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li>\r\n\t\t\t\t\t<span>问题类型：</span>\r\n\t\t\t\t\t<em>\r\n\t\t\t\t\t\t<select name=\"msgtype\" v-model=\"model.msgtype\" class=\"text selC\">\t\r\n\t\t\t\t\t\t\t<option v-for=\"item in MsgTypes\" value=\"{{item.value}}\">{{item.text}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</em>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li>\r\n\t\t\t\t\t<span>上传图片：</span>\r\n\t\t\t\t\t<em>\r\n\t\t\t\t\t\t<a href=\"javascript:;\" class=\"fila\">选择图片\r\n\t\t\t\t\t\t\t<input type=\"file\" name=\"imgfile\" id=\"uploadimgfile\">\r\n\t\t\t\t\t\t</a>\r\n\t\t\t\t\t\t<b class=\"imgb\">\r\n\t\t\t\t\t\t\t<img class=\"show_big_img\" src=\"/images/bgblack.png\" id=\"showimg\" style=\"width:auto;max-height:40px;position:relative;top:2px;left:25px;\">\r\n\t\t\t\t\t\t</b>\r\n\t\t\t\t\t</em>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li class=\"ctd\">\r\n\t\t\t\t\t<span>留言内容：</span>\r\n\t\t\t\t\t<em><textarea class=\"ctt\" v-model=\"model.content\" name=\"content\" required=\"true\" maxlength=\"360\"></textarea></em>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li>\r\n\t\t\t\t\t<span></span>\r\n\t\t\t\t\t<em><input type=\"button\" @click=\"submit\" class=\"btn\" value=\"提交留言\"></em>\r\n\t\t\t\t</li>\r\n\t\t\t</form>\r\n\t\t</div>\r\n\t</ul>\r\n\t<ul class=\"u2\" v-show=!flag>\r\n\t\t<li class=\"mymsg\" v-for=\"item in replyModel\">\r\n\t\t\t<h4><img class=\"lgim\" v-bind:src=getSrc>\r\n\t\t\t{{item.old.title}}<i>{{item.the_time|datetime}}</i></h4>\r\n\t\t\t<div class=\"nrd\">\r\n\t\t\t\t{{item.old.content}}\r\n\t\t\t\t<hr style=\"width:100%;margin-top:10px;margin-bottom:10px;border-bottom:1px dashed #43C328;\">\r\n\t\t\t\t<div v-if=\"item.new\">\r\n\t\t\t\t\t<h4>\r\n\t\t\t\t\t\t<img class=\"lgim\" src=\"/images/logo2.png\"> \r\n\t\t\t\t\t\t\t多米多客服\r\n\t\t\t\t\t\t<i>{{item.new.the_time|datetime}}</i>\r\n\t\t\t\t\t</h4>\r\n\t\t\t\t\t<span style=\"color:#949CB3\">{{item.new.content}}</span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"!item.new\">\r\n\t\t\t\t\t<h4>\r\n\t\t\t\t\t\t<img class=\"lgim\" src=\"/images/logo2.png\"> \r\n\t\t\t\t\t\t\t多米多客服\r\n\t\t\t\t\t</h4>\r\n\t\t\t\t\t<span style=\"color:#949CB3\">没有回复哦</span>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</li>\r\n\t</ul>\r\n</div>\r\n\r\n</div>\r\n";
 
 /***/ },
 /* 61 */
@@ -4125,7 +4143,7 @@ webpackJsonp([0],[
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] app\\components\\share.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(63)
+	__vue_template__ = __webpack_require__(64)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -4145,23 +4163,33 @@ webpackJsonp([0],[
 
 /***/ },
 /* 62 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+		value: true
 	});
-	exports.default = {};
+
+	var _qrcodejs = __webpack_require__(63);
+
+	exports.default = {
+		props: ['mobile'],
+
+		created: function created() {
+			new _qrcodejs.QRCode(document.getElementById("qrcode"), "http://jindo.dev.naver.com/collie");
+		}
+	};
 
 /***/ },
-/* 63 */
+/* 63 */,
+/* 64 */
 /***/ function(module, exports) {
 
-	module.exports = "\r\n<div class=\"rmain\">\r\n  <div class=\"shareC\">\r\n  \t<h1><b>分享注册</b></h1>\r\n  \t<ul>\r\n  \t\t<li><div id=\"code\" style=\"width:300px;height:300px;margin:auto;padding:20px 5px 0 5px;background:#fff;\"><canvas width=\"256\" height=\"256\"></canvas></div></li>\r\n  \t\t<li>\r\n  \t\t\t<em id=\"link\" class=\"copye\">http://114.55.114.236/?act=reg&amp;refer=15834048710</em>\r\n  \t\t\t<br><br><br>\r\n  \t\t\t<a href=\"javascript:void(0);\" id=\"copy_link\" class=\"btn copy_link\" data-clipboard-target=\"#link\" aria-label=\"复制成功！\">[点击复制]</a>\r\n  \t\t</li>\r\n  \t\t<li></li>\r\n  \t</ul>\r\n  </div>\r\n</div>\r\n";
+	module.exports = "\r\n<div class=\"rmain\">\r\n  <div class=\"shareC\">\r\n  \t<h1><b>分享注册</b></h1>\r\n  \t<ul>\r\n  \t\t<li>\r\n\t\t\t  <div id=\"qrcode\" style=\"width:300px;height:300px;margin:auto;padding:20px 5px 0 5px;background:#fff;\">\r\n\r\n\t\t\t\t  </div>\r\n\t\t\t\t</li>\r\n  \t\t<li>\r\n  \t\t\t<em id=\"link\" class=\"copye\">http://114.55.114.236/?act=reg&amp;refer=15834048710</em>\r\n  \t\t\t<br><br><br>\r\n  \t\t\t<a href=\"javascript:void(0);\" id=\"copy_link\" class=\"btn copy_link\" data-clipboard-target=\"#link\" aria-label=\"复制成功！\">[点击复制]</a>\r\n  \t\t</li>\r\n  \t\t<li></li>\r\n  \t</ul>\r\n  </div>\r\n</div>\r\n";
 
 /***/ },
-/* 64 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4174,7 +4202,7 @@ webpackJsonp([0],[
 
 	var _vue2 = _interopRequireDefault(_vue);
 
-	var _vuex = __webpack_require__(65);
+	var _vuex = __webpack_require__(66);
 
 	var _vuex2 = _interopRequireDefault(_vuex);
 
@@ -4206,8 +4234,8 @@ webpackJsonp([0],[
 	});
 
 /***/ },
-/* 65 */,
-/* 66 */
+/* 66 */,
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4220,7 +4248,7 @@ webpackJsonp([0],[
 
 	var _vue2 = _interopRequireDefault(_vue);
 
-	var _moment = __webpack_require__(67);
+	var _moment = __webpack_require__(68);
 
 	var _moment2 = _interopRequireDefault(_moment);
 
