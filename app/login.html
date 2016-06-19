@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="none">
+<title>多米多 - 用户登录</title>
+<link href="/css/base.css" rel="stylesheet">
+<link href="/css/common.css" rel="stylesheet">
+<link href="/css/style.css" rel="stylesheet">
+</head>
+<body class="loginbodybg">
+
+<!--[if lte IE 9]> 
+	<div style="width:100%; height:35px; line-height:35px; background:#ddd; text-align:center; font-size:14px; font-weight:bold; color:red; ">
+		亲！您所使用的IE内核浏览器版本过低，可能会导致页面访问出现异常错误！请升级到IE11版本或切换成高速渲染模式，也可以使用Firefox浏览器（火狐）或者Chrome浏览器（谷歌）来浏览网页。
+	</div> 
+<![endif]-->
+
+<div class="loginC" id="loginApp">
+	<h1>
+		<li>
+			<a href="#" class="logoa"><img src="images/logo_zh.png"></a>
+			<a href="#" class="langa" title="change to English">English</a>
+			<a href="#" class="langa" title="切换成简体中文">简体中文&nbsp;|&nbsp;</a>
+		</li>
+	</h1>
+	<div class="form">
+		<h2>用户登录</h2>
+		<ul>
+			<li><input type="text" class="text un" id="username" v-model="mobile" placeholder="手机号" maxlength="32"></li>
+			<li><input type="password" class="text pd" id="pwd" v-model="pwd" placeholder="密码" maxlength="32"></li>
+			<li v-if="disabled"><a href="javascript:;" class="btn" style="background:grey;color:#fff;padding:15px 30px;font-size:16px;">暂无法登录</a></li>
+            <li v-else><a href="javascript:;" class="btn"  @click="login" id="login_btn">登录</a></li>
+		</ul>
+		<ul>
+			<input type="hidden" id="token" value="FGGFGDGFSDFU">
+			<li><input type="hidden" class="remember"></li>
+			<li><a href="#" class="fg" @click="retrievePWD" style="right:-95px;">忘记密码</a></li>
+		</ul>
+	</div>
+</div>
+
+
+<script src="/build/vendor1.js"></script>
+<script src="/build/login.js"></script>
+
+</body>
+</html>

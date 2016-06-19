@@ -334,3 +334,5 @@
 #remark div .btn{width:150px; line-height:45px; display:block; margin:auto; margin-top:35px; text-align:center; font-size:18px; color:#fff; background:#43C328; border-radius:6px; }
 /* 打分 end */
 
+ul.errors{ width: auto !important; margin: auto; margin-top: 5px !important;}
+ul.errors>li{ margin:3px 4px; color:#FFC30D;}

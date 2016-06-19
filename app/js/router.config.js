@@ -46,6 +46,7 @@ router.map({
         component: record
     },
     '/news': {
+        name:'news',
         component: news
     },
     '/news/:id': {
@@ -56,6 +57,7 @@ router.map({
         component: leavemsg
     },
     '/messages': {
+        name:'messages',
         component: messages
     },
     '/message/:id': {

@@ -32,8 +32,6 @@
 
     import {getName} from '../js/getters';
     import {changeName} from '../js/actions';
-    
-    console.log(changeName);
 
     export default {
         vuex:{

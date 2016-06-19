@@ -1,7 +1,9 @@
 import request from 'superagent';
 import Q from 'q';
+import config from './config'
 
 const API_HOST = 'http://192.168.1.102:3000/api/';
+export const LOGIN_KEY = "member.login.information";
 
 export const API = {
     News(page){
@@ -12,22 +14,68 @@ export const API = {
     },
     Messages(page){
         var who = GET_MEMBER_LOGIN_INFO();
-        return HTTP_GET(_Combine('messages/page/', who.id,'/', page));
+        return HTTP_GET(_Combine('messages/page/', who.memberid,'/', page));
     },
     MessageSingle(id){
         return HTTP_GET(_Combine('message/',id));
     },
     MessageReplies(){
         var who = GET_MEMBER_LOGIN_INFO();
-        return HTTP_GET(_Combine('messages/reply/',who.id));
+        return HTTP_GET(_Combine('messages/reply/',who.memberid));
     },
     PostMsg(model){
         var who = GET_MEMBER_LOGIN_INFO();
-        model.member_id = who.id;
+        model.member_id = who.memberid;
         model.to_member_id = 0;
         model.state = 0;
         console.log(model);
-        return HTTP_POST(_Combine('message/action/leavemsg'),model);
+        return HTTP_POST(_Combine('message/action/leavemsg'), model);
+    },
+    Login(model){
+        console.log(model);
+        var deferred = Q.defer();
+        config.ajaxRequireToken = false;
+        HTTP_POST(_Combine('member/signin'), model,true).then(function(data){
+            if (data.isSuccess){
+                //data.data   { memberid, token}
+                //save the login info in localStorage
+                window.localStorage.setItem(LOGIN_KEY, JSON.stringify(data.data));
+                config.ajaxRequireToken = true;
+            }
+            deferred.resolve(data);
+        }).catch(function(err){
+            deferred.reject(err);
+        });
+        return deferred.promise;
+    },
+    Logout(model){
+        var deferred = Q.defer();
+        HTTP_POST(_Combine('member/signout'),model).then(function(data){
+           window.localStorage.removeItem(LOGIN_KEY);
+           deferred.resolve(data);
+        }).catch(function(err){
+            deferred.reject(err);
+        });
+        return deferred.promise;
+    },
+    Register(model){
+        var deferred = Q.defer();
+        config.ajaxRequireToken = false;
+        HTTP_POST(_Combine('member/signup'),model).then(function(data){
+           window.localStorage.setItem(LOGIN_KEY, data.data);
+           config.ajaxRequireToken = true;
+           deferred.resolve(data);
+        }).catch(function(err){
+            deferred.reject(err);
+        });
+        return deferred.promise;
+    },
+    Member(username){
+        return HTTP_GET(_Combine('member/',username));
+    },
+    IndexData(){
+        var who = GET_MEMBER_LOGIN_INFO();
+         return HTTP_GET(_Combine('index/info/', who.memberid));
     }
 }
 
@@ -54,7 +102,7 @@ export function HTTP_POST(url,data){
         .post(url)
         .send(data)
         .end(function(err,res){
-            if(err){
+            if(err) {
                 deferred.reject(err);
             } else {
                 deferred.resolve(res.body);
@@ -105,7 +153,7 @@ export function HTTP_DELETE(url,data) {
         .del(url)
         .send(data)
         .end(function(err,res){
-            if(err){
+            if(err) {
                 deferred.reject("error");
             } else {
                 deferred.resolve(res.body);
@@ -114,9 +162,35 @@ export function HTTP_DELETE(url,data) {
     return deferred.promise;
 }
 
-//** LocalStrorage
+//** LocalStrorage  & Member Info
 
-export function GET_MEMBER_LOGIN_INFO(){
-    return { id:4132 ,token: '',sex: 1,tel:'18742538743',username:'18742538743'}
+var MEMBER_INFO = {};
+
+//取会员登录时保存在LocalStorage中的值
+export function GET_MEMBER_LOGIN_INFO() {
+    var who = window.localStorage.getItem(LOGIN_KEY);
+    if(!who) throw "no member login";
+    who = JSON.parse(who);
+    return who;    
+}
+
+export function HAS_LOGIN() {
+    var who = window.localStorage.getItem(LOGIN_KEY);
+    if(!who) return false;
+    who = JSON.parse(who);
+    return who.memberid;
+}
+
+//取当前会员信息
+export function GET_MEMBER_INFO() {
+    if(MEMBER_INFO && MEMBER_INFO.id)
+        return MEMBER_INFO;
+    else{
+        return null;
+    }
+}
+
+export function  SET_MEMBER_INFO(value) {
+    MEMBER_INFO = value;
 }
 

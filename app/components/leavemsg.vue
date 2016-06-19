@@ -76,7 +76,7 @@
 <script>
 
 import {MsgTypes} from '../js/constants';
-import {API, GET_MEMBER_LOGIN_INFO} from '../js/api';
+import {API, GET_MEMBER_INFO} from '../js/api';
 
 export default {
 	data(){
@@ -90,14 +90,14 @@ export default {
 	},
 	computed:{
 		getSrc: function () {
-			return "/images/default"+this.who.sex+".jpg";
+			return "/images/default"+ this.who.sex +".jpg";
     	}
 	},
 	route:{
 		data:function(transition){
 			API.MessageReplies().then(function(data){
 				console.log(data);
-				transition.next({'replyModel': data,'who': GET_MEMBER_LOGIN_INFO()});
+				transition.next({'replyModel': data,'who': GET_MEMBER_INFO()});
 			}).catch(function(err){
 			});
 		}
@@ -105,7 +105,7 @@ export default {
 	methods:{
 		submit(event){
 			API.PostMsg(this.model).then(function(data){
-				alert("保存成功！");
+				alert2("保存成功！");
 				console.log(data);
 			}).catch(function(err){
 				console.log(err);
