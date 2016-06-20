@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import VueValidator from 'vue-validator';
 
 import router from './router.config';
 
@@ -8,6 +9,8 @@ import './constants'
 import { API,GET_MEMBER_INFO,SET_MEMBER_INFO } from './api';
 import {alert2} from './utils';
 
+Vue.use(VueValidator);
+
 const App = Vue.extend({
         data(){
             return {
@@ -15,7 +18,11 @@ const App = Vue.extend({
                 config6:{},
                 config24:{},
                 bonusFreeze:0,
-                moneyFreeze:0
+                moneyFreeze:0,
+                offer:{},
+                offerPairs: 0,
+                applyPairs: 0,
+                showNews: false
             }
         },
         props: {
@@ -39,6 +46,10 @@ const App = Vue.extend({
                     vm.config24 = d.config24;
                     vm.moneyFreeze = d.moneyFreeze;
                     vm.bonusFreeze = d.bonusFreeze;
+                    vm.offer = d.offer;
+                    vm.offerPairs = d.offerPairs;
+                    vm.showNews = d.showNews;
+                    vm.apply = d.apply;
                     console.log(data.data);
                 } else {
                     alert2(data.error.message);

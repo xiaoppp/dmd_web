@@ -29,21 +29,27 @@ router.map({
         component: index
     },
     '/offer': {
+        name:'offer',
         component: offer
     },
     '/apply': {
+        name:'apply',
         component: apply
     },
     '/info': {
+        name:'info',
         component: info
     },
     '/team': {
+        name:'team',
         component: team
     },
     '/income': {
+        name:'income',
         component: income
     },
     '/record': {
+        name:'record',
         component: record
     },
     '/news': {
@@ -55,6 +61,7 @@ router.map({
         component: newssingle
     },
     '/leavemsg': {
+        name:'leavemsg',
         component: leavemsg
     },
     '/messages': {
@@ -66,6 +73,7 @@ router.map({
         component: messagesingle
     },
     '/share': {
+        name:'share',
         component: share
     }
 });

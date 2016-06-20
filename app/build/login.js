@@ -9,9 +9,9 @@ webpackJsonp([1],{
 
 	var _vue2 = _interopRequireDefault(_vue);
 
-	var _api = __webpack_require__(36);
+	var _api = __webpack_require__(27);
 
-	var _utils = __webpack_require__(182);
+	var _utils = __webpack_require__(8);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -52,7 +52,62 @@ webpackJsonp([1],{
 
 /***/ },
 
-/***/ 36:
+/***/ 8:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.alert2 = alert2;
+	exports.queryValue = queryValue;
+
+	var _q = __webpack_require__(9);
+
+	var _q2 = _interopRequireDefault(_q);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function alert2(msg) {
+
+	    var defered = _q2.default.defer();
+
+	    var template = '\n\t    <div>\n\t\t    <h5><b>提示信息！</b></h5>\n\t\t    <p><span>' + msg + '</span></p>\n\t\t    <dd><button>确&nbsp;定</button></dd>\n\t    </div>\n    ';
+
+	    var div = document.createElement('div');
+	    div.setAttribute('id', "show_alert");
+	    div.style.display = 'block';
+	    div.innerHTML = template;
+	    var btn = div.children[0].children[2].children[0];
+
+	    if (btn.onclick) btn.onclick = _close;else if (btn.attachEvent) btn.attachEvent('onclick', _close);else if (btn.addEventListener) btn.addEventListener('click', _close);else {
+	        throw new Error("no click event handler can be bound.");
+	    }
+
+	    document.body.appendChild(div);
+
+	    function _close() {
+	        document.body.removeChild(div);
+	        defered.resolve('close');
+	    }
+
+	    return defered.promise;
+	};
+
+	function queryValue(name, url) {
+	    if (!url) url = window.location.href;
+	    name = name.replace(/[\[\]]/g, "\\$&");
+	    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+	        results = regex.exec(url);
+	    if (!results) return null;
+	    if (!results[2]) return '';
+	    return decodeURIComponent(results[2].replace(/\+/g, " "));
+	}
+
+/***/ },
+
+/***/ 27:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -70,15 +125,15 @@ webpackJsonp([1],{
 	exports.GET_MEMBER_INFO = GET_MEMBER_INFO;
 	exports.SET_MEMBER_INFO = SET_MEMBER_INFO;
 
-	var _superagent = __webpack_require__(37);
+	var _superagent = __webpack_require__(28);
 
 	var _superagent2 = _interopRequireDefault(_superagent);
 
-	var _q = __webpack_require__(43);
+	var _q = __webpack_require__(9);
 
 	var _q2 = _interopRequireDefault(_q);
 
-	var _config = __webpack_require__(45);
+	var _config = __webpack_require__(34);
 
 	var _config2 = _interopRequireDefault(_config);
 
@@ -256,7 +311,7 @@ webpackJsonp([1],{
 
 /***/ },
 
-/***/ 45:
+/***/ 34:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -267,61 +322,6 @@ webpackJsonp([1],{
 	exports.default = {
 	    ajaxRequireToken: true
 	};
-
-/***/ },
-
-/***/ 182:
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.alert2 = alert2;
-	exports.queryValue = queryValue;
-
-	var _q = __webpack_require__(43);
-
-	var _q2 = _interopRequireDefault(_q);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function alert2(msg) {
-
-	    var defered = _q2.default.defer();
-
-	    var template = '\n\t    <div>\n\t\t    <h5><b>提示信息！</b></h5>\n\t\t    <p><span>' + msg + '</span></p>\n\t\t    <dd><button>确&nbsp;定</button></dd>\n\t    </div>\n    ';
-
-	    var div = document.createElement('div');
-	    div.setAttribute('id', "show_alert");
-	    div.style.display = 'block';
-	    div.innerHTML = template;
-	    var btn = div.children[0].children[2].children[0];
-
-	    if (btn.onclick) btn.onclick = _close;else if (btn.attachEvent) btn.attachEvent('onclick', _close);else if (btn.addEventListener) btn.addEventListener('click', _close);else {
-	        throw new Error("no click event handler can be bound.");
-	    }
-
-	    document.body.appendChild(div);
-
-	    function _close() {
-	        document.body.removeChild(div);
-	        defered.resolve('close');
-	    }
-
-	    return defered.promise;
-	};
-
-	function queryValue(name, url) {
-	    if (!url) url = window.location.href;
-	    name = name.replace(/[\[\]]/g, "\\$&");
-	    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-	        results = regex.exec(url);
-	    if (!results) return null;
-	    if (!results[2]) return '';
-	    return decodeURIComponent(results[2].replace(/\+/g, " "));
-	}
 
 /***/ }
 

@@ -9,17 +9,21 @@ webpackJsonp([2],{
 
 	var _vue2 = _interopRequireDefault(_vue);
 
-	var _vueValidator = __webpack_require__(183);
+	var _vueValidator = __webpack_require__(3);
 
 	var _vueValidator2 = _interopRequireDefault(_vueValidator);
 
-	var _api = __webpack_require__(36);
+	var _api = __webpack_require__(27);
 
-	var _utils = __webpack_require__(182);
+	var _utils = __webpack_require__(8);
 
-	var _validation_errors = __webpack_require__(184);
+	var _validation_errors = __webpack_require__(36);
 
 	var _validation_errors2 = _interopRequireDefault(_validation_errors);
+
+	var _validation = __webpack_require__(35);
+
+	var _validation2 = _interopRequireDefault(_validation);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -32,32 +36,7 @@ webpackJsonp([2],{
 	            refer: "18742538743",
 	            refer_name: "张星海"
 	        },
-	        validationRules: {
-	            nickname: {
-	                required: { rule: true, message: "昵称不能为空" },
-	                maxlength: { rule: 15, message: "不能超过15个字符" }
-	            },
-	            pwd: {
-	                required: { rule: true, message: "密码不能为空" },
-	                maxlength: { rule: 32, message: "不能超过32个字符" }
-	            },
-	            pay_pwd: {
-	                required: { rule: true, message: "安全密码不能为空" },
-	                maxlength: { rule: 32, message: "不能超过32个字符" }
-	            },
-	            mobile: {
-	                required: { rule: true, message: "会员手机号码不能为空" },
-	                maxlength: { rule: 11, message: "不能超过11个字符" }
-	            },
-	            captcha: {
-	                required: { rule: true, message: "图形验证码不能为空" },
-	                maxlength: { rule: 4, message: "不能超过4个字符" }
-	            },
-	            mobile_checkcode: {
-	                required: { rule: true, message: "手机验证码不能为空" },
-	                maxlength: { rule: 6, message: "不能超过6个字符" }
-	            }
-	        }
+	        validationRules: _validation2.default.Register
 	    },
 	    methods: {
 	        register: function register(evt) {
@@ -93,7 +72,62 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 36:
+/***/ 8:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.alert2 = alert2;
+	exports.queryValue = queryValue;
+
+	var _q = __webpack_require__(9);
+
+	var _q2 = _interopRequireDefault(_q);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function alert2(msg) {
+
+	    var defered = _q2.default.defer();
+
+	    var template = '\n\t    <div>\n\t\t    <h5><b>提示信息！</b></h5>\n\t\t    <p><span>' + msg + '</span></p>\n\t\t    <dd><button>确&nbsp;定</button></dd>\n\t    </div>\n    ';
+
+	    var div = document.createElement('div');
+	    div.setAttribute('id', "show_alert");
+	    div.style.display = 'block';
+	    div.innerHTML = template;
+	    var btn = div.children[0].children[2].children[0];
+
+	    if (btn.onclick) btn.onclick = _close;else if (btn.attachEvent) btn.attachEvent('onclick', _close);else if (btn.addEventListener) btn.addEventListener('click', _close);else {
+	        throw new Error("no click event handler can be bound.");
+	    }
+
+	    document.body.appendChild(div);
+
+	    function _close() {
+	        document.body.removeChild(div);
+	        defered.resolve('close');
+	    }
+
+	    return defered.promise;
+	};
+
+	function queryValue(name, url) {
+	    if (!url) url = window.location.href;
+	    name = name.replace(/[\[\]]/g, "\\$&");
+	    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+	        results = regex.exec(url);
+	    if (!results) return null;
+	    if (!results[2]) return '';
+	    return decodeURIComponent(results[2].replace(/\+/g, " "));
+	}
+
+/***/ },
+
+/***/ 27:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -111,15 +145,15 @@ webpackJsonp([2],{
 	exports.GET_MEMBER_INFO = GET_MEMBER_INFO;
 	exports.SET_MEMBER_INFO = SET_MEMBER_INFO;
 
-	var _superagent = __webpack_require__(37);
+	var _superagent = __webpack_require__(28);
 
 	var _superagent2 = _interopRequireDefault(_superagent);
 
-	var _q = __webpack_require__(43);
+	var _q = __webpack_require__(9);
 
 	var _q2 = _interopRequireDefault(_q);
 
-	var _config = __webpack_require__(45);
+	var _config = __webpack_require__(34);
 
 	var _config2 = _interopRequireDefault(_config);
 
@@ -297,7 +331,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 45:
+/***/ 34:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -311,71 +345,64 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 182:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 35:
+/***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.alert2 = alert2;
-	exports.queryValue = queryValue;
+	var VRules = {};
 
-	var _q = __webpack_require__(43);
-
-	var _q2 = _interopRequireDefault(_q);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function alert2(msg) {
-
-	    var defered = _q2.default.defer();
-
-	    var template = '\n\t    <div>\n\t\t    <h5><b>提示信息！</b></h5>\n\t\t    <p><span>' + msg + '</span></p>\n\t\t    <dd><button>确&nbsp;定</button></dd>\n\t    </div>\n    ';
-
-	    var div = document.createElement('div');
-	    div.setAttribute('id', "show_alert");
-	    div.style.display = 'block';
-	    div.innerHTML = template;
-	    var btn = div.children[0].children[2].children[0];
-
-	    if (btn.onclick) btn.onclick = _close;else if (btn.attachEvent) btn.attachEvent('onclick', _close);else if (btn.addEventListener) btn.addEventListener('click', _close);else {
-	        throw new Error("no click event handler can be bound.");
+	VRules.Register = {
+	    nickname: {
+	        required: { rule: true, message: "昵称不能为空" },
+	        maxlength: { rule: 15, message: "不能超过15个字符" }
+	    },
+	    pwd: {
+	        required: { rule: true, message: "密码不能为空" },
+	        maxlength: { rule: 32, message: "不能超过32个字符" }
+	    },
+	    pay_pwd: {
+	        required: { rule: true, message: "安全密码不能为空" },
+	        maxlength: { rule: 32, message: "不能超过32个字符" }
+	    },
+	    mobile: {
+	        required: { rule: true, message: "会员手机号码不能为空" },
+	        maxlength: { rule: 11, message: "不能超过11个字符" }
+	    },
+	    captcha: {
+	        required: { rule: true, message: "图形验证码不能为空" },
+	        maxlength: { rule: 4, message: "不能超过4个字符" }
+	    },
+	    mobile_checkcode: {
+	        required: { rule: true, message: "手机验证码不能为空" },
+	        maxlength: { rule: 6, message: "不能超过6个字符" }
 	    }
-
-	    document.body.appendChild(div);
-
-	    function _close() {
-	        document.body.removeChild(div);
-	        defered.resolve('close');
-	    }
-
-	    return defered.promise;
 	};
 
-	function queryValue(name, url) {
-	    if (!url) url = window.location.href;
-	    name = name.replace(/[\[\]]/g, "\\$&");
-	    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-	        results = regex.exec(url);
-	    if (!results) return null;
-	    if (!results[2]) return '';
-	    return decodeURIComponent(results[2].replace(/\+/g, " "));
-	}
+	VRules.MemberInfo = {
+	    nickname: {
+	        required: { rule: true, message: "昵称不能为空" },
+	        maxlength: { rule: 32, message: "不能超过32个字符" }
+	    }
+	};
+
+	exports.default = VRules;
 
 /***/ },
 
-/***/ 184:
+/***/ 36:
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(185)
+	__vue_script__ = __webpack_require__(37)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] app\\components\\_validation_errors.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(186)
+	__vue_template__ = __webpack_require__(38)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -395,7 +422,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 185:
+/***/ 37:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -413,7 +440,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 186:
+/***/ 38:
 /***/ function(module, exports) {
 
 	module.exports = "\n<ul class=\"errors\" v-if=\"field && field.dirty && field.invalid\">\n    <li v-for=\"error in field.errors\">*&nbsp;{{error.message}}</li>\n</ul>\n";
