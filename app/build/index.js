@@ -32,13 +32,20 @@ webpackJsonp([0],[
 	            member: {},
 	            config6: {},
 	            config24: {},
-	            income: 90,
-	            bonus: 100
+	            bonusFreeze: 0,
+	            moneyFreeze: 0
 	        };
 	    },
 
 	    props: {},
-	    methods: {},
+	    methods: {
+	        gBelieveSrc: function gBelieveSrc(n) {
+	            var b = this.member.believe;
+	            if (b == undefined) return 'images/xin02.png';
+	            var i = n < b ? 1 : 2;
+	            return "images/xin0" + i + ".png";
+	        }
+	    },
 	    created: function created() {
 	        var vm = this;
 	        _api.API.IndexData().then(function (data) {
@@ -48,10 +55,12 @@ webpackJsonp([0],[
 	                vm.member = (0, _api.GET_MEMBER_INFO)();
 	                vm.config6 = d.config6;
 	                vm.config24 = d.config24;
-	                vm.income = d.incomeTotal;
-	                vm.bonus = d.bonusTotal;
+	                vm.moneyFreeze = d.moneyFreeze;
+	                vm.bonusFreeze = d.bonusFreeze;
+	                console.log(data.data);
 	            } else {
 	                (0, _utils.alert2)(data.error.message);
+	                console.log(data.error.message);
 	            }
 	        });
 	    },
@@ -147,6 +156,7 @@ webpackJsonp([0],[
 
 	router.map({
 	    '/index': {
+	        name: 'index',
 	        component: _index2.default
 	    },
 	    '/offer': {
@@ -194,6 +204,8 @@ webpackJsonp([0],[
 	router.redirect({
 	    '*': '/index'
 	});
+
+	router.go({ name: 'index' });
 
 	exports.default = router;
 
@@ -2946,15 +2958,27 @@ webpackJsonp([0],[
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+		value: true
 	});
-	exports.default = {};
+	exports.default = {
+		computed: {
+			dmd: function dmd() {
+				return 0;
+			},
+			income: function income() {
+				return this.$parent.member.money + this.$parent.moneyFreeze;
+			},
+			bonus: function bonus() {
+				return this.$parent.member.bonus + this.$parent.bonusFreeze;
+			}
+		}
+	};
 
 /***/ },
 /* 7 */
 /***/ function(module, exports) {
 
-	module.exports = "\r\n<div class=\"rmain\" style=\"background:#26272C;\">\r\n\r\n\t<div class=\"nifo\">\r\n\t\t<ul>\r\n\t\t\t<li><b>DMD币</b><span>0.00</span></li>\r\n\t\t\t<li><b>本金总额</b><span>0.00</span></li>\r\n\t\t\t<li><b>利息总额</b><span>0.00</span></li>\r\n\t\t\t<li><b>奖金总额</b><span>0.00</span></li>\r\n\t\t</ul>\r\n\t</div>\r\n\r\n\t<div class=\"anniu\">\r\n\t\t<a href=\"/?act=offer\"><img src=\"/images/btn_bozhong.png\"></a>\r\n\t\t<a href=\"/?act=apply\"><img src=\"/images/btn_shouhuo.png\"></a>\r\n\t</div>\r\n\r\n\t<div class=\"bzsh\">\r\n\t\t<a href=\"javascript:;\" class=\"bs bz\" title=\"查看详情\">\r\n\t\t\t<i>等待播种</i>\r\n\t\t</a>\r\n\t\t<a href=\"javascript:;\" class=\"bs sh\" title=\"查看详情\">\r\n\t\t\t<i class=\"i\">等待收获</i>\r\n\t\t</a>\r\n\t</div>\r\n</div>\r\n";
+	module.exports = "\r\n<div class=\"rmain\" style=\"background:#26272C;\">\r\n\r\n\t<div class=\"nifo\">\r\n\t\t<ul>\r\n\t\t\t<li><b>DMD币</b><span>{{dmd|currency '￥'}}</span></li>\r\n\t\t\t<li><b>本金总额</b><span>{{income|currency '￥'}}</span></li>\r\n\t\t\t<li><b>利息总额</b><span>{{$parent.member.interest|currency '￥'}}</span></li>\r\n\t\t\t<li><b>奖金总额</b><span>{{bonus|currency '￥'}}</span></li>\r\n\t\t</ul>\r\n\t</div>\r\n\r\n\t<div class=\"anniu\">\r\n\t\t<a href=\"/?act=offer\"><img src=\"/images/btn_bozhong.png\"></a>\r\n\t\t<a href=\"/?act=apply\"><img src=\"/images/btn_shouhuo.png\"></a>\r\n\t</div>\r\n\r\n\t<div class=\"bzsh\">\r\n\t\t<a href=\"javascript:;\" class=\"bs bz\" title=\"查看详情\">\r\n\t\t\t<i>等待播种</i>\r\n\t\t</a>\r\n\t\t<a href=\"javascript:;\" class=\"bs sh\" title=\"查看详情\">\r\n\t\t\t<i class=\"i\">等待收获</i>\r\n\t\t</a>\r\n\t</div>\r\n</div>\r\n";
 
 /***/ },
 /* 8 */
@@ -3698,8 +3722,9 @@ webpackJsonp([0],[
 			data: function data(transition) {
 				var page = transition.to.query.page || this.page;
 				_api.API.News(page).then(function (data) {
-					var count = data.count;
-					var rows = data.rows;
+					var d = data.data;
+					var count = d.count;
+					var rows = d.rows;
 					transition.next({ "model": rows, 'page': page, 'total': count });
 				}).catch(function (err) {
 					console.log(err);
@@ -3742,7 +3767,7 @@ webpackJsonp([0],[
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var API_HOST = 'http://192.168.1.102:3000/api/';
+	var API_HOST = 'http://192.168.1.100:3000/api/';
 	var LOGIN_KEY = exports.LOGIN_KEY = "member.login.information";
 
 	var API = exports.API = {
@@ -3900,16 +3925,12 @@ webpackJsonp([0],[
 
 	function HAS_LOGIN() {
 	    var who = window.localStorage.getItem(LOGIN_KEY);
-	    if (!who) return false;
-	    who = JSON.parse(who);
-	    return who.memberid;
+	    if (!who) return false;else return true;
 	}
 
 	//取当前会员信息
 	function GET_MEMBER_INFO() {
-	    if (MEMBER_INFO && MEMBER_INFO.id) return MEMBER_INFO;else {
-	        return null;
-	    }
+	    if (MEMBER_INFO && MEMBER_INFO.id) return MEMBER_INFO;else throw "no member info.";
 	}
 
 	function SET_MEMBER_INFO(value) {
@@ -4101,9 +4122,10 @@ webpackJsonp([0],[
 			data: function data(transition) {
 				var id = transition.to.params.id;
 				_api.API.NewsSingle(id).then(function (data) {
-					data.content = (0, _jsHtmlencode.htmlDecode)(data.content);
-					transition.next({ 'model': data });
-					console.log(data);
+					var d = data.data;
+					d.content = (0, _jsHtmlencode.htmlDecode)(d.content);
+					transition.next({ 'model': d });
+					console.log(d);
 				});
 			}
 		}
@@ -4175,11 +4197,14 @@ webpackJsonp([0],[
 			data: function data(transition) {
 				var page = transition.to.query.page || this.page;
 				_api.API.Messages(page).then(function (data) {
-					var count = data.count;
-					var rows = data.rows;
-					rows.forEach(function (item, key) {
-						if (item.state == 0) item.state = "w";else item.state = "ed";
-					});
+					var d = data.data;
+					var count = d.count;
+					var rows = d.rows;
+					if (rows) {
+						rows.forEach(function (item, key) {
+							if (item.state == 0) item.state = "w";else item.state = "ed";
+						});
+					}
 					transition.next({ "model": rows, 'page': page, 'total': count });
 				}).catch(function (err) {
 					console.log(err);
@@ -4244,8 +4269,9 @@ webpackJsonp([0],[
 			data: function data(transition) {
 				var id = transition.to.params.id;
 				_api.API.MessageSingle(id).then(function (data) {
-					transition.next({ 'model': data });
-					console.log(data);
+					var d = data.data;
+					transition.next({ 'model': d });
+					console.log(d);
 				});
 			}
 		}
@@ -4319,7 +4345,8 @@ webpackJsonp([0],[
 			data: function data(transition) {
 				_api.API.MessageReplies().then(function (data) {
 					console.log(data);
-					transition.next({ 'replyModel': data, 'who': (0, _api.GET_MEMBER_INFO)() });
+					var d = data.data;
+					transition.next({ 'replyModel': d, 'who': (0, _api.GET_MEMBER_INFO)() });
 				}).catch(function (err) {});
 			}
 		},
@@ -4414,7 +4441,7 @@ webpackJsonp([0],[
 			data: function data(transition) {
 				var base = "https://sp0.baidu.com/5aU_bSa9KgQFm2e88IuM_a/micxp1.duapp.com/qr.php";
 				var who = (0, _api.GET_MEMBER_INFO)();
-				var value = window.location.protocol + "://" + window.location.host + '/reg?refer=' + who.mobile;
+				var value = window.location.protocol + "//" + window.location.host + '/register.html?refer=' + who.mobile;
 				transition.next({ 'regUrl': value, 'qrcodeUrl': base + "?value=" + encodeURIComponent(value) });
 			}
 		}
@@ -4503,6 +4530,10 @@ webpackJsonp([0],[
 
 	_vue2.default.filter('datetime', function (input) {
 	    return (0, _moment2.default)(input).format('YYYY-MM-DD hh:mm:ss');
+	});
+
+	_vue2.default.filter('level', function (input) {
+	    return input + '级会员';
 	});
 
 	exports.default = "";

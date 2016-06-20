@@ -2,7 +2,7 @@ import request from 'superagent';
 import Q from 'q';
 import config from './config'
 
-const API_HOST = 'http://192.168.1.102:3000/api/';
+const API_HOST = 'http://192.168.1.100:3000/api/';
 export const LOGIN_KEY = "member.login.information";
 
 export const API = {
@@ -177,17 +177,14 @@ export function GET_MEMBER_LOGIN_INFO() {
 export function HAS_LOGIN() {
     var who = window.localStorage.getItem(LOGIN_KEY);
     if(!who) return false;
-    who = JSON.parse(who);
-    return who.memberid;
+    else return true;
 }
 
 //取当前会员信息
 export function GET_MEMBER_INFO() {
     if(MEMBER_INFO && MEMBER_INFO.id)
         return MEMBER_INFO;
-    else{
-        return null;
-    }
+    else throw "no member info.";
 }
 
 export function  SET_MEMBER_INFO(value) {

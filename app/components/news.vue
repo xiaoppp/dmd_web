@@ -34,8 +34,9 @@ export default {
 		data(transition){
 			var page = transition.to.query.page || this.page;
 			API.News(page).then(function(data){
-				var count = data.count;
-				var rows = data.rows;
+				var d = data.data;
+				var count = d.count;
+				var rows = d.rows;
 				transition.next({"model": rows,'page': page,'total': count});
 			}).catch(function(err){
 				console.log(err);

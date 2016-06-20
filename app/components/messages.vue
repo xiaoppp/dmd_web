@@ -32,12 +32,15 @@ export default {
 		data:function(transition){
 			var page = transition.to.query.page || this.page;
 			API.Messages(page).then(function(data){
-				var count = data.count;
-				var rows = data.rows;
-				rows.forEach(function(item,key){
-					if(item.state==0) item.state = "w";
-					else item.state = "ed";
-				});
+				var d = data.data;
+				var count = d.count;
+				var rows = d.rows;
+				if(rows){
+					rows.forEach(function(item,key){
+						if(item.state==0) item.state = "w";
+						else item.state = "ed";
+					});
+				}
 				transition.next({"model": rows,'page': page,'total': count});
 			}).catch(function(err){
 				console.log(err);

@@ -25,6 +25,7 @@ const router = new VueRouter({
 
 router.map({
     '/index': {
+        name:'index',
         component: index
     },
     '/offer': {
@@ -72,5 +73,7 @@ router.map({
 router.redirect({
     '*': '/index'
 });
+
+router.go({name:'index'});
 
 export default router;

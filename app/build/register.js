@@ -125,7 +125,7 @@ webpackJsonp([2],{
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var API_HOST = 'http://192.168.1.102:3000/api/';
+	var API_HOST = 'http://192.168.1.100:3000/api/';
 	var LOGIN_KEY = exports.LOGIN_KEY = "member.login.information";
 
 	var API = exports.API = {
@@ -283,16 +283,12 @@ webpackJsonp([2],{
 
 	function HAS_LOGIN() {
 	    var who = window.localStorage.getItem(LOGIN_KEY);
-	    if (!who) return false;
-	    who = JSON.parse(who);
-	    return who.memberid;
+	    if (!who) return false;else return true;
 	}
 
 	//取当前会员信息
 	function GET_MEMBER_INFO() {
-	    if (MEMBER_INFO && MEMBER_INFO.id) return MEMBER_INFO;else {
-	        return null;
-	    }
+	    if (MEMBER_INFO && MEMBER_INFO.id) return MEMBER_INFO;else throw "no member info.";
 	}
 
 	function SET_MEMBER_INFO(value) {

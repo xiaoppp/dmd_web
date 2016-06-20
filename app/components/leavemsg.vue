@@ -97,7 +97,8 @@ export default {
 		data:function(transition){
 			API.MessageReplies().then(function(data){
 				console.log(data);
-				transition.next({'replyModel': data,'who': GET_MEMBER_INFO()});
+				var d = data.data;
+				transition.next({'replyModel': d,'who': GET_MEMBER_INFO()});
 			}).catch(function(err){
 			});
 		}

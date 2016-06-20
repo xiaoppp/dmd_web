@@ -38,7 +38,7 @@ export default {
 		data:function(transition){
 			var base = "https://sp0.baidu.com/5aU_bSa9KgQFm2e88IuM_a/micxp1.duapp.com/qr.php";
 			var who = GET_MEMBER_INFO();
-			var value = window.location.protocol+"://"+window.location.host+'/reg?refer='+ who.mobile;
+			var value = window.location.protocol+"//"+window.location.host+'/register.html?refer='+ who.mobile;
 			transition.next({'regUrl':value,'qrcodeUrl': base+"?value="+encodeURIComponent(value)});
 		}
 	}

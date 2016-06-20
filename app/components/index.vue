@@ -3,10 +3,10 @@
 
 	<div class="nifo">
 		<ul>
-			<li><b>DMD币</b><span>0.00</span></li>
-			<li><b>本金总额</b><span>0.00</span></li>
-			<li><b>利息总额</b><span>0.00</span></li>
-			<li><b>奖金总额</b><span>0.00</span></li>
+			<li><b>DMD币</b><span>{{dmd|currency '￥'}}</span></li>
+			<li><b>本金总额</b><span>{{income|currency '￥'}}</span></li>
+			<li><b>利息总额</b><span>{{$parent.member.interest|currency '￥'}}</span></li>
+			<li><b>奖金总额</b><span>{{bonus|currency '￥'}}</span></li>
 		</ul>
 	</div>
 
@@ -16,7 +16,7 @@
 	</div>
 
 	<div class="bzsh">
-		<a href="javascript:;" class="bs bz" title="查看详情">
+		<a href="javascript:;" v-link="{}" class="bs bz" title="查看详情">
 			<i>等待播种</i>
 		</a>
 		<a href="javascript:;" class="bs sh" title="查看详情">
@@ -27,5 +27,18 @@
 </template>
 
 <script>
-export default {}
+
+export default {
+	computed:{
+		dmd(){
+			return 0;
+		},
+		income(){
+			return this.$parent.member.money + this.$parent.moneyFreeze;
+		},
+		bonus(){
+			return this.$parent.member.bonus + this.$parent.bonusFreeze;
+		}
+	}
+}
 </script>

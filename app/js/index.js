@@ -14,13 +14,19 @@ const App = Vue.extend({
                 member:{},
                 config6:{},
                 config24:{},
-                income:90,
-                bonus:100
+                bonusFreeze:0,
+                moneyFreeze:0
             }
         },
         props: {
         },
         methods: {
+            gBelieveSrc(n){
+                var b = this.member.believe;
+                if(b == undefined) return 'images/xin02.png';
+                var i = n < b ? 1 : 2;
+                return "images/xin0"+ i +".png";
+            }
         },
         created() {
             var vm = this;
@@ -31,10 +37,12 @@ const App = Vue.extend({
                     vm.member = GET_MEMBER_INFO();
                     vm.config6 = d.config6;
                     vm.config24 = d.config24;
-                    vm.income = d.incomeTotal;
-                    vm.bonus = d.bonusTotal;
+                    vm.moneyFreeze = d.moneyFreeze;
+                    vm.bonusFreeze = d.bonusFreeze;
+                    console.log(data.data);
                 } else {
                     alert2(data.error.message);
+                    console.log(data.error.message);
                 }
             });
         },
