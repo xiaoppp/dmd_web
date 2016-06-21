@@ -43,9 +43,7 @@
 			</ul>
 		</div>
 
-
-		
-		 <treeview :value.sync="value" :model="tree"  labelname="truename" valuename="id"></treeview>
+		 <treeview :value.sync="value" :model.sync="tree"  labelname="truename" valuename="id"></treeview>
 
 		 {{tree|json}}
 
@@ -73,7 +71,7 @@
 		data(){
 			return {
 				value: 566,
-				tree: []
+				tree:  []
 			}
 		},
 		methods:{
@@ -82,16 +80,15 @@
 		},
 		events: {
         'treeview_click': function(node) {
-            // TODO my code here
-            console.log(node.label);
-            console.log(node.value);
-			console.log(node.model);
+            // // TODO my code here
+            // console.log(node.label);
+            // console.log(node.value);
+			 console.log(node.model);
 			let vm = this;
 			API.TeamTree(node.value).then(function(data){
 				if(data.isSuccess) {
-					node.model.nodes = data.data;
-					//node.children = data.data;
-					
+					console.log(data.data);
+					node.model.nodes = data.data;					
 				} else {
 					alert2(data.error.message);
 				}
