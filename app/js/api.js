@@ -27,7 +27,7 @@ export const API = {
         model.to_member_id = 0;
         model.state = 0;
         console.log(model);
-        return HTTP_POST('message/action/leavemsg',model);
+        return HTTP_POST(_Combine('message/action/leavemsg'),model);
     }
 }
 
@@ -119,4 +119,3 @@ export function HTTP_DELETE(url,data) {
 export function GET_MEMBER_LOGIN_INFO(){
     return { id:4132 ,token: ''}
 }
-
