@@ -2,7 +2,7 @@ import request from 'superagent';
 import Q from 'q';
 import config from './config'
 
-const API_HOST = 'http://192.168.1.100:3000/api/';
+const API_HOST = 'http://192.168.1.104:3000/api/';
 export const LOGIN_KEY = "member.login.information";
 
 export const API = {
@@ -73,9 +73,25 @@ export const API = {
     Member(username){
         return HTTP_GET(_Combine('member/',username));
     },
+    ParentMember(id){
+        return HTTP_GET(_Combine('member/info/',id));
+    },
     IndexData(){
         var who = GET_MEMBER_LOGIN_INFO();
          return HTTP_GET(_Combine('index/info/', who.memberid));
+    },
+    EditMemberInfo(model){
+        return HTTP_POST(_Combine('member/edit/info'),model);
+    },
+    EditPwd(model){
+        return HTTP_POST(_Combine('member/reset'),model);
+    },
+    EditPayPwd(model,mode){
+        //mode //  0 通过原始安全密码,  1 通过手机验证码
+    },
+    TeamTree(id){
+        //member/children
+        return HTTP_GET(_Combine('member/children/',id));
     }
 }
 
@@ -171,7 +187,7 @@ export function GET_MEMBER_LOGIN_INFO() {
     var who = window.localStorage.getItem(LOGIN_KEY);
     if(!who) throw "no member login";
     who = JSON.parse(who);
-    return who;    
+    return who;
 }
 
 export function HAS_LOGIN() {

@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import VueValidator from 'vue-validator';
 
 import router from './router.config';
 
@@ -8,8 +7,7 @@ import './filters';
 import './constants'
 import { API,GET_MEMBER_INFO,SET_MEMBER_INFO } from './api';
 import {alert2} from './utils';
-
-Vue.use(VueValidator);
+import './lib/vue.tree-view';
 
 const App = Vue.extend({
         data(){

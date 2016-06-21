@@ -139,7 +139,7 @@ webpackJsonp([1],{
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var API_HOST = 'http://192.168.1.100:3000/api/';
+	var API_HOST = 'http://192.168.1.104:3000/api/';
 	var LOGIN_KEY = exports.LOGIN_KEY = "member.login.information";
 
 	var API = exports.API = {
@@ -210,9 +210,25 @@ webpackJsonp([1],{
 	    Member: function Member(username) {
 	        return HTTP_GET(_Combine('member/', username));
 	    },
+	    ParentMember: function ParentMember(id) {
+	        return HTTP_GET(_Combine('member/info/', id));
+	    },
 	    IndexData: function IndexData() {
 	        var who = GET_MEMBER_LOGIN_INFO();
 	        return HTTP_GET(_Combine('index/info/', who.memberid));
+	    },
+	    EditMemberInfo: function EditMemberInfo(model) {
+	        return HTTP_POST(_Combine('member/edit/info'), model);
+	    },
+	    EditPwd: function EditPwd(model) {
+	        return HTTP_POST(_Combine('member/reset'), model);
+	    },
+	    EditPayPwd: function EditPayPwd(model, mode) {
+	        //mode //  0 通过原始安全密码,  1 通过手机验证码
+	    },
+	    TeamTree: function TeamTree(id) {
+	        //member/children
+	        return HTTP_GET(_Combine('member/children/', id));
 	    }
 	};
 

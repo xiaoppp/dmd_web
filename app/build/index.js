@@ -8,10 +8,6 @@ webpackJsonp([0],[
 
 	var _vue2 = _interopRequireDefault(_vue);
 
-	var _vueValidator = __webpack_require__(3);
-
-	var _vueValidator2 = _interopRequireDefault(_vueValidator);
-
 	var _router = __webpack_require__(4);
 
 	var _router2 = _interopRequireDefault(_router);
@@ -28,9 +24,9 @@ webpackJsonp([0],[
 
 	var _utils = __webpack_require__(8);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	__webpack_require__(204);
 
-	_vue2.default.use(_vueValidator2.default);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var App = _vue2.default.extend({
 	    data: function data() {
@@ -3580,19 +3576,29 @@ webpackJsonp([0],[
 	    value: true
 	});
 
+	var _vue = __webpack_require__(1);
+
+	var _vue2 = _interopRequireDefault(_vue);
+
+	var _vueValidator = __webpack_require__(3);
+
+	var _vueValidator2 = _interopRequireDefault(_vueValidator);
+
 	var _constants = __webpack_require__(26);
 
 	var _api = __webpack_require__(27);
 
-	var _validation = __webpack_require__(35);
+	var _utils = __webpack_require__(8);
 
-	var _validation2 = _interopRequireDefault(_validation);
+	var _validation = __webpack_require__(35);
 
 	var _validation_errors = __webpack_require__(36);
 
 	var _validation_errors2 = _interopRequireDefault(_validation_errors);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	_vue2.default.use(_vueValidator2.default);
 
 	exports.default = {
 	    data: function data() {
@@ -3602,15 +3608,63 @@ webpackJsonp([0],[
 	            model: {},
 	            pwdModel: {},
 	            payPwdModel: {},
-	            validationRules: _validation2.default.MemberInfo
+	            payPwdModel2: {},
+	            validationRules: _validation.ValidatorRules.Member,
+	            parent: { truename: '', mobile: '' }
 	        };
 	    },
 
 	    route: {
 	        data: function data(transition) {
 	            var who = (0, _api.GET_MEMBER_INFO)();
+	            console.log(who);
 
-	            transition.next({ 'model': who });
+	            var m = {
+	                id: who.id,
+	                nickname: who.nickname,
+	                alipay: who.alipay,
+	                weixin: who.weixin,
+	                bank: who.bank,
+	                bank_num: who.bank_num,
+	                bank_addr: who.bank_addr,
+	                mobile: who.mobile,
+	                username: who.username
+	            };
+
+	            _api.API.ParentMember(who.parent_id).then(function (data) {
+	                if (data.isSuccess) {
+	                    transition.next({ 'parent': data.data, 'model': m });
+	                } else {
+	                    (0, _utils.alert2)(data.error.message);
+	                }
+	            });
+	        }
+	    },
+	    methods: {
+	        submit: function submit() {
+	            console.log(this.model);
+	            _api.API.EditMemberInfo(this.model).then(function (data) {
+	                if (data.isSuccess) {
+	                    (0, _utils.alert2)('修改资料成功！');
+	                } else {
+	                    (0, _utils.alert2)(data.error.message);
+	                }
+	                console.log(data);
+	            }).catch(function (err) {
+	                console.log(err);
+	            });
+	        },
+	        changePwd: function changePwd() {
+	            console.log(this.pwdModel);
+	            (0, _utils.alert2)('change pwd');
+	        },
+	        changePayPwd: function changePayPwd() {
+	            console.log(this.payPwdModel);
+	            (0, _utils.alert2)('change pay pwd');
+	        },
+	        changePayPwd2: function changePayPwd2() {
+	            console.log(this.payPwdModel2);
+	            (0, _utils.alert2)('change pay pwd 2');
 	        }
 	    },
 	    components: { validationErrors: _validation_errors2.default }
@@ -3662,7 +3716,7 @@ webpackJsonp([0],[
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var API_HOST = 'http://192.168.1.100:3000/api/';
+	var API_HOST = 'http://192.168.1.104:3000/api/';
 	var LOGIN_KEY = exports.LOGIN_KEY = "member.login.information";
 
 	var API = exports.API = {
@@ -3733,9 +3787,25 @@ webpackJsonp([0],[
 	    Member: function Member(username) {
 	        return HTTP_GET(_Combine('member/', username));
 	    },
+	    ParentMember: function ParentMember(id) {
+	        return HTTP_GET(_Combine('member/info/', id));
+	    },
 	    IndexData: function IndexData() {
 	        var who = GET_MEMBER_LOGIN_INFO();
 	        return HTTP_GET(_Combine('index/info/', who.memberid));
+	    },
+	    EditMemberInfo: function EditMemberInfo(model) {
+	        return HTTP_POST(_Combine('member/edit/info'), model);
+	    },
+	    EditPwd: function EditPwd(model) {
+	        return HTTP_POST(_Combine('member/reset'), model);
+	    },
+	    EditPayPwd: function EditPayPwd(model, mode) {
+	        //mode //  0 通过原始安全密码,  1 通过手机验证码
+	    },
+	    TeamTree: function TeamTree(id) {
+	        //member/children
+	        return HTTP_GET(_Combine('member/children/', id));
 	    }
 	};
 
@@ -3860,43 +3930,108 @@ webpackJsonp([0],[
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	var VRules = {};
+	var ValidatorRules = exports.ValidatorRules = {
 
-	VRules.Register = {
-	    nickname: {
-	        required: { rule: true, message: "昵称不能为空" },
-	        maxlength: { rule: 15, message: "不能超过15个字符" }
+	    Register: {
+	        nickname: {
+	            required: { rule: true, message: "昵称不能为空" },
+	            maxlength: { rule: 15, message: "不能超过15个字符" }
+	        },
+	        pwd: {
+	            required: { rule: true, message: "密码不能为空" },
+	            maxlength: { rule: 32, message: "不能超过32个字符" }
+	        },
+	        pay_pwd: {
+	            required: { rule: true, message: "安全密码不能为空" },
+	            maxlength: { rule: 32, message: "不能超过32个字符" }
+	        },
+	        mobile: {
+	            required: { rule: true, message: "会员手机号码不能为空" },
+	            maxlength: { rule: 11, message: "不能超过11个字符" }
+	        },
+	        captcha: {
+	            required: { rule: true, message: "图形验证码不能为空" },
+	            maxlength: { rule: 4, message: "不能超过4个字符" }
+	        },
+	        mobile_checkcode: {
+	            required: { rule: true, message: "手机验证码不能为空" },
+	            maxlength: { rule: 6, message: "不能超过6个字符" }
+	        }
 	    },
-	    pwd: {
-	        required: { rule: true, message: "密码不能为空" },
-	        maxlength: { rule: 32, message: "不能超过32个字符" }
-	    },
-	    pay_pwd: {
-	        required: { rule: true, message: "安全密码不能为空" },
-	        maxlength: { rule: 32, message: "不能超过32个字符" }
-	    },
-	    mobile: {
-	        required: { rule: true, message: "会员手机号码不能为空" },
-	        maxlength: { rule: 11, message: "不能超过11个字符" }
-	    },
-	    captcha: {
-	        required: { rule: true, message: "图形验证码不能为空" },
-	        maxlength: { rule: 4, message: "不能超过4个字符" }
-	    },
-	    mobile_checkcode: {
-	        required: { rule: true, message: "手机验证码不能为空" },
-	        maxlength: { rule: 6, message: "不能超过6个字符" }
+
+	    Member: {
+	        nickname: {
+	            required: { rule: true, message: "昵称不能为空" },
+	            maxlength: { rule: 32, message: "不能超过32个字符" }
+	        },
+	        truename: {
+	            maxlength: { rule: 32, message: "不能超过32个字符" }
+	        },
+	        alipay: {
+	            maxlength: { rule: 32, message: "不能超过32个字符" }
+	        },
+	        weixin: {
+	            maxlength: { rule: 32, message: "不能超过32个字符" }
+	        },
+	        bank: {
+	            required: { rule: true, message: "请选择银行卡类型" },
+	            maxlength: { rule: 32, message: "不能超过32个字符" }
+	        },
+	        bank_num: {
+	            maxlength: { rule: 32, message: "不能超过32个字符" }
+	        },
+	        bank_addr: {
+	            maxlength: { rule: 32, message: "不能超过32个字符" }
+	        },
+	        pay_pwd: {
+	            required: { rule: true, message: "请填写安全密码" },
+	            maxlength: { rule: 32, message: "不能超过32个字符" }
+	        },
+
+	        old_pwd: {
+	            required: { rule: true, message: "请填写原始密码" }
+	        },
+
+	        pwd: {
+	            required: { rule: true, message: "请填写新密码" }
+	        },
+
+	        repwd: {
+	            required: { rule: true, message: "请再次填写新密码" }
+	        },
+
+	        pay_pwd3: {
+	            required: { rule: true, message: "请输入安全密码" }
+	        },
+
+	        old_pay_pwd: {
+	            required: { rule: true, message: "请输入原始安全密码" }
+	        },
+
+	        pay_pw4: {
+	            required: { rule: true, message: "请输入新的安全密码" }
+	        },
+
+	        pay_repwd: {
+	            required: { rule: true, message: "请再次输入新的安全密码" }
+	        },
+
+	        captcha: {
+	            required: { rule: true, message: "请输入图形验证码" }
+	        },
+
+	        mobile_checkcode: {
+	            required: { rule: true, message: "请输入手机验证码" }
+	        },
+
+	        pay_pw5: {
+	            required: { rule: true, message: "请输入新的安全密码" }
+	        }
+
 	    }
 	};
 
-	VRules.MemberInfo = {
-	    nickname: {
-	        required: { rule: true, message: "昵称不能为空" },
-	        maxlength: { rule: 32, message: "不能超过32个字符" }
-	    }
-	};
-
-	exports.default = VRules;
+	var Validators = exports.Validators = {};
 
 /***/ },
 /* 36 */
@@ -3953,7 +4088,7 @@ webpackJsonp([0],[
 /* 39 */
 /***/ function(module, exports) {
 
-	module.exports = "\n    <div class=\"rmain\">\n        <div class=\"personalC\">\n            <h1><b>我的资料</b></h1>\n            <div class=\"sad\">\n                <a href=\"javascript:;\" :class=\"{'on':tab == 1}\" @click=\"tab = 1\">个人资料</a>\n                <a href=\"javascript:;\" :class=\"{'on':tab == 2}\" @click=\"tab = 2\">登录密码</a>\n                <a href=\"javascript:;\" :class=\"{'on':tab == 3}\" @click=\"tab = 3\">安全密码</a>\n            </div>\n            \n            <div v-show=\"tab == 1\">\n                <validator name=\"validation\">\n                <ul class=\"u1\">\n                <li>\n                    <span>推荐人姓名：</span>\n                    <em>赵瑞艮</em>\n                </li>\n                <li>\n                    <span>推荐人手机：</span>\n                    <em>15110671687</em>\n                </li>\n                <li>\n                    <span>账号/手机：</span>\n                    <em>{{model.username}}</em>\n                </li>\n                <li>\n                    <span>昵称：</span>\n                    <em><input type=\"text\" class=\"text\" v-model=\"model.nickname\" v-validation:nickname=\"validationRules.nickname\"></em>\n                    <validation-errors :field=\"$validation.nickname\"></validation-errors>\n                </li>\n                <li>\n                    <span>真实姓名：</span>\n                    <em><input type=\"text\" class=\"text\" v-model=\"model.truename\" v-validation:nickname=\"validationRules.truename\"></em>\n                    <validation-errors :field=\"$validation.truename\"></validation-errors>\n                </li>\n                <li>\n                    <span>支付宝：</span>\n                    <em><input type=\"text\" class=\"text\" v-model=\"model.alipay\" v-validation:nickname=\"validationRules.alipay\"></em>\n                    <validation-errors :field=\"$validation.alipay\"></validation-errors>\n                </li>\n                <li>\n                    <span>微信号：</span>\n                    <em><input type=\"text\" class=\"text\" v-model=\"model.weixin\" v-validation:nickname=\"validationRules.weixin\"></em>\n                    <validation-errors :field=\"$validation.weixin\"></validation-errors>\n                </li>\n                <li>\n                    <span>银行名称：</span>\n                    <em>\n                        <select class=\"text sel\" v-model=\"model.bank\">\n                            <option  v-for=\"item in Banks\" value=\"{{item.value}}\">{{item.text}}</option>\n                        </select>\n            \t\t</em>\n                </li>\n                <li>\n                    <span>分行名称：</span>\n                    <em><input type=\"text\" class=\"text\" v-model=\"model.bank_addr\" v-validation:nickname=\"validationRules.bank_addr\"></em>\n                    <validation-errors :field=\"$validation.bank_addr\"></validation-errors>\n                </li>\n                <li>\n                    <span>银行卡号：</span>\n                    <em><input type=\"text\" class=\"text\" v-model=\"model.bank_num\" v-validation:nickname=\"validationRules.bank_num\"></em>\n                    <validation-errors :field=\"$validation.bank_num\"></validation-errors>\n                </li>\n                <li>\n                    <span>安全密码：</span>\n                    <em><input type=\"password\" class=\"text\" v-model=\"model.pay_pwd\" v-validation:nickname=\"validationRules.pay_pwd\"></em>\n                    <validation-errors :field=\"$validation.pay_pwd\"></validation-errors>\n                </li>\n                <li>\n                   <span style=\"color:#fff;\">{{$validation|json}}</span>\n                    <span>&nbsp;</span>\n                    <em>\n                        <a v-if=\"$validation.valid\" href=\"javascript:;\" @click=\"submit();\" class=\"btn\" id=\"modify_personal_btn\">修改资料</a>\n                        <a v-else href=\"javascript:;\" class=\"btn\"  style=\"background-color:#888;cursor:not-allowed\">修改资料</a>\n                    </em>\n                </li>\n            </ul>\n            </validator>\n            </div>\n\n                <div v-show=\"tab == 2\">\n                    <ul class=\"u2\">\n                <li>\n                    <span>原密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"old_pwd\" onfocus=\"this.type='password';\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>新密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"pwd\" onfocus=\"this.type='password';\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>确认密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"repwd\" onfocus=\"this.type='password';\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>安全密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"pay_pwd3\" onfocus=\"this.type='password';\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>&nbsp;</span>\n                    <em><a href=\"javascript:;\" class=\"btn\" id=\"modify_pwd_btn\">修改登录密码</a></em>\n                </li>\n                <li>\n                    <span></span>\n                    <em></em>\n                </li>\n            </ul>\n            </div>        \n            \n            <div v-show=\"tab == 3\">\n            <ul class=\"u3\">\n                <li>\n                    <span>原安全密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"old_pay_pwd\" onfocus=\"this.type='password';\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>新安全密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"pay_pwd4\" onfocus=\"this.type='password';\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>确认密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"pay_repwd\" onfocus=\"this.type='password';\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>&nbsp;</span>\n                    <em><a href=\"javascript:;\" class=\"btn\" id=\"modify_pay_pwd_btn\">修改安全密码</a></em>\n                </li>\n                <li>\n                    <span></span>\n                    <em></em>\n                </li>\n                <li>\n                    <span></span>\n                    <em></em>\n                </li>\n                <li>\n                    <span>手机号：</span>\n                    <em>15834048710<input type=\"hidden\" id=\"mobile\" value=\"15834048710\"></em>\n                </li>\n                <li>\n                    <span>图形验证码：</span>\n                  <em>\n                  \t<input type=\"text\" class=\"text\" id=\"captcha\" maxlength=\"4\" style=\"width:150px;\">\n            \t\t\t\t<a href=\"javascript:void(0);\" style=\"position:relative;\" class=\"validate\" title=\"切换图片\" onclick=\"document.getElementById('captchaImg').src='/core/captcha.php?ImgGetCaptcha=true#'+Math.random();\">\n            \t\t\t\t\t<img id=\"captchaImg\" style=\"width:157px; height:44px; box-shadow:0 0 5px #ccc;position:absolute;top:-44px;right:-156px;\" src=\"/core/captcha.php?ImgGetCaptcha=true\">\n            \t\t\t\t</a>\n            \t\t\t</em>\n                </li>\n                <li>\n                    <span>手机验证码：</span>\n                    <em>\n\t\t                  <input type=\"text\" id=\"mobile_checkcode\" class=\"text\" maxlength=\"6\" style=\"width:150px;\">\n  \t\t\t\t            <input type=\"button\" class=\"sbtn\" data-type=\"forget\" id=\"send_mobile_checkcode\" value=\"发送验证码\" style=\"border:0;outline:none;width:150px;height:45px;background:#FFC30D;color:#fff;\">\n  \t\t\t            </em>\n                </li>\n                <li>\n                    <span>新安全密码：</span>\n                    <em><input type=\"text\" class=\"text\" id=\"pay_pwd5\" maxlength=\"32\"></em>\n                </li>\n                <li>\n                    <span>&nbsp;</span>\n                    <em><a href=\"javascript:;\" class=\"btn\" id=\"reset_pay_pwd_btn\">重置安全密码</a></em>\n                </li>\n                <li>\n                    <span></span>\n                    <em></em>\n                </li>\n            </ul>\n            </div>\n            \n        </div>\n    </div>\n  ";
+	module.exports = "\n    <div class=\"rmain\">\n        <div class=\"personalC\">\n            <h1><b>我的资料</b></h1>\n            <div class=\"sad\">\n                <a href=\"javascript:;\" :class=\"{'on':tab == 1}\" @click=\"tab = 1\">个人资料</a>\n                <a href=\"javascript:;\" :class=\"{'on':tab == 2}\" @click=\"tab = 2\">登录密码</a>\n                <a href=\"javascript:;\" :class=\"{'on':tab == 3}\" @click=\"tab = 3\">安全密码</a>\n            </div>\n            \n            <div v-show=\"tab == 1\">\n                <validator name=\"validation\">\n                <ul class=\"u1\">\n                <li>\n                    <span>推荐人姓名：</span>\n                    <em>{{parent.truename}}</em>\n                </li>\n                <li>\n                    <span>推荐人手机：</span>\n                    <em>{{parent.mobile}}</em>\n                </li>\n                <li>\n                    <span>账号/手机：</span>\n                    <em>{{model.username}}</em>\n                </li>\n                <li>\n                    <span>昵称：</span>\n                    <em><input type=\"text\" class=\"text\" v-model=\"model.nickname\" v-validate:nickname=\"validationRules.nickname\"></em>\n                    <validation-errors :field=\"$validation.nickname\"></validation-errors>\n                </li>\n                <li>\n                    <span>真实姓名：</span>\n                    <em><input type=\"text\" class=\"text\" v-model=\"model.truename\" v-validate:truename=\"validationRules.truename\"></em>\n                    <validation-errors :field=\"$validation.truename\"></validation-errors>\n                </li>\n                <li>\n                    <span>支付宝：</span>\n                    <em><input type=\"text\" class=\"text\" v-model=\"model.alipay\" v-validate:alipay=\"validationRules.alipay\"></em>\n                    <validation-errors :field=\"$validation.alipay\"></validation-errors>\n                </li>\n                <li>\n                    <span>微信号：</span>\n                    <em><input type=\"text\" class=\"text\" v-model=\"model.weixin\" v-validate:weixin=\"validationRules.weixin\"></em>\n                    <validation-errors :field=\"$validation.weixin\"></validation-errors>\n                </li>\n                <li>\n                    <span>银行名称：</span>\n                    <em>\n                        <select class=\"text sel\" v-model=\"model.bank\">\n                            <option  v-for=\"item in Banks\" value=\"{{item.value}}\">{{item.text}}</option>\n                        </select>\n            \t\t</em>\n                </li>\n                <li>\n                    <span>分行名称：</span>\n                    <em><input type=\"text\" class=\"text\" v-model=\"model.bank_addr\" v-validate:bank_addr=\"validationRules.bank_addr\"></em>\n                    <validation-errors :field=\"$validation.bank_addr\"></validation-errors>\n                </li>\n                <li>\n                    <span>银行卡号：</span>\n                    <em><input type=\"text\" class=\"text\" v-model=\"model.bank_num\" v-validate:bank_num=\"validationRules.bank_num\"></em>\n                    <validation-errors :field=\"$validation.bank_num\"></validation-errors>\n                </li>\n                <li>\n                    <span>安全密码：</span>\n                    <em><input type=\"password\" class=\"text\" v-model=\"model.pay_pwd\" v-validate:pay_pwd=\"validationRules.pay_pwd\"></em>\n                    <validation-errors :field=\"$validation.pay_pwd\"></validation-errors>\n                </li>\n                <li>\n                    <!--<span style=\"color:#fff;\">{{$validation|json}}</span>-->\n                    <span>&nbsp;</span>\n                    <em>\n                        <a v-if=\"$validation.valid\" href=\"javascript:;\" @click=\"submit\" class=\"btn\" id=\"modify_personal_btn\">修改资料</a>\n                        <a v-else href=\"javascript:;\" class=\"btn\"  style=\"background-color:#888;cursor:not-allowed\">修改资料</a>\n                    </em>\n                </li>\n                <div style=\"height:8px;\"></div>\n            </ul>\n            </validator>\n            </div>\n                <div v-show=\"tab == 2\">\n                    <validator name=\"validation1\">\n                        <ul class=\"u2\">\n                        <li>\n                            <span>原密码：</span>\n                            <em><input type=\"password\" class=\"text\" v-model=\"pwdModel.old_pwd\" v-validate:old_pwd=\"validationRules.old_pwd\"></em>\n                            <validation-errors :field=\"$validation1.old_pwd\"></validation-errors>\n                        </li>\n                        <li>\n                            <span>新密码：</span>\n                            <em><input type=\"password\" class=\"text\" v-model=\"pwdModel.pwd\" v-validate:old_pwd=\"validationRules.pwd\"></em>\n                            <validation-errors :field=\"$validation1.pwd\"></validation-errors>\n                        </li>\n                        <li>\n                            <span>确认密码：</span>\n                            <em><input type=\"password\" class=\"text\" v-model=\"pwdModel.repwd\" v-validate:old_pwd=\"validationRules.repwd\"></em>\n                            <validation-errors :field=\"$validation1.repwd\"></validation-errors>\n                        </li>\n                        <li>\n                            <span>安全密码：</span>\n                            <em><input type=\"password\" class=\"text\" v-model=\"pwdModel.pay_pwd3\" v-validate:old_pwd=\"validationRules.pay_pwd3\"></em>\n                            c\n                        </li>\n                        <li>\n                            <span>&nbsp;</span>\n                            <em>\n                                <a v-if=\"$validation1.valid\" href=\"javascript:;\" class=\"btn\" @click=\"changePwd\" id=\"modify_pwd_btn\">修改登录密码</a>\n                                <a v-else href=\"javascript:;\" class=\"btn\"  style=\"background-color:#888;cursor:not-allowed\">修改登录密码</a>\n                            </em>\n                        </li>\n                        <li>\n                            <span></span>\n                            <em></em>\n                        </li>\n                        </ul>\n                    </validator>\n            </div>        \n            \n            <div v-show=\"tab == 3\">\n                <validator name=\"validation2\">\n            <ul class=\"u3\">\n                <li>\n                    <span>原安全密码：</span>\n                    <em><input type=\"password\" class=\"text\" v-model=\"payPwdModel.old_pay_pwd\" v-validate:old_pay_pwd=\"validationRules.old_pay_pwd\"></em>\n                    <validation-errors :field=\"$validation2.old_pay_pwd\"></validation-errors>\n                </li>\n                <li>\n                    <span>新安全密码：</span>\n                    <em><input type=\"password\" class=\"text\" v-model=\"payPwdModel.pay_pwd4\" v-validate:pay_pwd4=\"validationRules.pay_pwd4\"></em>\n                    <validation-errors :field=\"$validation2.pay_pwd4\"></validation-errors>\n                </li>\n                <li>\n                    <span>确认密码：</span>\n                    <em><input type=\"password\" class=\"text\" v-model=\"payPwdModel.pay_repwd\" v-validate:pay_repwd=\"validationRules.pay_repwd\"></em>\n                    <validation-errors :field=\"$validation2.pay_repwd\"></validation-errors>\n                </li>\n                <li>\n                    <span>&nbsp;</span>\n                    <em>\n                        <a v-if=\"$validation2.valid\" href=\"javascript:;\" @click=\"changePayPwd\" class=\"btn\" id=\"modify_pay_pwd_btn\">修改安全密码</a>\n                        <a v-else href=\"javascript:;\" class=\"btn\" id=\"modify_pay_pwd_btn\" style=\"background-color:#888;cursor:not-allowed\">修改安全密码</a>\n                    </em>\n                </li>\n                </ul>\n                </validator>\n\n                <hr/>\n\n                <validator name=\"validation3\">\n                <ul class=\"ul4\">\n                <li>\n                    <span></span>\n                    <em></em>\n                </li>\n                <li>\n                    <span></span>\n                    <em></em>\n                </li>\n                <li>\n                    <span>手机号：</span>\n                    <em>{{model.mobile}}<input type=\"hidden\" id=\"mobile\" value=\"{{model.mobile}}\"></em>\n                </li>\n                <li>\n                    <span>图形验证码：</span>\n                  <em>\n                  \t<input type=\"text\" class=\"text\" v-model=\"payPwdModel2.captcha\" v-validate:captcha=\"validationRules.captcha\" style=\"width:150px;\">\n            \t\t\t\t<a href=\"javascript:void(0);\" style=\"position:relative;\" class=\"validate\" title=\"切换图片\" onclick=\"document.getElementById('captchaImg').src='/core/captcha.php?ImgGetCaptcha=true#'+Math.random();\">\n            \t\t\t\t\t<img id=\"captchaImg\" style=\"width:157px; height:44px; box-shadow:0 0 5px #ccc;position:absolute;top:-44px;right:-156px;\" src=\"/core/captcha.php?ImgGetCaptcha=true\">\n            \t\t\t\t</a>\n            \t\t</em>\n                    <validation-errors :field=\"$validation3.captcha\"></validation-errors>\n                </li>\n                <li>\n                    <span>手机验证码：</span>\n                    <em>\n\t\t                  <input type=\"text\" v-model=\"payPwdModel2.mobile_checkcode\" v-validate:captcha=\"validationRules.mobile_checkcode\" class=\"text\" style=\"width:150px;\">\n  \t\t\t\t            <input type=\"button\" class=\"sbtn\" data-type=\"forget\" id=\"send_mobile_checkcode\" value=\"发送验证码\" style=\"border:0;outline:none;width:150px;height:45px;background:#FFC30D;color:#fff;\">\n  \t\t\t            </em>\n                          <validation-errors :field=\"$validation3.mobile_checkcode\"></validation-errors>\n                </li>\n                <li>\n                    <span>新安全密码：</span>\n                    <em><input type=\"text\" class=\"text\" v-model=\"payPwdModel2.pay_pwd5\" v-validate:captcha=\"validationRules.pay_pwd5\"></em>\n                    <validation-errors :field=\"$validation3.pay_pwd5\"></validation-errors>\n                </li>\n                <li>\n                    <span>&nbsp;</span>\n                    <em>\n                        <a v-if=\"$validation3.valid\" @click=\"changePayPwd2\" href=\"javascript:;\" class=\"btn\" id=\"reset_pay_pwd_btn\">重置安全密码</a>\n                        <a v-else href=\"javascript:;\" class=\"btn\" style=\"background-color:#888;cursor:not-allowed\">重置安全密码</a>\n                     </em>\n                </li>\n                <li>\n                    <span></span>\n                    <em></em>\n                </li>\n                </ul>\n            </validator>\n            </div>\n            \n        </div>\n    </div>\n  ";
 
 /***/ },
 /* 40 */
@@ -3985,20 +4120,65 @@ webpackJsonp([0],[
 
 /***/ },
 /* 41 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+		value: true
 	});
-	exports.default = {};
+
+	var _api = __webpack_require__(27);
+
+	var _utils = __webpack_require__(8);
+
+	exports.default = {
+		route: {
+			data: function data(transition) {
+				var who = (0, _api.GET_MEMBER_INFO)();
+				var vm = this;
+				_api.API.TeamTree(who.id).then(function (data) {
+					if (data.isSuccess) {
+						transition.next({ 'value': who.id, 'tree': data.data });
+					} else {
+						(0, _utils.alert2)(data.error.message);
+					}
+				});
+			}
+		},
+		data: function data() {
+			return {
+				value: 566,
+				tree: []
+			};
+		},
+
+		methods: {
+			findNode: function findNode(id) {}
+		},
+		events: {
+			'treeview_click': function treeview_click(node) {
+				console.log(node.label);
+				console.log(node.value);
+				console.log(node.model);
+				var vm = this;
+				_api.API.TeamTree(node.value).then(function (data) {
+					if (data.isSuccess) {
+						node.model.nodes = data.data;
+					} else {
+							(0, _utils.alert2)(data.error.message);
+						}
+				});
+			}
+		}
+
+	};
 
 /***/ },
 /* 42 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"rmain\">\n\t<div class=\"teamC\">\n\t\t<h1><b>我的团队</b></h1>\n\t\t<div class=\"sad\">\n\t\t\t<a href=\"javascript:;\" class=\"on\" data-i=\"1\">我的团队</a>\n\t\t\t<a href=\"javascript:;\" data-i=\"2\">申请升级</a>\n\t\t</div>\n\t\t<ul class=\"u1\">\n\t\t\t<h2>\n\t\t\t<span>团队总人数：<b>0人</b></span>\n\t\t\t<span>直推人数：<b>0人</b></span>\n\t\t\t<span>有效会员人数：<b>0人</b></span>\n\t\t\t<span>无效会员人数：<b>0人</b></span>\n\t\t\t<!--span>团队总挂单金额：<b>0.00元</b></span-->\n\t\t\t<!--span>团队已完成打款金额：<b>0.00元</b></span-->\n\t\t</h2>\n\t\t\t<table>\n\t\t\t\t<thead>\n\t\t\t\t\t<tr>\n\t\t\t\t\t\t<th>编号</th>\n\t\t\t\t\t\t<th>会员手机</th>\n\t\t\t\t\t\t<th>会员昵称</th>\n\t\t\t\t\t\t<th>注册时间</th>\n\t\t\t\t\t\t<th>下级人数</th>\n\t\t\t\t\t\t<th>状态</th>\n\t\t\t\t\t\t<th>操作</th>\n\t\t\t\t\t</tr>\n\t\t\t\t</thead>\n\t\t\t\t<tbody>\n\t\t\t\t</tbody>\n\t\t\t</table>\n\t\t</ul>\n\t\t<ul class=\"u2\">\n\t\t\t<li>推荐1位，晋升M1（一级会员），可获1代收益</li>\n\t\t\t<li>推荐2位，晋升M2（二级会员），可获2代收益</li>\n\t\t\t<li>推荐5位，晋升M3（三级会员），可获3代收益</li>\n\t\t\t<li>推荐15位，团队100人，晋升M4（四级会员），可获4代收益</li>\n\t\t\t<li>推荐15位，团队100人，晋升高级经理，可获无限代收益</li>\n\t\t\t<li><a href=\"javascript:;\" class=\"btn\" id=\"team_apply_btn\">申请升级</a></li>\n\t\t\t<li class=\"imgli\">\n\t\t\t\t<br><img src=\"/images/team.png\"></li>\n\t\t</ul>\n\t</div>\n</div>\n";
+	module.exports = "\n<div class=\"rmain\">\n\t<div class=\"teamC\">\n\t\t<h1><b>我的团队</b></h1>\n\t\t<div class=\"sad\">\n\t\t\t<a href=\"javascript:;\" class=\"on\" data-i=\"1\">我的团队</a>\n\t\t\t<a href=\"javascript:;\" data-i=\"2\">申请升级</a>\n\t\t</div>\n\t\t<ul class=\"u1\">\n\t\t\t<h2>\n\t\t\t<span>团队总人数：<b>0人</b></span>\n\t\t\t<span>直推人数：<b>0人</b></span>\n\t\t\t<span>有效会员人数：<b>0人</b></span>\n\t\t\t<span>无效会员人数：<b>0人</b></span>\n\t\t\t<!--span>团队总挂单金额：<b>0.00元</b></span-->\n\t\t\t<!--span>团队已完成打款金额：<b>0.00元</b></span-->\n\t\t</h2>\n\t\t\t<table>\n\t\t\t\t<thead>\n\t\t\t\t\t<tr>\n\t\t\t\t\t\t<th>编号</th>\n\t\t\t\t\t\t<th>会员手机</th>\n\t\t\t\t\t\t<th>会员昵称</th>\n\t\t\t\t\t\t<th>注册时间</th>\n\t\t\t\t\t\t<th>下级人数</th>\n\t\t\t\t\t\t<th>状态</th>\n\t\t\t\t\t\t<th>操作</th>\n\t\t\t\t\t</tr>\n\t\t\t\t</thead>\n\t\t\t\t<tbody>\n\t\t\t\t</tbody>\n\t\t\t</table>\n\t\t</ul>\n\t\t<ul class=\"u2\">\n\t\t\t<li>推荐1位，晋升M1（一级会员），可获1代收益</li>\n\t\t\t<li>推荐2位，晋升M2（二级会员），可获2代收益</li>\n\t\t\t<li>推荐5位，晋升M3（三级会员），可获3代收益</li>\n\t\t\t<li>推荐15位，团队100人，晋升M4（四级会员），可获4代收益</li>\n\t\t\t<li>推荐15位，团队100人，晋升高级经理，可获无限代收益</li>\n\t\t\t<li><a href=\"javascript:;\" class=\"btn\" id=\"team_apply_btn\">申请升级</a></li>\n\t\t\t<li class=\"imgli\">\n\t\t\t\t<br><img src=\"/images/team.png\"></li>\n\t\t</ul>\n\t</div>\n\n\n\t\n\t <treeview :value.sync=\"value\" :model=\"tree\"  labelname=\"truename\" valuename=\"id\"></treeview>\n\n\t {{tree|json}}\n\n</div>\n";
 
 /***/ },
 /* 43 */
@@ -4779,6 +4959,324 @@ webpackJsonp([0],[
 	});
 
 	exports.default = "";
+
+/***/ },
+/* 85 */,
+/* 86 */,
+/* 87 */,
+/* 88 */,
+/* 89 */,
+/* 90 */,
+/* 91 */,
+/* 92 */,
+/* 93 */,
+/* 94 */,
+/* 95 */,
+/* 96 */,
+/* 97 */,
+/* 98 */,
+/* 99 */,
+/* 100 */,
+/* 101 */,
+/* 102 */,
+/* 103 */,
+/* 104 */,
+/* 105 */,
+/* 106 */,
+/* 107 */,
+/* 108 */,
+/* 109 */,
+/* 110 */,
+/* 111 */,
+/* 112 */,
+/* 113 */,
+/* 114 */,
+/* 115 */,
+/* 116 */,
+/* 117 */,
+/* 118 */,
+/* 119 */,
+/* 120 */,
+/* 121 */,
+/* 122 */,
+/* 123 */,
+/* 124 */,
+/* 125 */,
+/* 126 */,
+/* 127 */,
+/* 128 */,
+/* 129 */,
+/* 130 */,
+/* 131 */,
+/* 132 */,
+/* 133 */,
+/* 134 */,
+/* 135 */,
+/* 136 */,
+/* 137 */,
+/* 138 */,
+/* 139 */,
+/* 140 */,
+/* 141 */,
+/* 142 */,
+/* 143 */,
+/* 144 */,
+/* 145 */,
+/* 146 */,
+/* 147 */,
+/* 148 */,
+/* 149 */,
+/* 150 */,
+/* 151 */,
+/* 152 */,
+/* 153 */,
+/* 154 */,
+/* 155 */,
+/* 156 */,
+/* 157 */,
+/* 158 */,
+/* 159 */,
+/* 160 */,
+/* 161 */,
+/* 162 */,
+/* 163 */,
+/* 164 */,
+/* 165 */,
+/* 166 */,
+/* 167 */,
+/* 168 */,
+/* 169 */,
+/* 170 */,
+/* 171 */,
+/* 172 */,
+/* 173 */,
+/* 174 */,
+/* 175 */,
+/* 176 */,
+/* 177 */,
+/* 178 */,
+/* 179 */,
+/* 180 */,
+/* 181 */,
+/* 182 */,
+/* 183 */,
+/* 184 */,
+/* 185 */,
+/* 186 */,
+/* 187 */,
+/* 188 */,
+/* 189 */,
+/* 190 */,
+/* 191 */,
+/* 192 */,
+/* 193 */,
+/* 194 */,
+/* 195 */,
+/* 196 */,
+/* 197 */,
+/* 198 */,
+/* 199 */,
+/* 200 */,
+/* 201 */,
+/* 202 */,
+/* 203 */,
+/* 204 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _vue = __webpack_require__(1);
+
+	var _vue2 = _interopRequireDefault(_vue);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	_vue2.default.component('treeview', _vue2.default.extend({
+	    template: '<div class="treeview {{class}}"><div class="node-data" v-for="(index, node) in model"><div class="node" :class="{\'active\': isSelected(index)}" @click.prevent="select(index, node[valuename])"><span class="icon node-parent-toggled" v-show="areValidNodes(node[children]) && isOpened(index)"><svg viewBox="0 0 35 35"><g transform="translate(0,-1017.3621)"><path class="back" d="m 2.1411424,1026.4693 0,23.4146 27.0189286,0 0,-23.4146 -13.937805,0 0,-2.7898 -9.2657958,0 0,2.7898 z"/><path class="front" d="m 1,1051.3621 7,-19 2,0 1,-2 6,0 -1,2 19,0 -4.472399,18.9369 z"/><path class="light" d="m 29.696699,1047.0363 -0.820749,3.0631 -6,0 0.757614,-3"/></g></svg> </span><span class="icon node-parent" v-show="areValidNodes(node[children]) && !isOpened(index)"><svg width="14" height="14" viewBox="0 0 35 35"><g transform="translate(0,-1017.3621)"><path class="fill" d="m 1,1026.1835 0,25.1786 33,0 0,-25.1786 -18.857143,0 0,-3 -10.017857,0 0,3 z"/><path class="light" d="m 32,1046.1625 0,3 -6,0 0,-3 6,0"/></g></svg> </span><span class="icon node" v-if="!areValidNodes(node[children])"><svg width="8" height="8" viewBox="0 0 35 35"><g transform="translate(0,-1017.3622)"><circle cx="17.488264" cy="1034.874" r="16.003242"/></g></svg></span><label>{{{node[labelname]}}}</label></div><div v-if="areValidNodes(node[children])" class="children" v-show="isOpened(index)"><div class="margin"></div><div class="nodes"><treeview :id="id" :value.sync="value" :labelname="labelname" :valuename="valuename" :children="children" :model="node[children]" :parent.once="index" class="inner"></treeview></div></div></div></div>',
+	    props: {
+	        /**
+	         * Unique identifier for treeview.
+	         * @since 1.0.0
+	         * @var string
+	         */
+	        id: {
+	            Type: String,
+	            default: 'tv_' + Math.ceil(Math.random() * 100000)
+	        },
+	        /**
+	         * Value of the selected node in the tree.
+	         * @since 1.0.0
+	         * @var mixed
+	         */
+	        value: [String, Number],
+	        /**
+	         * Initial tree composition.
+	         * @since 1.0.0
+	         * @since 1.0.2 Renamed to model.
+	         * @var array
+	         */
+	        model: {
+	            Type: Array,
+	            default: function _default() {
+	                return [];
+	            }
+	        },
+	        /**
+	         * Additional CSS class to apply to component.
+	         * @since 1.0.0
+	         * @var string
+	         */
+	        class: {
+	            Type: String,
+	            default: ''
+	        },
+	        /**
+	         * Name of the child nodes property.
+	         * @since 1.0.0
+	         * @var string
+	         */
+	        children: {
+	            Type: String,
+	            default: 'nodes'
+	        },
+	        /**
+	         * Name of the property holding the node name.
+	         * @since 1.0.0
+	         * @var string
+	         */
+	        labelname: {
+	            Type: String,
+	            default: 'label'
+	        },
+	        /**
+	         * Name of the property holding the node value.
+	         * @since 1.0.0
+	         * @var string
+	         */
+	        valuename: {
+	            Type: String,
+	            default: 'value'
+	        },
+	        node: {
+	            Type: Object,
+	            default: 'node'
+	        },
+	        /**
+	         * Parent node model index.
+	         * @since 1.0.2
+	         * @var int
+	         */
+	        parent: {
+	            Type: Number,
+	            default: undefined
+	        }
+	    },
+	    methods: {
+	        /**
+	         * Selects a node from tree view.
+	         * @since 1.0.0
+	         * @since 1.0.1 Node is passed to event.
+	         *
+	         * @param int   index Tree index selected.
+	         * @param mixed value Value selected.
+	         */
+	        select: function select(index, value) {
+	            // Unselect from current level, children and parents
+	            this.toggleOpen(index);
+	            this.$set('value', value);
+	            // Call to event.
+	            this.$dispatch('treeview_click', {
+	                label: this.model[index][this.labelname],
+	                value: this.model[index][this.valuename],
+	                model: this.model[index]
+	                // ,
+	                // children: this.model[index][this.children]
+	            });
+	        },
+	        /**
+	         * Toggles open / close node.
+	         * @since 1.0.0
+	         *
+	         * @param int index Index to open
+	         */
+	        toggleOpen: function toggleOpen(index) {
+	            // Return if no children
+	            if (!this.areValidNodes(this.model[index][this.children])) return;
+	            // Init
+	            if (this.model[index].isOpened == undefined) this.$set('model[' + index + '].isOpened', this.hasSelectedChild(index));
+	            // General
+	            this.$set('model[' + index + '].isOpened', !this.model[index].isOpened);
+	        },
+	        /**
+	         * Returns flag indicating if nodes are valid or not.
+	         * @since 1.0.0
+	         * @since 1.0.2 Renamed
+	         *
+	         * @param array nodes Nodes to validate.
+	         */
+	        areValidNodes: function areValidNodes(nodes) {
+	            return nodes != undefined && Object.prototype.toString.call(nodes) === '[object Array]' && nodes.length > 0;
+	        },
+	        /**
+	         * Returns flag indicating if tree view has a node selected.
+	         * @since 1.0.2
+	         *
+	         * @return bool
+	         */
+	        hasSelected: function hasSelected() {
+	            // Check children
+	            for (var i in this.model) {
+	                if (this.isSelected(i) || this.hasSelectedChild(i)) return true;
+	            }
+	            return false;
+	        },
+	        /**
+	         * Returns flag indicating if node at specified index has a child selcted or not.
+	         * @since 1.0.2
+	         *
+	         * @param int index Index to check
+	         *
+	         * @return bool
+	         */
+	        hasSelectedChild: function hasSelectedChild(index) {
+	            for (var i in this.$children) {
+	                if (this.$children[i].parent == index && this.$children[i].hasSelected()) return true;
+	            }
+	            return false;
+	        },
+	        /**
+	         * Returns flag indicating if node at specified index is selected or not.
+	         * @since 1.0.2
+	         *
+	         * @param int index Index to check
+	         *
+	         * @return bool
+	         */
+	        isSelected: function isSelected(index) {
+	            return this.value && this.model[index][this.valuename] == this.value;
+	        },
+
+	        /**
+	         * Returns flag indicating if node is opened or not.
+	         * @since 1.0.2
+	         *
+	         * @param int index Index to check
+	         *
+	         * @return bool
+	         */
+	        isOpened: function isOpened(index) {
+	            return this.model[index].isOpened != undefined && this.model[index].isOpened || this.hasSelectedChild(index);
+	        }
+	    }
+	})); /**
+	      * Tree view.
+	      * Vue Component.
+	      *
+	      * @author Alejandro Mostajo <http://about.me/amostajo>
+	      * @copyright 10Quality <http://www.10quality.com>
+	      * @license MIT
+	      * @version 1.0.2
+	      */
 
 /***/ }
 ]);

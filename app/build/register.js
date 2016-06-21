@@ -23,8 +23,6 @@ webpackJsonp([2],{
 
 	var _validation = __webpack_require__(35);
 
-	var _validation2 = _interopRequireDefault(_validation);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	_vue2.default.use(_vueValidator2.default);
@@ -36,7 +34,7 @@ webpackJsonp([2],{
 	            refer: "18742538743",
 	            refer_name: "张星海"
 	        },
-	        validationRules: _validation2.default.Register
+	        ValidatorRules: _validation.ValidatorRules.Register
 	    },
 	    methods: {
 	        register: function register(evt) {
@@ -159,7 +157,7 @@ webpackJsonp([2],{
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var API_HOST = 'http://192.168.1.100:3000/api/';
+	var API_HOST = 'http://192.168.1.104:3000/api/';
 	var LOGIN_KEY = exports.LOGIN_KEY = "member.login.information";
 
 	var API = exports.API = {
@@ -230,9 +228,25 @@ webpackJsonp([2],{
 	    Member: function Member(username) {
 	        return HTTP_GET(_Combine('member/', username));
 	    },
+	    ParentMember: function ParentMember(id) {
+	        return HTTP_GET(_Combine('member/info/', id));
+	    },
 	    IndexData: function IndexData() {
 	        var who = GET_MEMBER_LOGIN_INFO();
 	        return HTTP_GET(_Combine('index/info/', who.memberid));
+	    },
+	    EditMemberInfo: function EditMemberInfo(model) {
+	        return HTTP_POST(_Combine('member/edit/info'), model);
+	    },
+	    EditPwd: function EditPwd(model) {
+	        return HTTP_POST(_Combine('member/reset'), model);
+	    },
+	    EditPayPwd: function EditPayPwd(model, mode) {
+	        //mode //  0 通过原始安全密码,  1 通过手机验证码
+	    },
+	    TeamTree: function TeamTree(id) {
+	        //member/children
+	        return HTTP_GET(_Combine('member/children/', id));
 	    }
 	};
 
@@ -353,43 +367,108 @@ webpackJsonp([2],{
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	var VRules = {};
+	var ValidatorRules = exports.ValidatorRules = {
 
-	VRules.Register = {
-	    nickname: {
-	        required: { rule: true, message: "昵称不能为空" },
-	        maxlength: { rule: 15, message: "不能超过15个字符" }
+	    Register: {
+	        nickname: {
+	            required: { rule: true, message: "昵称不能为空" },
+	            maxlength: { rule: 15, message: "不能超过15个字符" }
+	        },
+	        pwd: {
+	            required: { rule: true, message: "密码不能为空" },
+	            maxlength: { rule: 32, message: "不能超过32个字符" }
+	        },
+	        pay_pwd: {
+	            required: { rule: true, message: "安全密码不能为空" },
+	            maxlength: { rule: 32, message: "不能超过32个字符" }
+	        },
+	        mobile: {
+	            required: { rule: true, message: "会员手机号码不能为空" },
+	            maxlength: { rule: 11, message: "不能超过11个字符" }
+	        },
+	        captcha: {
+	            required: { rule: true, message: "图形验证码不能为空" },
+	            maxlength: { rule: 4, message: "不能超过4个字符" }
+	        },
+	        mobile_checkcode: {
+	            required: { rule: true, message: "手机验证码不能为空" },
+	            maxlength: { rule: 6, message: "不能超过6个字符" }
+	        }
 	    },
-	    pwd: {
-	        required: { rule: true, message: "密码不能为空" },
-	        maxlength: { rule: 32, message: "不能超过32个字符" }
-	    },
-	    pay_pwd: {
-	        required: { rule: true, message: "安全密码不能为空" },
-	        maxlength: { rule: 32, message: "不能超过32个字符" }
-	    },
-	    mobile: {
-	        required: { rule: true, message: "会员手机号码不能为空" },
-	        maxlength: { rule: 11, message: "不能超过11个字符" }
-	    },
-	    captcha: {
-	        required: { rule: true, message: "图形验证码不能为空" },
-	        maxlength: { rule: 4, message: "不能超过4个字符" }
-	    },
-	    mobile_checkcode: {
-	        required: { rule: true, message: "手机验证码不能为空" },
-	        maxlength: { rule: 6, message: "不能超过6个字符" }
+
+	    Member: {
+	        nickname: {
+	            required: { rule: true, message: "昵称不能为空" },
+	            maxlength: { rule: 32, message: "不能超过32个字符" }
+	        },
+	        truename: {
+	            maxlength: { rule: 32, message: "不能超过32个字符" }
+	        },
+	        alipay: {
+	            maxlength: { rule: 32, message: "不能超过32个字符" }
+	        },
+	        weixin: {
+	            maxlength: { rule: 32, message: "不能超过32个字符" }
+	        },
+	        bank: {
+	            required: { rule: true, message: "请选择银行卡类型" },
+	            maxlength: { rule: 32, message: "不能超过32个字符" }
+	        },
+	        bank_num: {
+	            maxlength: { rule: 32, message: "不能超过32个字符" }
+	        },
+	        bank_addr: {
+	            maxlength: { rule: 32, message: "不能超过32个字符" }
+	        },
+	        pay_pwd: {
+	            required: { rule: true, message: "请填写安全密码" },
+	            maxlength: { rule: 32, message: "不能超过32个字符" }
+	        },
+
+	        old_pwd: {
+	            required: { rule: true, message: "请填写原始密码" }
+	        },
+
+	        pwd: {
+	            required: { rule: true, message: "请填写新密码" }
+	        },
+
+	        repwd: {
+	            required: { rule: true, message: "请再次填写新密码" }
+	        },
+
+	        pay_pwd3: {
+	            required: { rule: true, message: "请输入安全密码" }
+	        },
+
+	        old_pay_pwd: {
+	            required: { rule: true, message: "请输入原始安全密码" }
+	        },
+
+	        pay_pw4: {
+	            required: { rule: true, message: "请输入新的安全密码" }
+	        },
+
+	        pay_repwd: {
+	            required: { rule: true, message: "请再次输入新的安全密码" }
+	        },
+
+	        captcha: {
+	            required: { rule: true, message: "请输入图形验证码" }
+	        },
+
+	        mobile_checkcode: {
+	            required: { rule: true, message: "请输入手机验证码" }
+	        },
+
+	        pay_pw5: {
+	            required: { rule: true, message: "请输入新的安全密码" }
+	        }
+
 	    }
 	};
 
-	VRules.MemberInfo = {
-	    nickname: {
-	        required: { rule: true, message: "昵称不能为空" },
-	        maxlength: { rule: 32, message: "不能超过32个字符" }
-	    }
-	};
-
-	exports.default = VRules;
+	var Validators = exports.Validators = {};
 
 /***/ },
 

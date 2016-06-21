@@ -4,7 +4,7 @@ import VueValidator from 'vue-validator';
 import {API} from './api';
 import {alert2,queryValue} from './utils';
 import validationErrors from '../components/_validation_errors.vue';
-import VRules from './validation';
+import {ValidatorRules} from './validation';
 
 Vue.use(VueValidator);
 
@@ -15,7 +15,7 @@ new Vue({
             refer:"18742538743",
             refer_name:"张星海"
         },
-        validationRules: VRules.Register
+        ValidatorRules: ValidatorRules.Register
     },
     methods:{
         register: function(evt){
