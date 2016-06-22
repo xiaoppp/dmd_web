@@ -1,7 +1,5 @@
 <template>
 <div class="rmain">
-{{getName}}
-
 <div class="incomeC">
 	<h1><b>我的资产</b></h1>
 	<h2 class="allzichan">
@@ -183,7 +181,7 @@
 <script>
 
 import {getName} from '../js/getters';
-    
+
     export default {
         vuex:{
             getters:{

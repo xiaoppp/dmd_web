@@ -43,55 +43,59 @@
 			</ul>
 		</div>
 
-		 <treeview :value.sync="value" :model="tree"  labelname="truename" valuename="id"></treeview>
-
-		 {{tree|json}}
+		<ul id="team-tree">
+			<item class="item" :model="treeData">
+			</item>
+		</ul>
 
 	</div>
 </template>
+
+
+<style scoped>
+
+#team-tree{}
+.bold{}
+.bold > span {color:#fff;}
+.item{}
+.item > ul{}
+
+</style>
+
+
 <script>
 	import {API,GET_MEMBER_INFO} from '../js/api';
 	import {alert2} from '../js/utils';
+	import item from './teamtree.vue';
 	export default {
-		route:{
-			data(transition){
+		route: {
+			data(transition) {
 				let who = GET_MEMBER_INFO();
 				let vm = this;
-				API.TeamTree(who.id).then(function(data){
-					if(data.isSuccess) {
-					   transition.next({'value': who.id,'tree': data.data});
+
+				API.TeamTree(who.id).then(function(data) {
+					if (data.isSuccess) {
+						const children = data.data.map(d => {
+							return {
+								name: d.truename,
+								id: d.id
+							}
+						})
+						let tree = {
+							name: who.truename,
+							children: children
+						}
+						transition.next({treeData: tree})
 					} else {
 						alert2(data.error.message);
 					}
 				});
 			}
 		},
-		data(){
+		data() {
 			return {
-				value: 566,
-				tree:  []
+				treeData: {}
 			}
-		},
-		methods:{
-			findNode(id){
-			}
-		},
-		events: {
-        'treeview_click': function(node) {
-            // // TODO my code here
-            // console.log(node.label);
-            // console.log(node.value);
-			 console.log(node.model);
-			let vm = this;
-			API.TeamTree(node.value).then(function(data){
-				if(data.isSuccess) {
-					console.log(data.data);
-					node.model.nodes = data.data;	
-				} else {
-					alert2(data.error.message);
-				}
-			});
-        }
-    },
+		}
 	}
 </script>

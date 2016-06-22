@@ -2,7 +2,7 @@ import request from 'superagent';
 import Q from 'q';
 import config from './config'
 
-const API_HOST = 'http://192.168.1.104:3000/api/';
+const API_HOST = 'http://192.168.1.102:3000/api/';
 export const LOGIN_KEY = "member.login.information";
 
 export const API = {
@@ -92,6 +92,10 @@ export const API = {
     TeamTree(id){
         //member/children
         return HTTP_GET(_Combine('member/children/',id));
+    },
+    Offer(money){
+        let model = {money : money};
+        return HTTP_POST(_Combine('offer'),model);
     }
 }
 
