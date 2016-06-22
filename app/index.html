@@ -5,6 +5,7 @@
     <link href="/css/base.css" rel="stylesheet">
     <link href="/css/common.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
+    <link href="/js/lib/vue.tree-view.css" rel="stylesheet">
 </head>
 
 <body id="app">
@@ -12,15 +13,11 @@
         <a href="/" class="logoa"><img src="images/logo.png"></a>
         <a class="rt tuichu" id="login_exit">退出</a>
         <span class="rt chengxin">诚信&nbsp;
-            <img src="images/xin01.png">
-            <img src="images/xin01.png">
-            <img src="images/xin01.png">
-            <img src="images/xin01.png">
-            <img src="images/xin01.png">
+            <img v-bind:src=gBelieveSrc(n)  v-for = "n in 5">
         </span>
-        <span class="rt dengji">二级会员</span>
-        <span class="rt">昵称：皇者团队十咖啡</span>
-        <a href="/?act=personal" class="rt imga"><img src="images/default1.jpg"></a>
+        <span class="rt dengji">{{member.level|level}}</span>
+        <span class="rt">昵称：{{member.nickname}}</span>
+        <a href="#" v-link="{name:'index'}" class="rt imga"><img src="images/default1.jpg"></a>
     </div>
     <div class="imain">
         <div class="imi ilft">

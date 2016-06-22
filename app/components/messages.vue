@@ -11,33 +11,42 @@
 				</li>
 			</ul>
 		</div>
+		<pagination urlname="messages" :page="page" :total="total"></pagination>
 	</div>
 </div>
 </template>
 <script>
 
 import {API} from '../js/api';
+import pagination from './_pagination.vue';
 
 export default {
 	data(){
 		return { 
-			model:[]
+			model:[],
+			page: 1,
+			total: 0,
 		 }
 	},
 	route:{
 		data:function(transition){
-			API.Messages(1).then(function(data){
-				var count = data.count;
-				var rows = data.rows;
-				rows.forEach(function(item,key){
-					if(item.state==0)item.state = "w";
-					else item.state = "ed";
-				});
-				transition.next({'model':rows});
+			var page = transition.to.query.page || this.page;
+			API.Messages(page).then(function(data){
+				var d = data.data;
+				var count = d.count;
+				var rows = d.rows;
+				if(rows){
+					rows.forEach(function(item,key){
+						if(item.state==0) item.state = "w";
+						else item.state = "ed";
+					});
+				}
+				transition.next({"model": rows,'page': page,'total': count});
 			}).catch(function(err){
 				console.log(err);
 			});
 		}
-	}
+	},
+	components:{pagination}
 }
 </script>

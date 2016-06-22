@@ -25,27 +25,35 @@ const router = new VueRouter({
 
 router.map({
     '/index': {
+        name:'index',
         component: index
     },
     '/offer': {
+        name:'offer',
         component: offer
     },
     '/apply': {
+        name:'apply',
         component: apply
     },
     '/info': {
+        name:'info',
         component: info
     },
     '/team': {
+        name:'team',
         component: team
     },
     '/income': {
+        name:'income',
         component: income
     },
     '/record': {
+        name:'record',
         component: record
     },
     '/news': {
+        name:'news',
         component: news
     },
     '/news/:id': {
@@ -53,9 +61,11 @@ router.map({
         component: newssingle
     },
     '/leavemsg': {
+        name:'leavemsg',
         component: leavemsg
     },
     '/messages': {
+        name:'messages',
         component: messages
     },
     '/message/:id': {
@@ -63,6 +73,7 @@ router.map({
         component: messagesingle
     },
     '/share': {
+        name:'share',
         component: share
     }
 });
@@ -70,5 +81,7 @@ router.map({
 router.redirect({
     '*': '/index'
 });
+
+router.go({name:'index'});
 
 export default router;

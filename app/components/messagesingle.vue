@@ -30,8 +30,9 @@
 			data:function(transition){
 				var id = transition.to.params.id;
 				API.MessageSingle(id).then(function(data){
-					transition.next({'model': data});
-					console.log(data);
+                    var d = data.data;
+					transition.next({'model': d});
+					console.log(d);
 				});
 			}
 		}

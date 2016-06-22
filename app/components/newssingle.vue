@@ -30,9 +30,10 @@
 			data:function(transition){
 				var id = transition.to.params.id;
 				API.NewsSingle(id).then(function(data){
-					data.content = htmlDecode(data.content);
-					transition.next({'model': data});
-					console.log(data);
+					var d = data.data;
+					d.content = htmlDecode(d.content);
+					transition.next({'model': d});
+					console.log(d);
 				});
 			}
 		}
