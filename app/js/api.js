@@ -206,4 +206,3 @@ export function GET_MEMBER_INFO() {
 export function  SET_MEMBER_INFO(value) {
     MEMBER_INFO = value;
 }
-

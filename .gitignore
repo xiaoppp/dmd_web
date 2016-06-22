@@ -1,7 +1,6 @@
 node_modules
-frontend/node_modules
 
-frontend/app/build
+app/build
 
 logs
 *.log
