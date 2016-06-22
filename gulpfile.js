@@ -14,104 +14,65 @@ var minifycss = require('gulp-minify-css')
 var cssnano = require('gulp-cssnano');
 //var gulpif = require('gulp-if');
 
-
 var path = require('path');
 var fs = require('fs');
 
-var deploypath = 'deploy/app59613473t2/';
-var deploywebsitepath = "deploy/app59613473t2/app/static/";
+//var deploypath = 'deploy/app59613473t2/';
+var deploywebsitepath = "deploy/";
 
 var paths = {
-    flaskfiles: ['backend/config.py', 'backend/index.py', 'backend/requirements.txt'],
-    flaskapp: ['backend/app/**/*.py'],
-    image: ['frontend/app/img/**/*'],
+    image: ['app/images/**/*'],
     html: [
-        'frontend/app/before.html',
-        'frontend/app/end.html',
-        'frontend/app/building.html',
-        'frontend/app/fanrob.html',
-        'frontend/app/guessing.html',
-        'frontend/app/vote.html',
-        'frontend/app/card.html',
-        'frontend/app/activity.html',
-
-        'frontend/app/member/index.html',
-        'frontend/app/member/task.html'
-
+        'app/index.html',
+        'app/login.html',
+        'app/register.html'
     ],
     style: [
-        'frontend/app/style/site.css',
-        'frontend/app/style/ionic.css',
-        'frontend/app/style/bootstrap.min.css'
-    ],
-    fonts: [
-        'frontend/app/fonts/ionicons.eot',
-        'frontend/app/fonts/ionicons.svg',
-        'frontend/app/fonts/ionicons.ttf',
-        'frontend/app/fonts/ionicons.woff'
+        'app/css/admin.css',
+        'app/css/base.css',
+        'app/css/common_mobile.css',
+        'app/css/common.css',
+        'app/css/style_mobile.css',
+        'app/css/style.css'
     ],
     prejs: [
-        'frontend/app/build/before.js',
-        'frontend/app/build/building.js',
-        'frontend/app/build/fanrob.js',
-        'frontend/app/build/guessing.js',
-        'frontend/app/build/vote.js',
-        'frontend/app/build/card.js',
-        'frontend/app/build/activity.js',
-
-        'frontend/app/build/task.js',
-        'frontend/app/build/index.js',
-
-        'frontend/app/build/vendor1.js',
-        'frontend/app/build/vendor2.js',
-        'frontend/app/build/vendor3.js'
+        'app/build/index.js',
+        'app/build/login.js',
+        'app/build/register.js',
+        'app/build/vendor1.js'
     ],
     js: [
-        'frontend/app/build/loading.js'
+
     ]
 };
 
-process.chdir('..');
-console.log(process.cwd());
+// process.chdir('..');
+// console.log(process.cwd());
 
 gulp.task('clean', function () {
-    return gulp.src(deploypath + "/app", {
-        read: false
-    })
+    return gulp
+        .src(deploywebsitepath, {
+            read: false
+        })
         .pipe(clean());
-})
-
-// copy all python files
-gulp.task('python', function () {
-    gulp
-        .src(paths.flaskfiles, {
-            base: 'backend'
-        })
-        .pipe(gulp.dest(deploypath))
-
-    gulp
-        .src(paths.flaskapp, {
-            base: 'backend/app'
-        })
-        .pipe(gulp.dest(deploypath + 'app'))
 })
 
 gulp.task('imagemin', function () {
     return gulp
         .src(paths.image, {
-            base: 'frontend/app'
+            base: 'app'
         })
         .pipe(gulp.dest(deploywebsitepath));
 })
 
 //replace url of css and js
-gulp.task('html', ['prejs','style','fonts'], function () {
+gulp.task('html', ['prejs','style'], function () {
     var style_manifest = gulp.src("./" + deploywebsitepath + "/style-manifest");
     var js_manifest = gulp.src("./" + deploywebsitepath + "/js-manifest");
 
     return gulp
         .src(paths.html, {
-            base: 'frontend/app'
+            base: 'app'
         })
         .pipe(revReplace({
             manifest: style_manifest
@@ -125,14 +86,14 @@ gulp.task('html', ['prejs','style','fonts'], function () {
 
 gulp.task('js', function () {
     return gulp.src(paths.js, {
-            base: 'frontend/app'
+            base: 'app'
         })
         .pipe(gulp.dest(deploywebsitepath));
 })
 
 gulp.task('prejs', function () {
     return gulp.src(paths.prejs, {
-            base: 'frontend/app'
+            base: 'app'
         })
         .pipe(replace('opt: "test"', 'opt: "product"'))
         .pipe(uglify())
@@ -142,16 +103,9 @@ gulp.task('prejs', function () {
         .pipe(gulp.dest(deploywebsitepath))
 })
 
-gulp.task('fonts', function() {
-    gulp.src(paths.fonts, {
-          base: 'frontend/app'
-        })
-        .pipe(gulp.dest(deploywebsitepath))
-})
-
 gulp.task('style', function() {
     gulp.src(paths.style, {
-          base: 'frontend/app'
+          base: 'app'
         })
         .pipe(cssnano({zindex: false}))
         .pipe(rev())
@@ -160,35 +114,4 @@ gulp.task('style', function() {
         .pipe(gulp.dest(deploywebsitepath))
 })
 
-gulp.task('copy', ['python', 'imagemin', 'js', 'html'])
-
-gulp.task('git', function () {
-    process.chdir('deploy/app59613473t2');
-    console.log(process.cwd());
-
-    function add() {
-        gulp.src('./*')
-            .pipe(git.add());
-    }
-
-    function commit() {
-        gulp.src('./*')
-            .pipe(git.commit('deploy commit'));
-    }
-
-    function push() {
-        git.push('origin', 'master', function (err) {
-            if (err) {
-                console.log(err);
-            }
-        });
-    }
-
-    var series = [add, commit, push];
-
-    for (var i = 0; i < series.length; i++) {
-        setTimeout(series[i], 1000 * (i + 1));
-    }
-})
-
-gulp.task('default', ['git']);
+gulp.task('copy', ['imagemin', 'js', 'html'])

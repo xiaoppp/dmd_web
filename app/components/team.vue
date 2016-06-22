@@ -44,7 +44,7 @@
 		</div>
 
 
-		
+
 		 <treeview :value.sync="value" :model="tree"  labelname="truename" valuename="id"></treeview>
 
 		 {{tree|json}}
@@ -52,10 +52,8 @@
 	</div>
 </template>
 <script>
-
 	import {API,GET_MEMBER_INFO} from '../js/api';
 	import {alert2} from '../js/utils';
-
 	export default {
 		route:{
 			data(transition){
@@ -91,14 +89,12 @@
 				if(data.isSuccess) {
 					node.model.nodes = data.data;
 					//node.children = data.data;
-					
+
 				} else {
 					alert2(data.error.message);
 				}
 			});
         }
-    }, 
-
-
+    },
 	}
 </script>
