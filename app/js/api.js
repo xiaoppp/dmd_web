@@ -96,6 +96,9 @@ export const API = {
     Offer(money){
         let model = {money : money};
         return HTTP_POST(_Combine('offer'),model);
+    },
+    TeamScope(id){
+        return HTTP_GET(_Combine('member/children/amount/',id));
     }
 }
 
@@ -204,7 +207,7 @@ export function HAS_LOGIN() {
 export function GET_MEMBER_INFO() {
     if(MEMBER_INFO && MEMBER_INFO.id)
         return MEMBER_INFO;
-    else throw "no member info.";
+    else throw "no member info provided.";
 }
 
 export function  SET_MEMBER_INFO(value) {

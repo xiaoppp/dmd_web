@@ -1,13 +1,15 @@
 <template id="item-template">
     <li>
-        <div :class="{bold: isFolder}" @click="toggle">
-            {{model.name}}
-            <span v-if="isFolder">[{{open ? '-' : '+'}}]</span>
+        <div :class="{bold: isFolder}" class="item-self"  @click="toggle">
+            <i class="{{model.sex == 1 ? 'female':'male'}}"></i>
+            <span class="item-name">{{model.name}} - {{model.mobile}}</span>
+            <span class="item-plus-minus" v-if="isFolder">[{{open ? ' - ' : ' + '}}]</span>
+            <span class="item-plus-minus" v-else>[ ? ]</span>
+            <a href="javascript:;" class="item-detail" @click="viewDetail(model,$event)">详细</a>
         </div>
-        <ul v-show="open" v-if="isFolder">
+        <ul class="item-children" v-show="open" v-if="isFolder">
             <item class="item" v-for="model in model.children" :model="model" @click="itemClick(model, $event)">
             </item>
-            <!-- <li @click="addChild">+</li> -->
         </ul>
     </li>
 </template>
@@ -18,10 +20,12 @@
         API,
         GET_MEMBER_INFO
     } from '../js/api';
+
     export default Vue.component('item', {
                 template: '#item-template',
                 props: {
-                    model: Object
+                    model: Object,
+                    from : Number,
                 },
                 data: function() {
                     return {
@@ -44,6 +48,7 @@
                         if (model.children)
                             return
                         else {
+
                             Vue.set(model, 'children', [])
 
                             API.TeamTree(model.id).then(function(data) {
@@ -52,14 +57,14 @@
                                             const children = data.data.map(d => {
                                                 return {
                                                     name: d.truename,
-                                                    id: d.id
+                                                    id: d.id,
+                                                    sex: d.sex,
+                                                    mobile: d.username,
+                                                    nickname: d.nickname,
+                                                    ok: d.ok
                                                 }
                                             })
 
-                                            // let tree = {
-                                            //     name: model.name,
-                                            //     children: children
-                                            // }
                                             model.children = children
                                             this.open = true
                                         }
@@ -68,33 +73,37 @@
                                     }
                                 })
                             }
-                        },
-                        toggle: function() {
-                                console.log('toggle')
-                                if (this.isFolder) {
-                                    this.open = !this.open
-                                }
-                            },
-                            changeType: function() {
-                                console.log('change type')
-                                if (!this.isFolder) {
-                                    Vue.set(this.model, 'children', [])
-                                    this.addChild()
-                                    this.open = true
-                                }
-                            },
-                            addChild: function() {
-                                this.model.children.push({
-                                    name: 'new stuff'
-                                })
+                    },
+                    toggle: function() {
+                            console.log('toggle')
+                            if (this.isFolder) {
+                                this.open = !this.open
                             }
+                        },
+                    changeType: function() {
+                        console.log('change type')
+                        if (!this.isFolder) {
+                            Vue.set(this.model, 'children', [])
+                            this.addChild()
+                            this.open = true
+                        }
+                    },
+                    addChild: function() {
+                        this.model.children.push({
+                            name: 'new stuff'
+                        })
+                    },
+                    viewDetail:function(model,e){
+                        e.stopPropagation();
+                        console.log(model);
+                        this.$dispatch('on-detail-click',model);
                     }
-                })
+                }
+            })
 </script>
 
 <style>
     .item {
-        cursor: pointer;
     }
 
     .item div {
@@ -102,13 +111,28 @@
         font-size: 16px;
     }
 
-    .bold {
-        font-weight: bold;
+    .item-self{
+        color: #efefef;
+        height: 45px;
+        line-height: 45px;
     }
 
-    ul {
-        padding-left: 1em;
-        line-height: 1.5em;
-        list-style-type: dot;
-    }
+    .item-name{color:#ddd; padding:0 8px;}
+
+    .item-plus-minus{margin:0 5px;color:#fff;cursor: pointer;}
+
+    .item-children{ padding-left: 3em; line-height: 1.5em;  list-style-type: dot; margin-top: 2px !important;}
+
+    .bold { font-weight: bold; }
+
+    .bold > span {color:#fff;}
+    .item{}
+    .item > ul{}
+
+    .female,.male{display:inline-block;width:32px;height:32px;}
+    .male{background: url('/images/icons/male.png')}
+    .female{background: url('/images/icons/female.png')}
+
+    .item-detail{color:#FEC107}
+
 </style>

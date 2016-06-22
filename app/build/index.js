@@ -39,7 +39,8 @@ webpackJsonp([0],[
 	            offer: {},
 	            offerPairs: 0,
 	            applyPairs: 0,
-	            showNews: false
+	            showNews: false,
+	            teamScope: 0
 	        };
 	    },
 
@@ -54,6 +55,7 @@ webpackJsonp([0],[
 	    },
 	    created: function created() {
 	        var vm = this;
+
 	        _api.API.IndexData().then(function (data) {
 	            if (data.isSuccess) {
 	                var d = data.data;
@@ -71,6 +73,18 @@ webpackJsonp([0],[
 	            } else {
 	                (0, _utils.alert2)(data.error.message);
 	                console.log(data.error.message);
+	            }
+	        });
+
+	        var who = (0, _api.GET_MEMBER_LOGIN_INFO)();
+
+	        _api.API.TeamScope(who.memberid).then(function (data) {
+	            if (data.isSuccess) {
+	                var d = data.data;
+	                vm.teamScope = d;
+	                console.log(d);
+	            } else {
+	                (0, _utils.alert2)(data.error.message);
 	            }
 	        });
 	    },
@@ -3854,6 +3868,9 @@ webpackJsonp([0],[
 	    Offer: function Offer(money) {
 	        var model = { money: money };
 	        return HTTP_POST(_Combine('offer'), model);
+	    },
+	    TeamScope: function TeamScope(id) {
+	        return HTTP_GET(_Combine('member/children/amount/', id));
 	    }
 	};
 
@@ -3943,7 +3960,7 @@ webpackJsonp([0],[
 
 	//取当前会员信息
 	function GET_MEMBER_INFO() {
-	    if (MEMBER_INFO && MEMBER_INFO.id) return MEMBER_INFO;else throw "no member info.";
+	    if (MEMBER_INFO && MEMBER_INFO.id) return MEMBER_INFO;else throw "no member info provided.";
 	}
 
 	function SET_MEMBER_INFO(value) {
@@ -4143,13 +4160,12 @@ webpackJsonp([0],[
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__webpack_require__(195)
 	__vue_script__ = __webpack_require__(41)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] app\\components\\team.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(197)
+	__vue_template__ = __webpack_require__(42)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -4190,6 +4206,7 @@ webpackJsonp([0],[
 	exports.default = {
 		route: {
 			data: function data(transition) {
+
 				var who = (0, _api.GET_MEMBER_INFO)();
 				var vm = this;
 
@@ -4198,11 +4215,21 @@ webpackJsonp([0],[
 						var children = data.data.map(function (d) {
 							return {
 								name: d.truename,
-								id: d.id
+								id: d.id,
+								sex: d.sex,
+								mobile: d.username,
+								nickname: d.nickname,
+								ok: d.ok
 							};
 						});
+
 						var tree = {
 							name: who.truename,
+							id: who.id,
+							sex: who.sex,
+							mobile: who.username,
+							nickname: who.nickname,
+							ok: who.ok,
 							children: children
 						};
 						transition.next({ treeData: tree });
@@ -4212,15 +4239,38 @@ webpackJsonp([0],[
 				});
 			}
 		},
+		events: {
+			'on-detail-click': function onDetailClick(model) {
+				this.currentModel = model;
+			}
+		},
+		computed: {
+			childrenCount: function childrenCount() {
+				var n = this.currentModel.children;
+				if (!n) return '未加载下级';else return n.length;
+			},
+			rootChildrenCount: function rootChildrenCount() {
+				var d = this.treeData;
+				if (d.children) return d.children.length;else return 0;
+			}
+		},
 		data: function data() {
 			return {
-				treeData: {}
+				treeData: {},
+				tab: 1,
+				currentModel: {},
+				whoid: 0
 			};
 		}
 	};
 
 /***/ },
-/* 42 */,
+/* 42 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"rmain\">\n\t<div class=\"teamC\">\n\t\t<h1><b>我的团队</b></h1>\n\t\t<div class=\"sad\">\n\t\t\t<a href=\"javascript:;\" :class=\"{'on':tab == 1}\" @click=\"tab = 1\">我的团队</a>\n\t\t\t<a href=\"javascript:;\" :class=\"{'on':tab == 2}\" @click=\"tab = 2\">申请升级</a>\n\t\t</div>\n\t\t<ul class=\"u1\" v-show=\"tab == 1\">\n\t\t\t<h2>\n\t\t\t<span>团队总人数：<b>{{$parent.teamScope}}人</b></span>\n\t\t\t<span>直推人数：<b>{{rootChildrenCount}}人</b></span>\n\t\t\t<!--<span>有效会员人数：<b>0人</b></span>\n\t\t\t<span>无效会员人数：<b>0人</b></span>-->\n\t\t\t<!--span>团队总挂单金额：<b>0.00元</b></span-->\n\t\t\t<!--span>团队已完成打款金额：<b>0.00元</b></span-->\n\t\t\t</h2>\n\n\t\t\t<table>\n\t\t\t\t<thead>\n\t\t\t\t\t<tr>\n\t\t\t\t\t\t<th>编号</th>\n\t\t\t\t\t\t<th>会员手机</th>\n\t\t\t\t\t\t<th>会员昵称</th>\n\t\t\t\t\t\t<th>注册时间</th>\n\t\t\t\t\t\t<th>下级人数</th>\n\t\t\t\t\t\t<th>状态</th>\n\t\t\t\t\t\t<th>操作</th>\n\t\t\t\t\t</tr>\n\t\t\t\t</thead>\n\t\t\t\t<tbody>\n\t\t\t\t\t<tr v-if=\"currentModel.id\">\n\t\t\t\t\t\t<td>DMD{{currentModel.id}}18636967</td>\n\t\t\t\t\t\t<td>{{currentModel.mobile}}</td>\n\t\t\t\t\t\t<td :style=\"{color: currentModel.ok == 1?'#0f0':'#F1AF36'}\">{{currentModel.nickname}}</td>\n\t\t\t\t\t\t<td>{{currentModel.reg_time|datetime}}</td>\n\t\t\t\t\t\t<td>{{childrenCount}}</td>\n\t\t\t\t\t\t<td :style=\"{color: currentModel.state == 1 ? '#01CCCC':'f00'}\">\n\t\t\t\t\t\t\t{{currentModel.state == 1 ? \"正常\":\"冻结\"}}\n\t\t\t\t\t\t</td>\n\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t<a href=\"/?act=team&id=<?php echo $val['id']; ?>\" class=\"see\">查看</a>\n\n\t\t\t\t\t\t</td>\n\t\t\t\t\t</tr>\n\t\t\t\t</tbody>\n\t\t\t</table>\n\n\t\t\t<ul style=\"padding: 8px 0 0 35px;\">\n\t\t\t\t<item class=\"item\" :model=\"treeData\" :from=\"whoid\">\n\t\t\t\t</item>\n\t\t\t</ul>\n\n\t\t</ul>\n\n\t\t<ul class=\"u2\" v-show=\"tab == 2\">\n\t\t\t<li>推荐1位，晋升M1（一级会员），可获1代收益</li>\n\t\t\t<li>推荐2位，晋升M2（二级会员），可获2代收益</li>\n\t\t\t<li>推荐5位，晋升M3（三级会员），可获3代收益</li>\n\t\t\t<li>推荐15位，团队100人，晋升M4（四级会员），可获4代收益</li>\n\t\t\t<li>推荐15位，团队100人，晋升高级经理，可获无限代收益</li>\n\t\t\t<li>\n\t\t\t\t<a href=\"javascript:;\" class=\"btn\" id=\"team_apply_btn\">申请升级</a></li>\n\t\t\t<li class=\"imgli\">\n\t\t\t\t<br><img src=\"/images/team.png\"></li>\n\t\t</ul>\n\t</div>\n\n\t\n\n</div>\n";
+
+/***/ },
 /* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -5367,7 +5417,7 @@ webpackJsonp([0],[
 
 
 	// module
-	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.item {\n    cursor: pointer;\n}\n\n.item div {\n    color: white;\n    font-size: 16px;\n}\n\n.bold {\n    font-weight: bold;\n}\n\nul {\n    padding-left: 1em;\n    line-height: 1.5em;\n    list-style-type: dot;\n}\n", ""]);
+	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.item {\n}\n\n.item div {\n    color: white;\n    font-size: 16px;\n}\n\n.item-self{\n    color: #efefef;\n    height: 45px;\n    line-height: 45px;\n}\n\n.item-name{color:#ddd; padding:0 8px;}\n\n.item-plus-minus{margin:0 5px;color:#fff;cursor: pointer;}\n\n.item-children{ padding-left: 3em; line-height: 1.5em;  list-style-type: dot; margin-top: 2px !important;}\n\n.bold { font-weight: bold; }\n\n.bold > span {color:#fff;}\n.item{}\n.item > ul{}\n\n.female,.male{display:inline-block;width:32px;height:32px;}\n.male{background: url('/images/icons/male.png')}\n.female{background: url('/images/icons/female.png')}\n\n.item-detail{color:#FEC107}\n\n", ""]);
 
 	// exports
 
@@ -5393,7 +5443,8 @@ webpackJsonp([0],[
 	exports.default = _vue2.default.component('item', {
 	    template: '#item-template',
 	    props: {
-	        model: Object
+	        model: Object,
+	        from: Number
 	    },
 	    data: function data() {
 	        return {
@@ -5413,6 +5464,7 @@ webpackJsonp([0],[
 	            console.log(model.id);
 
 	            if (model.children) return;else {
+
 	                _vue2.default.set(model, 'children', []);
 
 	                _api.API.TeamTree(model.id).then(function (data) {
@@ -5421,7 +5473,11 @@ webpackJsonp([0],[
 	                            var children = data.data.map(function (d) {
 	                                return {
 	                                    name: d.truename,
-	                                    id: d.id
+	                                    id: d.id,
+	                                    sex: d.sex,
+	                                    mobile: d.username,
+	                                    nickname: d.nickname,
+	                                    ok: d.ok
 	                                };
 	                            });
 
@@ -5452,6 +5508,11 @@ webpackJsonp([0],[
 	            this.model.children.push({
 	                name: 'new stuff'
 	            });
+	        },
+	        viewDetail: function viewDetail(model, e) {
+	            e.stopPropagation();
+	            console.log(model);
+	            this.$dispatch('on-detail-click', model);
 	        }
 	    }
 	});
@@ -5460,53 +5521,7 @@ webpackJsonp([0],[
 /* 194 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<li>\n    <div :class=\"{bold: isFolder}\" @click=\"toggle\">\n        {{model.name}}\n        <span v-if=\"isFolder\">[{{open ? '-' : '+'}}]</span>\n    </div>\n    <ul v-show=\"open\" v-if=\"isFolder\">\n        <item class=\"item\" v-for=\"model in model.children\" :model=\"model\" @click=\"itemClick(model, $event)\">\n        </item>\n        <!-- <li @click=\"addChild\">+</li> -->\n    </ul>\n</li>\n";
-
-/***/ },
-/* 195 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(196);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(18)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-63c119bb&scoped=true!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./team.vue", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-63c119bb&scoped=true!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./team.vue");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 196 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(17)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n#team-tree[_v-63c119bb]{}\n.bold[_v-63c119bb]{}\n.bold > span[_v-63c119bb] {color:#fff;}\n.item[_v-63c119bb]{}\n.item > ul[_v-63c119bb]{}\n\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 197 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<div class=\"rmain\" _v-63c119bb=\"\">\n\t<div class=\"teamC\" _v-63c119bb=\"\">\n\t\t<h1 _v-63c119bb=\"\"><b _v-63c119bb=\"\">我的团队</b></h1>\n\t\t<div class=\"sad\" _v-63c119bb=\"\">\n\t\t\t<a href=\"javascript:;\" class=\"on\" data-i=\"1\" _v-63c119bb=\"\">我的团队</a>\n\t\t\t<a href=\"javascript:;\" data-i=\"2\" _v-63c119bb=\"\">申请升级</a>\n\t\t</div>\n\t\t<ul class=\"u1\" _v-63c119bb=\"\">\n\t\t\t<h2 _v-63c119bb=\"\">\n\t\t\t<span _v-63c119bb=\"\">团队总人数：<b _v-63c119bb=\"\">0人</b></span>\n\t\t\t<span _v-63c119bb=\"\">直推人数：<b _v-63c119bb=\"\">0人</b></span>\n\t\t\t<span _v-63c119bb=\"\">有效会员人数：<b _v-63c119bb=\"\">0人</b></span>\n\t\t\t<span _v-63c119bb=\"\">无效会员人数：<b _v-63c119bb=\"\">0人</b></span>\n\t\t\t<!--span>团队总挂单金额：<b>0.00元</b></span-->\n\t\t\t<!--span>团队已完成打款金额：<b>0.00元</b></span-->\n\t\t</h2>\n\t\t\t<table _v-63c119bb=\"\">\n\t\t\t\t<thead _v-63c119bb=\"\">\n\t\t\t\t\t<tr _v-63c119bb=\"\">\n\t\t\t\t\t\t<th _v-63c119bb=\"\">编号</th>\n\t\t\t\t\t\t<th _v-63c119bb=\"\">会员手机</th>\n\t\t\t\t\t\t<th _v-63c119bb=\"\">会员昵称</th>\n\t\t\t\t\t\t<th _v-63c119bb=\"\">注册时间</th>\n\t\t\t\t\t\t<th _v-63c119bb=\"\">下级人数</th>\n\t\t\t\t\t\t<th _v-63c119bb=\"\">状态</th>\n\t\t\t\t\t\t<th _v-63c119bb=\"\">操作</th>\n\t\t\t\t\t</tr>\n\t\t\t\t</thead>\n\t\t\t\t<tbody _v-63c119bb=\"\">\n\t\t\t\t</tbody>\n\t\t\t</table>\n\t\t</ul>\n\t\t<ul class=\"u2\" _v-63c119bb=\"\">\n\t\t\t<li _v-63c119bb=\"\">推荐1位，晋升M1（一级会员），可获1代收益</li>\n\t\t\t<li _v-63c119bb=\"\">推荐2位，晋升M2（二级会员），可获2代收益</li>\n\t\t\t<li _v-63c119bb=\"\">推荐5位，晋升M3（三级会员），可获3代收益</li>\n\t\t\t<li _v-63c119bb=\"\">推荐15位，团队100人，晋升M4（四级会员），可获4代收益</li>\n\t\t\t<li _v-63c119bb=\"\">推荐15位，团队100人，晋升高级经理，可获无限代收益</li>\n\t\t\t<li _v-63c119bb=\"\"><a href=\"javascript:;\" class=\"btn\" id=\"team_apply_btn\" _v-63c119bb=\"\">申请升级</a></li>\n\t\t\t<li class=\"imgli\" _v-63c119bb=\"\">\n\t\t\t\t<br _v-63c119bb=\"\"><img src=\"/images/team.png\" _v-63c119bb=\"\"></li>\n\t\t</ul>\n\t</div>\n\n\t<ul id=\"team-tree\" _v-63c119bb=\"\">\n\t\t<item class=\"item\" :model=\"treeData\" _v-63c119bb=\"\">\n\t\t</item>\n\t</ul>\n\n</div>\n";
+	module.exports = "\n<li>\n    <div :class=\"{bold: isFolder}\" class=\"item-self\"  @click=\"toggle\">\n        <i class=\"{{model.sex == 1 ? 'female':'male'}}\"></i>\n        <span class=\"item-name\">{{model.name}} - {{model.mobile}}</span>\n        <span class=\"item-plus-minus\" v-if=\"isFolder\">[{{open ? ' - ' : ' + '}}]</span>\n        <span class=\"item-plus-minus\" v-else>[ ? ]</span>\n        <a href=\"javascript:;\" class=\"item-detail\" @click=\"viewDetail(model,$event)\">详细</a>\n    </div>\n    <ul class=\"item-children\" v-show=\"open\" v-if=\"isFolder\">\n        <item class=\"item\" v-for=\"model in model.children\" :model=\"model\" @click=\"itemClick(model, $event)\">\n        </item>\n    </ul>\n</li>\n";
 
 /***/ }
 ]);

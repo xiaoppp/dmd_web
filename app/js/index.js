@@ -5,7 +5,7 @@ import router from './router.config';
 import Store from './store';
 import './filters';
 import './constants'
-import { API,GET_MEMBER_INFO,SET_MEMBER_INFO } from './api';
+import { API,GET_MEMBER_INFO,SET_MEMBER_INFO,GET_MEMBER_LOGIN_INFO } from './api';
 import {alert2} from './utils';
 import './lib/vue.tree-view';
 
@@ -20,7 +20,8 @@ const App = Vue.extend({
                 offer:{},
                 offerPairs: 0,
                 applyPairs: 0,
-                showNews: false
+                showNews: false,
+                teamScope : 0,
             }
         },
         props: {
@@ -34,10 +35,11 @@ const App = Vue.extend({
             }
         },
         created() {
-            var vm = this;
+            let vm = this;
+
             API.IndexData().then(function(data){
                 if(data.isSuccess){
-                    var d = data.data;
+                    let d = data.data;
                     SET_MEMBER_INFO(d.member);
                     vm.member = GET_MEMBER_INFO();
                     vm.config6 = d.config6;
@@ -54,6 +56,20 @@ const App = Vue.extend({
                     console.log(data.error.message);
                 }
             });
+
+            let who = GET_MEMBER_LOGIN_INFO();
+
+            API.TeamScope(who.memberid).then(function(data){
+                if(data.isSuccess){
+                    let d = data.data;
+                    vm.teamScope = d;
+                    console.log(d);
+
+                }else{
+                    alert2(data.error.message);
+                }
+            })
+
         },
         components: {
         },
