@@ -29,9 +29,6 @@ export const API = {
         model.to_member_id = 0;
         model.state = 0;
         console.log(model);
-<<<<<<< HEAD
-        return HTTP_POST(_Combine('message/action/leavemsg'),model);
-=======
         return HTTP_POST(_Combine('message/action/leavemsg'), model);
     },
     Login(model){
@@ -95,7 +92,6 @@ export const API = {
     TeamTree(id){
         //member/children
         return HTTP_GET(_Combine('member/children/',id));
->>>>>>> 50719a7e28ad735445de5675387e0c2ab6f571dd
     }
 }
 
