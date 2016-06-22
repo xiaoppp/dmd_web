@@ -30,7 +30,7 @@
 /******/ 	// "0" means "already loaded"
 /******/ 	// Array means "loading", array contains callbacks
 /******/ 	var installedChunks = {
-/******/ 		1:0
+/******/ 		3:0
 /******/ 	};
 
 /******/ 	// The require function
@@ -98,12 +98,15 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(38);
-	__webpack_require__(44);
+	__webpack_require__(28);
+	__webpack_require__(8);
 	__webpack_require__(1);
-	__webpack_require__(65);
-	__webpack_require__(67);
-	module.exports = __webpack_require__(49);
+	__webpack_require__(83);
+	__webpack_require__(25);
+	__webpack_require__(85);
+	__webpack_require__(59);
+	__webpack_require__(189);
+	module.exports = __webpack_require__(72);
 
 
 /***/ },
@@ -10273,1547 +10276,7 @@
 /* 5 */,
 /* 6 */,
 /* 7 */,
-/* 8 */,
-/* 9 */,
-/* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */,
-/* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */,
-/* 18 */,
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */,
-/* 23 */,
-/* 24 */,
-/* 25 */,
-/* 26 */,
-/* 27 */,
-/* 28 */,
-/* 29 */,
-/* 30 */,
-/* 31 */,
-/* 32 */,
-/* 33 */,
-/* 34 */,
-/* 35 */,
-/* 36 */,
-/* 37 */,
-/* 38 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Module dependencies.
-	 */
-
-	var Emitter = __webpack_require__(39);
-	var reduce = __webpack_require__(40);
-	var requestBase = __webpack_require__(41);
-	var isObject = __webpack_require__(42);
-
-	/**
-	 * Root reference for iframes.
-	 */
-
-	var root;
-	if (typeof window !== 'undefined') { // Browser window
-	  root = window;
-	} else if (typeof self !== 'undefined') { // Web Worker
-	  root = self;
-	} else { // Other environments
-	  root = this;
-	}
-
-	/**
-	 * Noop.
-	 */
-
-	function noop(){};
-
-	/**
-	 * Check if `obj` is a host object,
-	 * we don't want to serialize these :)
-	 *
-	 * TODO: future proof, move to compoent land
-	 *
-	 * @param {Object} obj
-	 * @return {Boolean}
-	 * @api private
-	 */
-
-	function isHost(obj) {
-	  var str = {}.toString.call(obj);
-
-	  switch (str) {
-	    case '[object File]':
-	    case '[object Blob]':
-	    case '[object FormData]':
-	      return true;
-	    default:
-	      return false;
-	  }
-	}
-
-	/**
-	 * Expose `request`.
-	 */
-
-	var request = module.exports = __webpack_require__(43).bind(null, Request);
-
-	/**
-	 * Determine XHR.
-	 */
-
-	request.getXHR = function () {
-	  if (root.XMLHttpRequest
-	      && (!root.location || 'file:' != root.location.protocol
-	          || !root.ActiveXObject)) {
-	    return new XMLHttpRequest;
-	  } else {
-	    try { return new ActiveXObject('Microsoft.XMLHTTP'); } catch(e) {}
-	    try { return new ActiveXObject('Msxml2.XMLHTTP.6.0'); } catch(e) {}
-	    try { return new ActiveXObject('Msxml2.XMLHTTP.3.0'); } catch(e) {}
-	    try { return new ActiveXObject('Msxml2.XMLHTTP'); } catch(e) {}
-	  }
-	  return false;
-	};
-
-	/**
-	 * Removes leading and trailing whitespace, added to support IE.
-	 *
-	 * @param {String} s
-	 * @return {String}
-	 * @api private
-	 */
-
-	var trim = ''.trim
-	  ? function(s) { return s.trim(); }
-	  : function(s) { return s.replace(/(^\s*|\s*$)/g, ''); };
-
-	/**
-	 * Serialize the given `obj`.
-	 *
-	 * @param {Object} obj
-	 * @return {String}
-	 * @api private
-	 */
-
-	function serialize(obj) {
-	  if (!isObject(obj)) return obj;
-	  var pairs = [];
-	  for (var key in obj) {
-	    if (null != obj[key]) {
-	      pushEncodedKeyValuePair(pairs, key, obj[key]);
-	        }
-	      }
-	  return pairs.join('&');
-	}
-
-	/**
-	 * Helps 'serialize' with serializing arrays.
-	 * Mutates the pairs array.
-	 *
-	 * @param {Array} pairs
-	 * @param {String} key
-	 * @param {Mixed} val
-	 */
-
-	function pushEncodedKeyValuePair(pairs, key, val) {
-	  if (Array.isArray(val)) {
-	    return val.forEach(function(v) {
-	      pushEncodedKeyValuePair(pairs, key, v);
-	    });
-	  }
-	  pairs.push(encodeURIComponent(key)
-	    + '=' + encodeURIComponent(val));
-	}
-
-	/**
-	 * Expose serialization method.
-	 */
-
-	 request.serializeObject = serialize;
-
-	 /**
-	  * Parse the given x-www-form-urlencoded `str`.
-	  *
-	  * @param {String} str
-	  * @return {Object}
-	  * @api private
-	  */
-
-	function parseString(str) {
-	  var obj = {};
-	  var pairs = str.split('&');
-	  var parts;
-	  var pair;
-
-	  for (var i = 0, len = pairs.length; i < len; ++i) {
-	    pair = pairs[i];
-	    parts = pair.split('=');
-	    obj[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
-	  }
-
-	  return obj;
-	}
-
-	/**
-	 * Expose parser.
-	 */
-
-	request.parseString = parseString;
-
-	/**
-	 * Default MIME type map.
-	 *
-	 *     superagent.types.xml = 'application/xml';
-	 *
-	 */
-
-	request.types = {
-	  html: 'text/html',
-	  json: 'application/json',
-	  xml: 'application/xml',
-	  urlencoded: 'application/x-www-form-urlencoded',
-	  'form': 'application/x-www-form-urlencoded',
-	  'form-data': 'application/x-www-form-urlencoded'
-	};
-
-	/**
-	 * Default serialization map.
-	 *
-	 *     superagent.serialize['application/xml'] = function(obj){
-	 *       return 'generated xml here';
-	 *     };
-	 *
-	 */
-
-	 request.serialize = {
-	   'application/x-www-form-urlencoded': serialize,
-	   'application/json': JSON.stringify
-	 };
-
-	 /**
-	  * Default parsers.
-	  *
-	  *     superagent.parse['application/xml'] = function(str){
-	  *       return { object parsed from str };
-	  *     };
-	  *
-	  */
-
-	request.parse = {
-	  'application/x-www-form-urlencoded': parseString,
-	  'application/json': JSON.parse
-	};
-
-	/**
-	 * Parse the given header `str` into
-	 * an object containing the mapped fields.
-	 *
-	 * @param {String} str
-	 * @return {Object}
-	 * @api private
-	 */
-
-	function parseHeader(str) {
-	  var lines = str.split(/\r?\n/);
-	  var fields = {};
-	  var index;
-	  var line;
-	  var field;
-	  var val;
-
-	  lines.pop(); // trailing CRLF
-
-	  for (var i = 0, len = lines.length; i < len; ++i) {
-	    line = lines[i];
-	    index = line.indexOf(':');
-	    field = line.slice(0, index).toLowerCase();
-	    val = trim(line.slice(index + 1));
-	    fields[field] = val;
-	  }
-
-	  return fields;
-	}
-
-	/**
-	 * Check if `mime` is json or has +json structured syntax suffix.
-	 *
-	 * @param {String} mime
-	 * @return {Boolean}
-	 * @api private
-	 */
-
-	function isJSON(mime) {
-	  return /[\/+]json\b/.test(mime);
-	}
-
-	/**
-	 * Return the mime type for the given `str`.
-	 *
-	 * @param {String} str
-	 * @return {String}
-	 * @api private
-	 */
-
-	function type(str){
-	  return str.split(/ *; */).shift();
-	};
-
-	/**
-	 * Return header field parameters.
-	 *
-	 * @param {String} str
-	 * @return {Object}
-	 * @api private
-	 */
-
-	function params(str){
-	  return reduce(str.split(/ *; */), function(obj, str){
-	    var parts = str.split(/ *= */)
-	      , key = parts.shift()
-	      , val = parts.shift();
-
-	    if (key && val) obj[key] = val;
-	    return obj;
-	  }, {});
-	};
-
-	/**
-	 * Initialize a new `Response` with the given `xhr`.
-	 *
-	 *  - set flags (.ok, .error, etc)
-	 *  - parse header
-	 *
-	 * Examples:
-	 *
-	 *  Aliasing `superagent` as `request` is nice:
-	 *
-	 *      request = superagent;
-	 *
-	 *  We can use the promise-like API, or pass callbacks:
-	 *
-	 *      request.get('/').end(function(res){});
-	 *      request.get('/', function(res){});
-	 *
-	 *  Sending data can be chained:
-	 *
-	 *      request
-	 *        .post('/user')
-	 *        .send({ name: 'tj' })
-	 *        .end(function(res){});
-	 *
-	 *  Or passed to `.send()`:
-	 *
-	 *      request
-	 *        .post('/user')
-	 *        .send({ name: 'tj' }, function(res){});
-	 *
-	 *  Or passed to `.post()`:
-	 *
-	 *      request
-	 *        .post('/user', { name: 'tj' })
-	 *        .end(function(res){});
-	 *
-	 * Or further reduced to a single call for simple cases:
-	 *
-	 *      request
-	 *        .post('/user', { name: 'tj' }, function(res){});
-	 *
-	 * @param {XMLHTTPRequest} xhr
-	 * @param {Object} options
-	 * @api private
-	 */
-
-	function Response(req, options) {
-	  options = options || {};
-	  this.req = req;
-	  this.xhr = this.req.xhr;
-	  // responseText is accessible only if responseType is '' or 'text' and on older browsers
-	  this.text = ((this.req.method !='HEAD' && (this.xhr.responseType === '' || this.xhr.responseType === 'text')) || typeof this.xhr.responseType === 'undefined')
-	     ? this.xhr.responseText
-	     : null;
-	  this.statusText = this.req.xhr.statusText;
-	  this.setStatusProperties(this.xhr.status);
-	  this.header = this.headers = parseHeader(this.xhr.getAllResponseHeaders());
-	  // getAllResponseHeaders sometimes falsely returns "" for CORS requests, but
-	  // getResponseHeader still works. so we get content-type even if getting
-	  // other headers fails.
-	  this.header['content-type'] = this.xhr.getResponseHeader('content-type');
-	  this.setHeaderProperties(this.header);
-	  this.body = this.req.method != 'HEAD'
-	    ? this.parseBody(this.text ? this.text : this.xhr.response)
-	    : null;
-	}
-
-	/**
-	 * Get case-insensitive `field` value.
-	 *
-	 * @param {String} field
-	 * @return {String}
-	 * @api public
-	 */
-
-	Response.prototype.get = function(field){
-	  return this.header[field.toLowerCase()];
-	};
-
-	/**
-	 * Set header related properties:
-	 *
-	 *   - `.type` the content type without params
-	 *
-	 * A response of "Content-Type: text/plain; charset=utf-8"
-	 * will provide you with a `.type` of "text/plain".
-	 *
-	 * @param {Object} header
-	 * @api private
-	 */
-
-	Response.prototype.setHeaderProperties = function(header){
-	  // content-type
-	  var ct = this.header['content-type'] || '';
-	  this.type = type(ct);
-
-	  // params
-	  var obj = params(ct);
-	  for (var key in obj) this[key] = obj[key];
-	};
-
-	/**
-	 * Parse the given body `str`.
-	 *
-	 * Used for auto-parsing of bodies. Parsers
-	 * are defined on the `superagent.parse` object.
-	 *
-	 * @param {String} str
-	 * @return {Mixed}
-	 * @api private
-	 */
-
-	Response.prototype.parseBody = function(str){
-	  var parse = request.parse[this.type];
-	  if (!parse && isJSON(this.type)) {
-	    parse = request.parse['application/json'];
-	  }
-	  return parse && str && (str.length || str instanceof Object)
-	    ? parse(str)
-	    : null;
-	};
-
-	/**
-	 * Set flags such as `.ok` based on `status`.
-	 *
-	 * For example a 2xx response will give you a `.ok` of __true__
-	 * whereas 5xx will be __false__ and `.error` will be __true__. The
-	 * `.clientError` and `.serverError` are also available to be more
-	 * specific, and `.statusType` is the class of error ranging from 1..5
-	 * sometimes useful for mapping respond colors etc.
-	 *
-	 * "sugar" properties are also defined for common cases. Currently providing:
-	 *
-	 *   - .noContent
-	 *   - .badRequest
-	 *   - .unauthorized
-	 *   - .notAcceptable
-	 *   - .notFound
-	 *
-	 * @param {Number} status
-	 * @api private
-	 */
-
-	Response.prototype.setStatusProperties = function(status){
-	  // handle IE9 bug: http://stackoverflow.com/questions/10046972/msie-returns-status-code-of-1223-for-ajax-request
-	  if (status === 1223) {
-	    status = 204;
-	  }
-
-	  var type = status / 100 | 0;
-
-	  // status / class
-	  this.status = this.statusCode = status;
-	  this.statusType = type;
-
-	  // basics
-	  this.info = 1 == type;
-	  this.ok = 2 == type;
-	  this.clientError = 4 == type;
-	  this.serverError = 5 == type;
-	  this.error = (4 == type || 5 == type)
-	    ? this.toError()
-	    : false;
-
-	  // sugar
-	  this.accepted = 202 == status;
-	  this.noContent = 204 == status;
-	  this.badRequest = 400 == status;
-	  this.unauthorized = 401 == status;
-	  this.notAcceptable = 406 == status;
-	  this.notFound = 404 == status;
-	  this.forbidden = 403 == status;
-	};
-
-	/**
-	 * Return an `Error` representative of this response.
-	 *
-	 * @return {Error}
-	 * @api public
-	 */
-
-	Response.prototype.toError = function(){
-	  var req = this.req;
-	  var method = req.method;
-	  var url = req.url;
-
-	  var msg = 'cannot ' + method + ' ' + url + ' (' + this.status + ')';
-	  var err = new Error(msg);
-	  err.status = this.status;
-	  err.method = method;
-	  err.url = url;
-
-	  return err;
-	};
-
-	/**
-	 * Expose `Response`.
-	 */
-
-	request.Response = Response;
-
-	/**
-	 * Initialize a new `Request` with the given `method` and `url`.
-	 *
-	 * @param {String} method
-	 * @param {String} url
-	 * @api public
-	 */
-
-	function Request(method, url) {
-	  var self = this;
-	  this._query = this._query || [];
-	  this.method = method;
-	  this.url = url;
-	  this.header = {}; // preserves header name case
-	  this._header = {}; // coerces header names to lowercase
-	  this.on('end', function(){
-	    var err = null;
-	    var res = null;
-
-	    try {
-	      res = new Response(self);
-	    } catch(e) {
-	      err = new Error('Parser is unable to parse the response');
-	      err.parse = true;
-	      err.original = e;
-	      // issue #675: return the raw response if the response parsing fails
-	      err.rawResponse = self.xhr && self.xhr.responseText ? self.xhr.responseText : null;
-	      // issue #876: return the http status code if the response parsing fails
-	      err.statusCode = self.xhr && self.xhr.status ? self.xhr.status : null;
-	      return self.callback(err);
-	    }
-
-	    self.emit('response', res);
-
-	    if (err) {
-	      return self.callback(err, res);
-	    }
-
-	    if (res.status >= 200 && res.status < 300) {
-	      return self.callback(err, res);
-	    }
-
-	    var new_err = new Error(res.statusText || 'Unsuccessful HTTP response');
-	    new_err.original = err;
-	    new_err.response = res;
-	    new_err.status = res.status;
-
-	    self.callback(new_err, res);
-	  });
-	}
-
-	/**
-	 * Mixin `Emitter` and `requestBase`.
-	 */
-
-	Emitter(Request.prototype);
-	for (var key in requestBase) {
-	  Request.prototype[key] = requestBase[key];
-	}
-
-	/**
-	 * Abort the request, and clear potential timeout.
-	 *
-	 * @return {Request}
-	 * @api public
-	 */
-
-	Request.prototype.abort = function(){
-	  if (this.aborted) return;
-	  this.aborted = true;
-	  this.xhr.abort();
-	  this.clearTimeout();
-	  this.emit('abort');
-	  return this;
-	};
-
-	/**
-	 * Set Content-Type to `type`, mapping values from `request.types`.
-	 *
-	 * Examples:
-	 *
-	 *      superagent.types.xml = 'application/xml';
-	 *
-	 *      request.post('/')
-	 *        .type('xml')
-	 *        .send(xmlstring)
-	 *        .end(callback);
-	 *
-	 *      request.post('/')
-	 *        .type('application/xml')
-	 *        .send(xmlstring)
-	 *        .end(callback);
-	 *
-	 * @param {String} type
-	 * @return {Request} for chaining
-	 * @api public
-	 */
-
-	Request.prototype.type = function(type){
-	  this.set('Content-Type', request.types[type] || type);
-	  return this;
-	};
-
-	/**
-	 * Set responseType to `val`. Presently valid responseTypes are 'blob' and 
-	 * 'arraybuffer'.
-	 *
-	 * Examples:
-	 *
-	 *      req.get('/')
-	 *        .responseType('blob')
-	 *        .end(callback);
-	 *
-	 * @param {String} val
-	 * @return {Request} for chaining
-	 * @api public
-	 */
-
-	Request.prototype.responseType = function(val){
-	  this._responseType = val;
-	  return this;
-	};
-
-	/**
-	 * Set Accept to `type`, mapping values from `request.types`.
-	 *
-	 * Examples:
-	 *
-	 *      superagent.types.json = 'application/json';
-	 *
-	 *      request.get('/agent')
-	 *        .accept('json')
-	 *        .end(callback);
-	 *
-	 *      request.get('/agent')
-	 *        .accept('application/json')
-	 *        .end(callback);
-	 *
-	 * @param {String} accept
-	 * @return {Request} for chaining
-	 * @api public
-	 */
-
-	Request.prototype.accept = function(type){
-	  this.set('Accept', request.types[type] || type);
-	  return this;
-	};
-
-	/**
-	 * Set Authorization field value with `user` and `pass`.
-	 *
-	 * @param {String} user
-	 * @param {String} pass
-	 * @param {Object} options with 'type' property 'auto' or 'basic' (default 'basic')
-	 * @return {Request} for chaining
-	 * @api public
-	 */
-
-	Request.prototype.auth = function(user, pass, options){
-	  if (!options) {
-	    options = {
-	      type: 'basic'
-	    }
-	  }
-
-	  switch (options.type) {
-	    case 'basic':
-	      var str = btoa(user + ':' + pass);
-	      this.set('Authorization', 'Basic ' + str);
-	    break;
-
-	    case 'auto':
-	      this.username = user;
-	      this.password = pass;
-	    break;
-	  }
-	  return this;
-	};
-
-	/**
-	* Add query-string `val`.
-	*
-	* Examples:
-	*
-	*   request.get('/shoes')
-	*     .query('size=10')
-	*     .query({ color: 'blue' })
-	*
-	* @param {Object|String} val
-	* @return {Request} for chaining
-	* @api public
-	*/
-
-	Request.prototype.query = function(val){
-	  if ('string' != typeof val) val = serialize(val);
-	  if (val) this._query.push(val);
-	  return this;
-	};
-
-	/**
-	 * Queue the given `file` as an attachment to the specified `field`,
-	 * with optional `filename`.
-	 *
-	 * ``` js
-	 * request.post('/upload')
-	 *   .attach(new Blob(['<a id="a"><b id="b">hey!</b></a>'], { type: "text/html"}))
-	 *   .end(callback);
-	 * ```
-	 *
-	 * @param {String} field
-	 * @param {Blob|File} file
-	 * @param {String} filename
-	 * @return {Request} for chaining
-	 * @api public
-	 */
-
-	Request.prototype.attach = function(field, file, filename){
-	  this._getFormData().append(field, file, filename || file.name);
-	  return this;
-	};
-
-	Request.prototype._getFormData = function(){
-	  if (!this._formData) {
-	    this._formData = new root.FormData();
-	  }
-	  return this._formData;
-	};
-
-	/**
-	 * Send `data` as the request body, defaulting the `.type()` to "json" when
-	 * an object is given.
-	 *
-	 * Examples:
-	 *
-	 *       // manual json
-	 *       request.post('/user')
-	 *         .type('json')
-	 *         .send('{"name":"tj"}')
-	 *         .end(callback)
-	 *
-	 *       // auto json
-	 *       request.post('/user')
-	 *         .send({ name: 'tj' })
-	 *         .end(callback)
-	 *
-	 *       // manual x-www-form-urlencoded
-	 *       request.post('/user')
-	 *         .type('form')
-	 *         .send('name=tj')
-	 *         .end(callback)
-	 *
-	 *       // auto x-www-form-urlencoded
-	 *       request.post('/user')
-	 *         .type('form')
-	 *         .send({ name: 'tj' })
-	 *         .end(callback)
-	 *
-	 *       // defaults to x-www-form-urlencoded
-	  *      request.post('/user')
-	  *        .send('name=tobi')
-	  *        .send('species=ferret')
-	  *        .end(callback)
-	 *
-	 * @param {String|Object} data
-	 * @return {Request} for chaining
-	 * @api public
-	 */
-
-	Request.prototype.send = function(data){
-	  var obj = isObject(data);
-	  var type = this._header['content-type'];
-
-	  // merge
-	  if (obj && isObject(this._data)) {
-	    for (var key in data) {
-	      this._data[key] = data[key];
-	    }
-	  } else if ('string' == typeof data) {
-	    if (!type) this.type('form');
-	    type = this._header['content-type'];
-	    if ('application/x-www-form-urlencoded' == type) {
-	      this._data = this._data
-	        ? this._data + '&' + data
-	        : data;
-	    } else {
-	      this._data = (this._data || '') + data;
-	    }
-	  } else {
-	    this._data = data;
-	  }
-
-	  if (!obj || isHost(data)) return this;
-	  if (!type) this.type('json');
-	  return this;
-	};
-
-	/**
-	 * @deprecated
-	 */
-	Response.prototype.parse = function serialize(fn){
-	  if (root.console) {
-	    console.warn("Client-side parse() method has been renamed to serialize(). This method is not compatible with superagent v2.0");
-	  }
-	  this.serialize(fn);
-	  return this;
-	};
-
-	Response.prototype.serialize = function serialize(fn){
-	  this._parser = fn;
-	  return this;
-	};
-
-	/**
-	 * Invoke the callback with `err` and `res`
-	 * and handle arity check.
-	 *
-	 * @param {Error} err
-	 * @param {Response} res
-	 * @api private
-	 */
-
-	Request.prototype.callback = function(err, res){
-	  var fn = this._callback;
-	  this.clearTimeout();
-	  fn(err, res);
-	};
-
-	/**
-	 * Invoke callback with x-domain error.
-	 *
-	 * @api private
-	 */
-
-	Request.prototype.crossDomainError = function(){
-	  var err = new Error('Request has been terminated\nPossible causes: the network is offline, Origin is not allowed by Access-Control-Allow-Origin, the page is being unloaded, etc.');
-	  err.crossDomain = true;
-
-	  err.status = this.status;
-	  err.method = this.method;
-	  err.url = this.url;
-
-	  this.callback(err);
-	};
-
-	/**
-	 * Invoke callback with timeout error.
-	 *
-	 * @api private
-	 */
-
-	Request.prototype.timeoutError = function(){
-	  var timeout = this._timeout;
-	  var err = new Error('timeout of ' + timeout + 'ms exceeded');
-	  err.timeout = timeout;
-	  this.callback(err);
-	};
-
-	/**
-	 * Enable transmission of cookies with x-domain requests.
-	 *
-	 * Note that for this to work the origin must not be
-	 * using "Access-Control-Allow-Origin" with a wildcard,
-	 * and also must set "Access-Control-Allow-Credentials"
-	 * to "true".
-	 *
-	 * @api public
-	 */
-
-	Request.prototype.withCredentials = function(){
-	  this._withCredentials = true;
-	  return this;
-	};
-
-	/**
-	 * Initiate request, invoking callback `fn(res)`
-	 * with an instanceof `Response`.
-	 *
-	 * @param {Function} fn
-	 * @return {Request} for chaining
-	 * @api public
-	 */
-
-	Request.prototype.end = function(fn){
-	  var self = this;
-	  var xhr = this.xhr = request.getXHR();
-	  var query = this._query.join('&');
-	  var timeout = this._timeout;
-	  var data = this._formData || this._data;
-
-	  // store callback
-	  this._callback = fn || noop;
-
-	  // state change
-	  xhr.onreadystatechange = function(){
-	    if (4 != xhr.readyState) return;
-
-	    // In IE9, reads to any property (e.g. status) off of an aborted XHR will
-	    // result in the error "Could not complete the operation due to error c00c023f"
-	    var status;
-	    try { status = xhr.status } catch(e) { status = 0; }
-
-	    if (0 == status) {
-	      if (self.timedout) return self.timeoutError();
-	      if (self.aborted) return;
-	      return self.crossDomainError();
-	    }
-	    self.emit('end');
-	  };
-
-	  // progress
-	  var handleProgress = function(e){
-	    if (e.total > 0) {
-	      e.percent = e.loaded / e.total * 100;
-	    }
-	    e.direction = 'download';
-	    self.emit('progress', e);
-	  };
-	  if (this.hasListeners('progress')) {
-	    xhr.onprogress = handleProgress;
-	  }
-	  try {
-	    if (xhr.upload && this.hasListeners('progress')) {
-	      xhr.upload.onprogress = handleProgress;
-	    }
-	  } catch(e) {
-	    // Accessing xhr.upload fails in IE from a web worker, so just pretend it doesn't exist.
-	    // Reported here:
-	    // https://connect.microsoft.com/IE/feedback/details/837245/xmlhttprequest-upload-throws-invalid-argument-when-used-from-web-worker-context
-	  }
-
-	  // timeout
-	  if (timeout && !this._timer) {
-	    this._timer = setTimeout(function(){
-	      self.timedout = true;
-	      self.abort();
-	    }, timeout);
-	  }
-
-	  // querystring
-	  if (query) {
-	    query = request.serializeObject(query);
-	    this.url += ~this.url.indexOf('?')
-	      ? '&' + query
-	      : '?' + query;
-	  }
-
-	  // initiate request
-	  if (this.username && this.password) {
-	    xhr.open(this.method, this.url, true, this.username, this.password);
-	  } else {
-	    xhr.open(this.method, this.url, true);
-	  }
-
-	  // CORS
-	  if (this._withCredentials) xhr.withCredentials = true;
-
-	  // body
-	  if ('GET' != this.method && 'HEAD' != this.method && 'string' != typeof data && !isHost(data)) {
-	    // serialize stuff
-	    var contentType = this._header['content-type'];
-	    var serialize = this._parser || request.serialize[contentType ? contentType.split(';')[0] : ''];
-	    if (!serialize && isJSON(contentType)) serialize = request.serialize['application/json'];
-	    if (serialize) data = serialize(data);
-	  }
-
-	  // set header fields
-	  for (var field in this.header) {
-	    if (null == this.header[field]) continue;
-	    xhr.setRequestHeader(field, this.header[field]);
-	  }
-
-	  if (this._responseType) {
-	    xhr.responseType = this._responseType;
-	  }
-
-	  // send stuff
-	  this.emit('request', this);
-
-	  // IE11 xhr.send(undefined) sends 'undefined' string as POST payload (instead of nothing)
-	  // We need null here if data is undefined
-	  xhr.send(typeof data !== 'undefined' ? data : null);
-	  return this;
-	};
-
-
-	/**
-	 * Expose `Request`.
-	 */
-
-	request.Request = Request;
-
-	/**
-	 * GET `url` with optional callback `fn(res)`.
-	 *
-	 * @param {String} url
-	 * @param {Mixed|Function} data or fn
-	 * @param {Function} fn
-	 * @return {Request}
-	 * @api public
-	 */
-
-	request.get = function(url, data, fn){
-	  var req = request('GET', url);
-	  if ('function' == typeof data) fn = data, data = null;
-	  if (data) req.query(data);
-	  if (fn) req.end(fn);
-	  return req;
-	};
-
-	/**
-	 * HEAD `url` with optional callback `fn(res)`.
-	 *
-	 * @param {String} url
-	 * @param {Mixed|Function} data or fn
-	 * @param {Function} fn
-	 * @return {Request}
-	 * @api public
-	 */
-
-	request.head = function(url, data, fn){
-	  var req = request('HEAD', url);
-	  if ('function' == typeof data) fn = data, data = null;
-	  if (data) req.send(data);
-	  if (fn) req.end(fn);
-	  return req;
-	};
-
-	/**
-	 * DELETE `url` with optional callback `fn(res)`.
-	 *
-	 * @param {String} url
-	 * @param {Function} fn
-	 * @return {Request}
-	 * @api public
-	 */
-
-	function del(url, fn){
-	  var req = request('DELETE', url);
-	  if (fn) req.end(fn);
-	  return req;
-	};
-
-	request['del'] = del;
-	request['delete'] = del;
-
-	/**
-	 * PATCH `url` with optional `data` and callback `fn(res)`.
-	 *
-	 * @param {String} url
-	 * @param {Mixed} data
-	 * @param {Function} fn
-	 * @return {Request}
-	 * @api public
-	 */
-
-	request.patch = function(url, data, fn){
-	  var req = request('PATCH', url);
-	  if ('function' == typeof data) fn = data, data = null;
-	  if (data) req.send(data);
-	  if (fn) req.end(fn);
-	  return req;
-	};
-
-	/**
-	 * POST `url` with optional `data` and callback `fn(res)`.
-	 *
-	 * @param {String} url
-	 * @param {Mixed} data
-	 * @param {Function} fn
-	 * @return {Request}
-	 * @api public
-	 */
-
-	request.post = function(url, data, fn){
-	  var req = request('POST', url);
-	  if ('function' == typeof data) fn = data, data = null;
-	  if (data) req.send(data);
-	  if (fn) req.end(fn);
-	  return req;
-	};
-
-	/**
-	 * PUT `url` with optional `data` and callback `fn(res)`.
-	 *
-	 * @param {String} url
-	 * @param {Mixed|Function} data or fn
-	 * @param {Function} fn
-	 * @return {Request}
-	 * @api public
-	 */
-
-	request.put = function(url, data, fn){
-	  var req = request('PUT', url);
-	  if ('function' == typeof data) fn = data, data = null;
-	  if (data) req.send(data);
-	  if (fn) req.end(fn);
-	  return req;
-	};
-
-
-/***/ },
-/* 39 */
-/***/ function(module, exports, __webpack_require__) {
-
-	
-	/**
-	 * Expose `Emitter`.
-	 */
-
-	if (true) {
-	  module.exports = Emitter;
-	}
-
-	/**
-	 * Initialize a new `Emitter`.
-	 *
-	 * @api public
-	 */
-
-	function Emitter(obj) {
-	  if (obj) return mixin(obj);
-	};
-
-	/**
-	 * Mixin the emitter properties.
-	 *
-	 * @param {Object} obj
-	 * @return {Object}
-	 * @api private
-	 */
-
-	function mixin(obj) {
-	  for (var key in Emitter.prototype) {
-	    obj[key] = Emitter.prototype[key];
-	  }
-	  return obj;
-	}
-
-	/**
-	 * Listen on the given `event` with `fn`.
-	 *
-	 * @param {String} event
-	 * @param {Function} fn
-	 * @return {Emitter}
-	 * @api public
-	 */
-
-	Emitter.prototype.on =
-	Emitter.prototype.addEventListener = function(event, fn){
-	  this._callbacks = this._callbacks || {};
-	  (this._callbacks['$' + event] = this._callbacks['$' + event] || [])
-	    .push(fn);
-	  return this;
-	};
-
-	/**
-	 * Adds an `event` listener that will be invoked a single
-	 * time then automatically removed.
-	 *
-	 * @param {String} event
-	 * @param {Function} fn
-	 * @return {Emitter}
-	 * @api public
-	 */
-
-	Emitter.prototype.once = function(event, fn){
-	  function on() {
-	    this.off(event, on);
-	    fn.apply(this, arguments);
-	  }
-
-	  on.fn = fn;
-	  this.on(event, on);
-	  return this;
-	};
-
-	/**
-	 * Remove the given callback for `event` or all
-	 * registered callbacks.
-	 *
-	 * @param {String} event
-	 * @param {Function} fn
-	 * @return {Emitter}
-	 * @api public
-	 */
-
-	Emitter.prototype.off =
-	Emitter.prototype.removeListener =
-	Emitter.prototype.removeAllListeners =
-	Emitter.prototype.removeEventListener = function(event, fn){
-	  this._callbacks = this._callbacks || {};
-
-	  // all
-	  if (0 == arguments.length) {
-	    this._callbacks = {};
-	    return this;
-	  }
-
-	  // specific event
-	  var callbacks = this._callbacks['$' + event];
-	  if (!callbacks) return this;
-
-	  // remove all handlers
-	  if (1 == arguments.length) {
-	    delete this._callbacks['$' + event];
-	    return this;
-	  }
-
-	  // remove specific handler
-	  var cb;
-	  for (var i = 0; i < callbacks.length; i++) {
-	    cb = callbacks[i];
-	    if (cb === fn || cb.fn === fn) {
-	      callbacks.splice(i, 1);
-	      break;
-	    }
-	  }
-	  return this;
-	};
-
-	/**
-	 * Emit `event` with the given args.
-	 *
-	 * @param {String} event
-	 * @param {Mixed} ...
-	 * @return {Emitter}
-	 */
-
-	Emitter.prototype.emit = function(event){
-	  this._callbacks = this._callbacks || {};
-	  var args = [].slice.call(arguments, 1)
-	    , callbacks = this._callbacks['$' + event];
-
-	  if (callbacks) {
-	    callbacks = callbacks.slice(0);
-	    for (var i = 0, len = callbacks.length; i < len; ++i) {
-	      callbacks[i].apply(this, args);
-	    }
-	  }
-
-	  return this;
-	};
-
-	/**
-	 * Return array of callbacks for `event`.
-	 *
-	 * @param {String} event
-	 * @return {Array}
-	 * @api public
-	 */
-
-	Emitter.prototype.listeners = function(event){
-	  this._callbacks = this._callbacks || {};
-	  return this._callbacks['$' + event] || [];
-	};
-
-	/**
-	 * Check if this emitter has `event` handlers.
-	 *
-	 * @param {String} event
-	 * @return {Boolean}
-	 * @api public
-	 */
-
-	Emitter.prototype.hasListeners = function(event){
-	  return !! this.listeners(event).length;
-	};
-
-
-/***/ },
-/* 40 */
-/***/ function(module, exports) {
-
-	
-	/**
-	 * Reduce `arr` with `fn`.
-	 *
-	 * @param {Array} arr
-	 * @param {Function} fn
-	 * @param {Mixed} initial
-	 *
-	 * TODO: combatible error handling?
-	 */
-
-	module.exports = function(arr, fn, initial){  
-	  var idx = 0;
-	  var len = arr.length;
-	  var curr = arguments.length == 3
-	    ? initial
-	    : arr[idx++];
-
-	  while (idx < len) {
-	    curr = fn.call(null, curr, arr[idx], ++idx, arr);
-	  }
-	  
-	  return curr;
-	};
-
-/***/ },
-/* 41 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Module of mixed-in functions shared between node and client code
-	 */
-	var isObject = __webpack_require__(42);
-
-	/**
-	 * Clear previous timeout.
-	 *
-	 * @return {Request} for chaining
-	 * @api public
-	 */
-
-	exports.clearTimeout = function _clearTimeout(){
-	  this._timeout = 0;
-	  clearTimeout(this._timer);
-	  return this;
-	};
-
-	/**
-	 * Force given parser
-	 *
-	 * Sets the body parser no matter type.
-	 *
-	 * @param {Function}
-	 * @api public
-	 */
-
-	exports.parse = function parse(fn){
-	  this._parser = fn;
-	  return this;
-	};
-
-	/**
-	 * Set timeout to `ms`.
-	 *
-	 * @param {Number} ms
-	 * @return {Request} for chaining
-	 * @api public
-	 */
-
-	exports.timeout = function timeout(ms){
-	  this._timeout = ms;
-	  return this;
-	};
-
-	/**
-	 * Faux promise support
-	 *
-	 * @param {Function} fulfill
-	 * @param {Function} reject
-	 * @return {Request}
-	 */
-
-	exports.then = function then(fulfill, reject) {
-	  return this.end(function(err, res) {
-	    err ? reject(err) : fulfill(res);
-	  });
-	}
-
-	/**
-	 * Allow for extension
-	 */
-
-	exports.use = function use(fn) {
-	  fn(this);
-	  return this;
-	}
-
-
-	/**
-	 * Get request header `field`.
-	 * Case-insensitive.
-	 *
-	 * @param {String} field
-	 * @return {String}
-	 * @api public
-	 */
-
-	exports.get = function(field){
-	  return this._header[field.toLowerCase()];
-	};
-
-	/**
-	 * Get case-insensitive header `field` value.
-	 * This is a deprecated internal API. Use `.get(field)` instead.
-	 *
-	 * (getHeader is no longer used internally by the superagent code base)
-	 *
-	 * @param {String} field
-	 * @return {String}
-	 * @api private
-	 * @deprecated
-	 */
-
-	exports.getHeader = exports.get;
-
-	/**
-	 * Set header `field` to `val`, or multiple fields with one object.
-	 * Case-insensitive.
-	 *
-	 * Examples:
-	 *
-	 *      req.get('/')
-	 *        .set('Accept', 'application/json')
-	 *        .set('X-API-Key', 'foobar')
-	 *        .end(callback);
-	 *
-	 *      req.get('/')
-	 *        .set({ Accept: 'application/json', 'X-API-Key': 'foobar' })
-	 *        .end(callback);
-	 *
-	 * @param {String|Object} field
-	 * @param {String} val
-	 * @return {Request} for chaining
-	 * @api public
-	 */
-
-	exports.set = function(field, val){
-	  if (isObject(field)) {
-	    for (var key in field) {
-	      this.set(key, field[key]);
-	    }
-	    return this;
-	  }
-	  this._header[field.toLowerCase()] = val;
-	  this.header[field] = val;
-	  return this;
-	};
-
-	/**
-	 * Remove header `field`.
-	 * Case-insensitive.
-	 *
-	 * Example:
-	 *
-	 *      req.get('/')
-	 *        .unset('User-Agent')
-	 *        .end(callback);
-	 *
-	 * @param {String} field
-	 */
-	exports.unset = function(field){
-	  delete this._header[field.toLowerCase()];
-	  delete this.header[field];
-	  return this;
-	};
-
-	/**
-	 * Write the field `name` and `val` for "multipart/form-data"
-	 * request bodies.
-	 *
-	 * ``` js
-	 * request.post('/upload')
-	 *   .field('foo', 'bar')
-	 *   .end(callback);
-	 * ```
-	 *
-	 * @param {String} name
-	 * @param {String|Blob|File|Buffer|fs.ReadStream} val
-	 * @return {Request} for chaining
-	 * @api public
-	 */
-	exports.field = function(name, val) {
-	  this._getFormData().append(name, val);
-	  return this;
-	};
-
-
-/***/ },
-/* 42 */
-/***/ function(module, exports) {
-
-	/**
-	 * Check if `obj` is an object.
-	 *
-	 * @param {Object} obj
-	 * @return {Boolean}
-	 * @api private
-	 */
-
-	function isObject(obj) {
-	  return null != obj && 'object' == typeof obj;
-	}
-
-	module.exports = isObject;
-
-
-/***/ },
-/* 43 */
-/***/ function(module, exports) {
-
-	// The node and browser modules expose versions of this with the
-	// appropriate constructor function bound as first argument
-	/**
-	 * Issue a request:
-	 *
-	 * Examples:
-	 *
-	 *    request('GET', '/users').end(callback)
-	 *    request('/users').end(callback)
-	 *    request('/users', callback)
-	 *
-	 * @param {String} method
-	 * @param {String|Function} url or callback
-	 * @return {Request}
-	 * @api public
-	 */
-
-	function request(RequestConstructor, method, url) {
-	  // callback
-	  if ('function' == typeof url) {
-	    return new RequestConstructor('GET', method).end(url);
-	  }
-
-	  // url first
-	  if (2 == arguments.length) {
-	    return new RequestConstructor('GET', method);
-	  }
-
-	  return new RequestConstructor(method, url);
-	}
-
-	module.exports = request;
-
-
-/***/ },
-/* 44 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process, setImmediate) {// vim:ts=4:sts=4:sw=4:
@@ -13865,10 +12328,10 @@
 
 	});
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(45).setImmediate))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(9).setImmediate))
 
 /***/ },
-/* 45 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(setImmediate, clearImmediate) {var nextTick = __webpack_require__(2).nextTick;
@@ -13947,13 +12410,4167 @@
 	exports.clearImmediate = typeof clearImmediate === "function" ? clearImmediate : function(id) {
 	  delete immediateIds[id];
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(45).setImmediate, __webpack_require__(45).clearImmediate))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9).setImmediate, __webpack_require__(9).clearImmediate))
 
 /***/ },
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */,
+/* 24 */,
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/*!
+	 * vue-validator v2.1.3
+	 * (c) 2016 kazuya kawaguchi
+	 * Released under the MIT License.
+	 */
+	'use strict';
+
+	var babelHelpers = {};
+	babelHelpers.typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+	  return typeof obj;
+	} : function (obj) {
+	  return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
+	};
+
+	babelHelpers.classCallCheck = function (instance, Constructor) {
+	  if (!(instance instanceof Constructor)) {
+	    throw new TypeError("Cannot call a class as a function");
+	  }
+	};
+
+	babelHelpers.createClass = function () {
+	  function defineProperties(target, props) {
+	    for (var i = 0; i < props.length; i++) {
+	      var descriptor = props[i];
+	      descriptor.enumerable = descriptor.enumerable || false;
+	      descriptor.configurable = true;
+	      if ("value" in descriptor) descriptor.writable = true;
+	      Object.defineProperty(target, descriptor.key, descriptor);
+	    }
+	  }
+
+	  return function (Constructor, protoProps, staticProps) {
+	    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+	    if (staticProps) defineProperties(Constructor, staticProps);
+	    return Constructor;
+	  };
+	}();
+
+	babelHelpers.inherits = function (subClass, superClass) {
+	  if (typeof superClass !== "function" && superClass !== null) {
+	    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+	  }
+
+	  subClass.prototype = Object.create(superClass && superClass.prototype, {
+	    constructor: {
+	      value: subClass,
+	      enumerable: false,
+	      writable: true,
+	      configurable: true
+	    }
+	  });
+	  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+	};
+
+	babelHelpers.possibleConstructorReturn = function (self, call) {
+	  if (!self) {
+	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+	  }
+
+	  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+	};
+
+	babelHelpers;
+
+	/**
+	 * Utilties
+	 */
+
+	// export default for holding the Vue reference
+	var exports$1 = {};
+	/**
+	 * warn
+	 *
+	 * @param {String} msg
+	 * @param {Error} [err]
+	 *
+	 */
+
+	function warn(msg, err) {
+	  if (window.console) {
+	    console.warn('[vue-validator] ' + msg);
+	    if (err) {
+	      console.warn(err.stack);
+	    }
+	  }
+	}
+
+	/**
+	 * empty
+	 *
+	 * @param {Array|Object} target
+	 * @return {Boolean}
+	 */
+
+	function empty(target) {
+	  if (target === null || target === undefined) {
+	    return true;
+	  }
+
+	  if (Array.isArray(target)) {
+	    if (target.length > 0) {
+	      return false;
+	    }
+	    if (target.length === 0) {
+	      return true;
+	    }
+	  } else if (exports$1.Vue.util.isPlainObject(target)) {
+	    for (var key in target) {
+	      if (exports$1.Vue.util.hasOwn(target, key)) {
+	        return false;
+	      }
+	    }
+	  }
+
+	  return true;
+	}
+
+	/**
+	 * each
+	 *
+	 * @param {Array|Object} target
+	 * @param {Function} iterator
+	 * @param {Object} [context]
+	 */
+
+	function each(target, iterator, context) {
+	  if (Array.isArray(target)) {
+	    for (var i = 0; i < target.length; i++) {
+	      iterator.call(context || target[i], target[i], i);
+	    }
+	  } else if (exports$1.Vue.util.isPlainObject(target)) {
+	    var hasOwn = exports$1.Vue.util.hasOwn;
+	    for (var key in target) {
+	      if (hasOwn(target, key)) {
+	        iterator.call(context || target[key], target[key], key);
+	      }
+	    }
+	  }
+	}
+
+	/**
+	 * pull
+	 *
+	 * @param {Array} arr
+	 * @param {Object} item
+	 * @return {Object|null}
+	 */
+
+	function pull(arr, item) {
+	  var index = exports$1.Vue.util.indexOf(arr, item);
+	  return ~index ? arr.splice(index, 1) : null;
+	}
+
+	/**
+	 * trigger
+	 *
+	 * @param {Element} el
+	 * @param {String} event
+	 * @param {Object} [args]
+	 */
+
+	function trigger(el, event, args) {
+	  var e = document.createEvent('HTMLEvents');
+	  e.initEvent(event, true, false);
+
+	  if (args) {
+	    for (var prop in args) {
+	      e[prop] = args[prop];
+	    }
+	  }
+
+	  // Due to Firefox bug, events fired on disabled
+	  // non-attached form controls can throw errors
+	  try {
+	    el.dispatchEvent(e);
+	  } catch (e) {}
+	}
+
+	/**
+	 * Forgiving check for a promise
+	 *
+	 * @param {Object} p
+	 * @return {Boolean}
+	 */
+
+	function isPromise(p) {
+	  return p && typeof p.then === 'function';
+	}
+
+	/**
+	 * Togging classes
+	 *
+	 * @param {Element} el
+	 * @param {String} key
+	 * @param {Function} fn
+	 */
+
+	function toggleClasses(el, key, fn) {
+	  key = key.trim();
+	  if (key.indexOf(' ') === -1) {
+	    fn(el, key);
+	    return;
+	  }
+
+	  var keys = key.split(/\s+/);
+	  for (var i = 0, l = keys.length; i < l; i++) {
+	    fn(el, keys[i]);
+	  }
+	}
+
+	/**
+	 * Fundamental validate functions
+	 */
+
+	/**
+	 * required
+	 *
+	 * This function validate whether the value has been filled out.
+	 *
+	 * @param {*} val
+	 * @return {Boolean}
+	 */
+
+	function required(val) {
+	  if (Array.isArray(val)) {
+	    if (val.length !== 0) {
+	      var valid = true;
+	      for (var i = 0, l = val.length; i < l; i++) {
+	        valid = required(val[i]);
+	        if (!valid) {
+	          break;
+	        }
+	      }
+	      return valid;
+	    } else {
+	      return false;
+	    }
+	  } else if (typeof val === 'number' || typeof val === 'function') {
+	    return true;
+	  } else if (typeof val === 'boolean') {
+	    return val;
+	  } else if (typeof val === 'string') {
+	    return val.length > 0;
+	  } else if (val !== null && (typeof val === 'undefined' ? 'undefined' : babelHelpers.typeof(val)) === 'object') {
+	    return Object.keys(val).length > 0;
+	  } else if (val === null || val === undefined) {
+	    return false;
+	  }
+	}
+
+	/**
+	 * pattern
+	 *
+	 * This function validate whether the value matches the regex pattern
+	 *
+	 * @param val
+	 * @param {String} pat
+	 * @return {Boolean}
+	 */
+
+	function pattern(val, pat) {
+	  if (typeof pat !== 'string') {
+	    return false;
+	  }
+
+	  var match = pat.match(new RegExp('^/(.*?)/([gimy]*)$'));
+	  if (!match) {
+	    return false;
+	  }
+
+	  return new RegExp(match[1], match[2]).test(val);
+	}
+
+	/**
+	 * minlength
+	 *
+	 * This function validate whether the minimum length.
+	 *
+	 * @param {String|Array} val
+	 * @param {String|Number} min
+	 * @return {Boolean}
+	 */
+
+	function minlength(val, min) {
+	  if (typeof val === 'string') {
+	    return isInteger(min, 10) && val.length >= parseInt(min, 10);
+	  } else if (Array.isArray(val)) {
+	    return val.length >= parseInt(min, 10);
+	  } else {
+	    return false;
+	  }
+	}
+
+	/**
+	 * maxlength
+	 *
+	 * This function validate whether the maximum length.
+	 *
+	 * @param {String|Array} val
+	 * @param {String|Number} max
+	 * @return {Boolean}
+	 */
+
+	function maxlength(val, max) {
+	  if (typeof val === 'string') {
+	    return isInteger(max, 10) && val.length <= parseInt(max, 10);
+	  } else if (Array.isArray(val)) {
+	    return val.length <= parseInt(max, 10);
+	  } else {
+	    return false;
+	  }
+	}
+
+	/**
+	 * min
+	 *
+	 * This function validate whether the minimum value of the numberable value.
+	 *
+	 * @param {*} val
+	 * @param {*} arg minimum
+	 * @return {Boolean}
+	 */
+
+	function min(val, arg) {
+	  return !isNaN(+val) && !isNaN(+arg) && +val >= +arg;
+	}
+
+	/**
+	 * max
+	 *
+	 * This function validate whether the maximum value of the numberable value.
+	 *
+	 * @param {*} val
+	 * @param {*} arg maximum
+	 * @return {Boolean}
+	 */
+
+	function max(val, arg) {
+	  return !isNaN(+val) && !isNaN(+arg) && +val <= +arg;
+	}
+
+	/**
+	 * isInteger
+	 *
+	 * This function check whether the value of the string is integer.
+	 *
+	 * @param {String} val
+	 * @return {Boolean}
+	 * @private
+	 */
+
+	function isInteger(val) {
+	  return (/^(-?[1-9]\d*|0)$/.test(val)
+	  );
+	}
+
+	var validators = Object.freeze({
+	  required: required,
+	  pattern: pattern,
+	  minlength: minlength,
+	  maxlength: maxlength,
+	  min: min,
+	  max: max
+	});
+
+	function Asset (Vue) {
+	  var extend = Vue.util.extend;
+
+	  // set global validators asset
+	  var assets = Object.create(null);
+	  extend(assets, validators);
+	  Vue.options.validators = assets;
+
+	  // set option merge strategy
+	  var strats = Vue.config.optionMergeStrategies;
+	  if (strats) {
+	    strats.validators = function (parent, child) {
+	      if (!child) {
+	        return parent;
+	      }
+	      if (!parent) {
+	        return child;
+	      }
+	      var ret = Object.create(null);
+	      extend(ret, parent);
+	      for (var key in child) {
+	        ret[key] = child[key];
+	      }
+	      return ret;
+	    };
+	  }
+
+	  /**
+	   * Register or retrieve a global validator definition.
+	   *
+	   * @param {String} id
+	   * @param {Function} definition
+	   */
+
+	  Vue.validator = function (id, definition) {
+	    if (!definition) {
+	      return Vue.options['validators'][id];
+	    } else {
+	      Vue.options['validators'][id] = definition;
+	    }
+	  };
+	}
+
+	function Override (Vue) {
+	  // override _init
+	  var init = Vue.prototype._init;
+	  Vue.prototype._init = function (options) {
+	    if (!this._validatorMaps) {
+	      this._validatorMaps = Object.create(null);
+	    }
+	    init.call(this, options);
+	  };
+
+	  // override _destroy
+	  var destroy = Vue.prototype._destroy;
+	  Vue.prototype._destroy = function () {
+	    destroy.apply(this, arguments);
+	    this._validatorMaps = null;
+	  };
+	}
+
+	var VALIDATE_UPDATE = '__vue-validator-validate-update__';
+	var PRIORITY_VALIDATE = 16;
+	var PRIORITY_VALIDATE_CLASS = 32;
+	var REGEX_FILTER = /[^|]\|[^|]/;
+	var REGEX_VALIDATE_DIRECTIVE = /^v-validate(?:$|:(.*)$)/;
+	var REGEX_EVENT = /^v-on:|^@/;
+
+	var classId = 0; // ID for validation class
+
+	function ValidateClass (Vue) {
+	  var vIf = Vue.directive('if');
+	  var FragmentFactory = Vue.FragmentFactory;
+	  var _Vue$util = Vue.util;
+	  var toArray = _Vue$util.toArray;
+	  var replace = _Vue$util.replace;
+	  var createAnchor = _Vue$util.createAnchor;
+
+	  /**
+	   * `v-validate-class` directive
+	   */
+
+	  Vue.directive('validate-class', {
+	    terminal: true,
+	    priority: vIf.priority + PRIORITY_VALIDATE_CLASS,
+
+	    bind: function bind() {
+	      var _this = this;
+
+	      var id = String(classId++);
+	      this.setClassIds(this.el, id);
+
+	      this.vm.$on(VALIDATE_UPDATE, this.cb = function (classIds, validation, results) {
+	        if (classIds.indexOf(id) > -1) {
+	          validation.updateClasses(results, _this.frag.node);
+	        }
+	      });
+
+	      this.setupFragment();
+	    },
+	    unbind: function unbind() {
+	      this.vm.$off(VALIDATE_UPDATE, this.cb);
+	      this.teardownFragment();
+	    },
+	    setClassIds: function setClassIds(el, id) {
+	      var childNodes = toArray(el.childNodes);
+	      for (var i = 0, l = childNodes.length; i < l; i++) {
+	        var element = childNodes[i];
+	        if (element.nodeType === 1) {
+	          var hasAttrs = element.hasAttributes();
+	          var attrs = hasAttrs && toArray(element.attributes);
+	          for (var k = 0, _l = attrs.length; k < _l; k++) {
+	            var attr = attrs[k];
+	            if (attr.name.match(REGEX_VALIDATE_DIRECTIVE)) {
+	              var existingId = element.getAttribute(VALIDATE_UPDATE);
+	              var value = existingId ? existingId + ',' + id : id;
+	              element.setAttribute(VALIDATE_UPDATE, value);
+	            }
+	          }
+	        }
+
+	        if (element.hasChildNodes()) {
+	          this.setClassIds(element, id);
+	        }
+	      }
+	    },
+	    setupFragment: function setupFragment() {
+	      this.anchor = createAnchor('v-validate-class');
+	      replace(this.el, this.anchor);
+
+	      this.factory = new FragmentFactory(this.vm, this.el);
+	      this.frag = this.factory.create(this._host, this._scope, this._frag);
+	      this.frag.before(this.anchor);
+	    },
+	    teardownFragment: function teardownFragment() {
+	      if (this.frag) {
+	        this.frag.remove();
+	        this.frag = null;
+	        this.factory = null;
+	      }
+
+	      replace(this.anchor, this.el);
+	      this.anchor = null;
+	    }
+	  });
+	}
+
+	function Validate (Vue) {
+	  var vIf = Vue.directive('if');
+	  var FragmentFactory = Vue.FragmentFactory;
+	  var parseDirective = Vue.parsers.directive.parseDirective;
+	  var _Vue$util = Vue.util;
+	  var inBrowser = _Vue$util.inBrowser;
+	  var bind = _Vue$util.bind;
+	  var on = _Vue$util.on;
+	  var off = _Vue$util.off;
+	  var createAnchor = _Vue$util.createAnchor;
+	  var replace = _Vue$util.replace;
+	  var camelize = _Vue$util.camelize;
+	  var isPlainObject = _Vue$util.isPlainObject;
+
+	  // Test for IE10/11 textarea placeholder clone bug
+
+	  function checkTextareaCloneBug() {
+	    if (inBrowser) {
+	      var t = document.createElement('textarea');
+	      t.placeholder = 't';
+	      return t.cloneNode(true).value === 't';
+	    } else {
+	      return false;
+	    }
+	  }
+	  var hasTextareaCloneBug = checkTextareaCloneBug();
+
+	  /**
+	   * `v-validate` directive
+	   */
+
+	  Vue.directive('validate', {
+	    terminal: true,
+	    priority: vIf.priority + PRIORITY_VALIDATE,
+	    params: ['group', 'field', 'detect-blur', 'detect-change', 'initial', 'classes'],
+
+	    paramWatchers: {
+	      detectBlur: function detectBlur(val, old) {
+	        if (this._invalid) {
+	          return;
+	        }
+	        this.validation.detectBlur = this.isDetectBlur(val);
+	        this.validator.validate(this.field);
+	      },
+	      detectChange: function detectChange(val, old) {
+	        if (this._invalid) {
+	          return;
+	        }
+	        this.validation.detectChange = this.isDetectChange(val);
+	        this.validator.validate(this.field);
+	      }
+	    },
+
+	    bind: function bind() {
+	      var el = this.el;
+
+	      if (process.env.NODE_ENV !== 'production' && el.__vue__) {
+	        warn('v-validate="' + this.expression + '" cannot be used on an instance root element.');
+	        this._invalid = true;
+	        return;
+	      }
+
+	      if (process.env.NODE_ENV !== 'production' && (el.hasAttribute('v-if') || el.hasAttribute('v-for'))) {
+	        warn('v-validate cannot be used `v-if` or `v-for` build-in terminal directive ' + 'on an element. these is wrapped with `<template>` or other tags: ' + '(e.g. <validator name="validator">' + '<template v-if="hidden">' + '<input type="text" v-validate:field1="[\'required\']">' + '</template>' + '</validator>).');
+	        this._invalid = true;
+	        return;
+	      }
+
+	      if (process.env.NODE_ENV !== 'production' && !(this.arg || this.params.field)) {
+	        warn('you need specify field name for v-validate directive.');
+	        this._invalid = true;
+	        return;
+	      }
+
+	      var validatorName = this.vm.$options._validator;
+	      if (process.env.NODE_ENV !== 'production' && !validatorName) {
+	        warn('you need to wrap the elements to be validated in a <validator> element: ' + '(e.g. <validator name="validator">' + '<input type="text" v-validate:field1="[\'required\']">' + '</validator>).');
+	        this._invalid = true;
+	        return;
+	      }
+
+	      var raw = el.getAttribute('v-model');
+
+	      var _parseModelRaw = this.parseModelRaw(raw);
+
+	      var model = _parseModelRaw.model;
+	      var filters = _parseModelRaw.filters;
+
+	      this.model = model;
+
+	      this.setupFragment();
+	      this.setupValidate(validatorName, model, filters);
+	      this.listen();
+	    },
+	    update: function update(value, old) {
+	      if (!value || this._invalid) {
+	        return;
+	      }
+
+	      if (isPlainObject(value)) {
+	        this.handleObject(value);
+	      } else if (Array.isArray(value)) {
+	        this.handleArray(value);
+	      }
+
+	      var options = { field: this.field, noopable: this._initialNoopValidation };
+	      if (this.frag) {
+	        options.el = this.frag.node;
+	      }
+	      this.validator.validate(options);
+
+	      if (this._initialNoopValidation) {
+	        this._initialNoopValidation = null;
+	      }
+	    },
+	    unbind: function unbind() {
+	      if (this._invalid) {
+	        return;
+	      }
+
+	      this.unlisten();
+	      this.teardownValidate();
+	      this.teardownFragment();
+
+	      this.model = null;
+	    },
+	    parseModelRaw: function parseModelRaw(raw) {
+	      if (REGEX_FILTER.test(raw)) {
+	        var parsed = parseDirective(raw);
+	        return { model: parsed.expression, filters: parsed.filters };
+	      } else {
+	        return { model: raw };
+	      }
+	    },
+	    setupValidate: function setupValidate(name, model, filters) {
+	      var params = this.params;
+	      var validator = this.validator = this.vm._validatorMaps[name];
+
+	      this.field = camelize(this.arg ? this.arg : params.field);
+
+	      this.validation = validator.manageValidation(this.field, model, this.vm, this.getElementFrom(this.frag), this._scope, filters, params.initial, this.isDetectBlur(params.detectBlur), this.isDetectChange(params.detectChange));
+
+	      isPlainObject(params.classes) && this.validation.setValidationClasses(params.classes);
+
+	      params.group && validator.addGroupValidation(params.group, this.field);
+
+	      this._initialNoopValidation = this.isInitialNoopValidation(params.initial);
+	    },
+	    listen: function listen() {
+	      var model = this.model;
+	      var validation = this.validation;
+	      var el = this.getElementFrom(this.frag);
+
+	      this.onBlur = bind(validation.listener, validation);
+	      on(el, 'blur', this.onBlur);
+	      if ((el.type === 'radio' || el.tagName === 'SELECT') && !model) {
+	        this.onChange = bind(validation.listener, validation);
+	        on(el, 'change', this.onChange);
+	      } else if (el.type === 'checkbox') {
+	        if (!model) {
+	          this.onChange = bind(validation.listener, validation);
+	          on(el, 'change', this.onChange);
+	        } else {
+	          this.onClick = bind(validation.listener, validation);
+	          on(el, 'click', this.onClick);
+	        }
+	      } else {
+	        if (!model) {
+	          this.onInput = bind(validation.listener, validation);
+	          on(el, 'input', this.onInput);
+	        }
+	      }
+	    },
+	    unlisten: function unlisten() {
+	      var el = this.getElementFrom(this.frag);
+
+	      if (this.onInput) {
+	        off(el, 'input', this.onInput);
+	        this.onInput = null;
+	      }
+
+	      if (this.onClick) {
+	        off(el, 'click', this.onClick);
+	        this.onClick = null;
+	      }
+
+	      if (this.onChange) {
+	        off(el, 'change', this.onChange);
+	        this.onChange = null;
+	      }
+
+	      if (this.onBlur) {
+	        off(el, 'blur', this.onBlur);
+	        this.onBlur = null;
+	      }
+	    },
+	    teardownValidate: function teardownValidate() {
+	      if (this.validator && this.validation) {
+	        var el = this.getElementFrom(this.frag);
+
+	        this.params.group && this.validator.removeGroupValidation(this.params.group, this.field);
+
+	        this.validator.unmanageValidation(this.field, el);
+
+	        this.validator = null;
+	        this.validation = null;
+	        this.field = null;
+	      }
+	    },
+	    setupFragment: function setupFragment() {
+	      this.anchor = createAnchor('v-validate');
+	      replace(this.el, this.anchor);
+
+	      this.factory = new FragmentFactory(this.vm, this.shimNode(this.el));
+	      this.frag = this.factory.create(this._host, this._scope, this._frag);
+	      this.frag.before(this.anchor);
+	    },
+	    teardownFragment: function teardownFragment() {
+	      if (this.frag) {
+	        this.frag.remove();
+	        this.frag = null;
+	        this.factory = null;
+	      }
+
+	      replace(this.anchor, this.el);
+	      this.anchor = null;
+	    },
+	    handleArray: function handleArray(value) {
+	      var _this = this;
+
+	      each(value, function (val) {
+	        _this.validation.setValidation(val);
+	      });
+	    },
+	    handleObject: function handleObject(value) {
+	      var _this2 = this;
+
+	      each(value, function (val, key) {
+	        if (isPlainObject(val)) {
+	          if ('rule' in val) {
+	            var msg = 'message' in val ? val.message : null;
+	            var initial = 'initial' in val ? val.initial : null;
+	            _this2.validation.setValidation(key, val.rule, msg, initial);
+	          }
+	        } else {
+	          _this2.validation.setValidation(key, val);
+	        }
+	      });
+	    },
+	    isDetectBlur: function isDetectBlur(detectBlur) {
+	      return detectBlur === undefined || detectBlur === 'on' || detectBlur === true;
+	    },
+	    isDetectChange: function isDetectChange(detectChange) {
+	      return detectChange === undefined || detectChange === 'on' || detectChange === true;
+	    },
+	    isInitialNoopValidation: function isInitialNoopValidation(initial) {
+	      return initial === 'off' || initial === false;
+	    },
+	    shimNode: function shimNode(node) {
+	      var ret = node;
+	      if (hasTextareaCloneBug) {
+	        if (node.tagName === 'TEXTAREA') {
+	          ret = node.cloneNode(true);
+	          ret.value = node.value;
+	          var i = ret.childNodes.length;
+	          while (i--) {
+	            ret.removeChild(ret.childNodes[i]);
+	          }
+	        }
+	      }
+	      return ret;
+	    },
+	    getElementFrom: function getElementFrom(frag) {
+	      return frag.single ? frag.node : frag.node.nextSibling;
+	    }
+	  });
+	}
+
+	/**
+	 * BaseValidation class
+	 */
+
+	var BaseValidation = function () {
+	  function BaseValidation(field, model, vm, el, scope, validator, filters, detectBlur, detectChange) {
+	    babelHelpers.classCallCheck(this, BaseValidation);
+
+	    this.field = field;
+	    this.touched = false;
+	    this.dirty = false;
+	    this.modified = false;
+
+	    this._modified = false;
+	    this._model = model;
+	    this._filters = filters;
+	    this._validator = validator;
+	    this._vm = vm;
+	    this._el = el;
+	    this._forScope = scope;
+	    this._init = this._getValue(el);
+	    this._validators = {};
+	    this._detectBlur = detectBlur;
+	    this._detectChange = detectChange;
+	    this._classes = {};
+	  }
+
+	  BaseValidation.prototype.manageElement = function manageElement(el, initial) {
+	    var _this = this;
+
+	    var scope = this._getScope();
+	    var model = this._model;
+
+	    this._initial = initial;
+
+	    var classIds = el.getAttribute(VALIDATE_UPDATE);
+	    if (classIds) {
+	      el.removeAttribute(VALIDATE_UPDATE);
+	      this._classIds = classIds.split(',');
+	    }
+
+	    if (model) {
+	      el.value = this._evalModel(model, this._filters);
+	      this._unwatch = scope.$watch(model, function (val, old) {
+	        if (val !== old) {
+	          if (_this.guardValidate(el, 'input')) {
+	            return;
+	          }
+
+	          _this.handleValidate(el, { noopable: _this._initial });
+	          if (_this._initial) {
+	            _this._initial = null;
+	          }
+	        }
+	      }, { deep: true });
+	    }
+	  };
+
+	  BaseValidation.prototype.unmanageElement = function unmanageElement(el) {
+	    this._unwatch && this._unwatch();
+	  };
+
+	  BaseValidation.prototype.setValidation = function setValidation(name, arg, msg, initial) {
+	    var validator = this._validators[name];
+	    if (!validator) {
+	      validator = this._validators[name] = {};
+	      validator.name = name;
+	    }
+
+	    validator.arg = arg;
+	    if (msg) {
+	      validator.msg = msg;
+	    }
+
+	    if (initial) {
+	      validator.initial = initial;
+	      validator._isNoopable = true;
+	    }
+	  };
+
+	  BaseValidation.prototype.setValidationClasses = function setValidationClasses(classes) {
+	    var _this2 = this;
+
+	    each(classes, function (value, key) {
+	      _this2._classes[key] = value;
+	    });
+	  };
+
+	  BaseValidation.prototype.willUpdateFlags = function willUpdateFlags() {
+	    var touched = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+
+	    touched && this.willUpdateTouched(this._el, 'blur');
+	    this.willUpdateDirty(this._el);
+	    this.willUpdateModified(this._el);
+	  };
+
+	  BaseValidation.prototype.willUpdateTouched = function willUpdateTouched(el, type) {
+	    if (type && type === 'blur') {
+	      this.touched = true;
+	      this._fireEvent(el, 'touched');
+	    }
+	  };
+
+	  BaseValidation.prototype.willUpdateDirty = function willUpdateDirty(el) {
+	    if (!this.dirty && this._checkModified(el)) {
+	      this.dirty = true;
+	      this._fireEvent(el, 'dirty');
+	    }
+	  };
+
+	  BaseValidation.prototype.willUpdateModified = function willUpdateModified(el) {
+	    this.modified = this._checkModified(el);
+	    if (this._modified !== this.modified) {
+	      this._fireEvent(el, 'modified', { modified: this.modified });
+	      this._modified = this.modified;
+	    }
+	  };
+
+	  BaseValidation.prototype.listener = function listener(e) {
+	    if (this.guardValidate(e.target, e.type)) {
+	      return;
+	    }
+
+	    this.handleValidate(e.target, { type: e.type });
+	  };
+
+	  BaseValidation.prototype.handleValidate = function handleValidate(el) {
+	    var _ref = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    var _ref$type = _ref.type;
+	    var type = _ref$type === undefined ? null : _ref$type;
+	    var _ref$noopable = _ref.noopable;
+	    var noopable = _ref$noopable === undefined ? false : _ref$noopable;
+
+	    this.willUpdateTouched(el, type);
+	    this.willUpdateDirty(el);
+	    this.willUpdateModified(el);
+
+	    this._validator.validate({ field: this.field, el: el, noopable: noopable });
+	  };
+
+	  BaseValidation.prototype.validate = function validate(cb) {
+	    var _this3 = this;
+
+	    var noopable = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+	    var el = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+
+	    var _ = exports$1.Vue.util;
+
+	    var results = {};
+	    var errors = [];
+	    var valid = true;
+
+	    this._runValidators(function (descriptor, name, done) {
+	      var asset = _this3._resolveValidator(name);
+	      var validator = null;
+	      var msg = null;
+
+	      if (_.isPlainObject(asset)) {
+	        if (asset.check && typeof asset.check === 'function') {
+	          validator = asset.check;
+	        }
+	        if (asset.message) {
+	          msg = asset.message;
+	        }
+	      } else if (typeof asset === 'function') {
+	        validator = asset;
+	      }
+
+	      if (descriptor.msg) {
+	        msg = descriptor.msg;
+	      }
+
+	      if (noopable) {
+	        results[name] = false;
+	        return done();
+	      }
+
+	      if (descriptor._isNoopable) {
+	        results[name] = false;
+	        descriptor._isNoopable = null;
+	        return done();
+	      }
+
+	      if (validator) {
+	        var value = _this3._getValue(_this3._el);
+	        _this3._invokeValidator(_this3._vm, validator, value, descriptor.arg, function (ret, err) {
+	          if (!ret) {
+	            valid = false;
+	            if (err) {
+	              // async error message
+	              errors.push({ validator: name, message: err });
+	              results[name] = err;
+	            } else if (msg) {
+	              var error = { validator: name };
+	              error.message = typeof msg === 'function' ? msg.call(_this3._vm, _this3.field, descriptor.arg) : msg;
+	              errors.push(error);
+	              results[name] = error.message;
+	            } else {
+	              results[name] = !ret;
+	            }
+	          } else {
+	            results[name] = !ret;
+	          }
+
+	          done();
+	        });
+	      } else {
+	        done();
+	      }
+	    }, function () {
+	      // finished
+	      _this3._fireEvent(_this3._el, valid ? 'valid' : 'invalid');
+
+	      var props = {
+	        valid: valid,
+	        invalid: !valid,
+	        touched: _this3.touched,
+	        untouched: !_this3.touched,
+	        dirty: _this3.dirty,
+	        pristine: !_this3.dirty,
+	        modified: _this3.modified
+	      };
+	      if (!empty(errors)) {
+	        props.errors = errors;
+	      }
+	      _.extend(results, props);
+
+	      _this3.willUpdateClasses(results, el);
+
+	      cb(results);
+	    });
+	  };
+
+	  BaseValidation.prototype.resetFlags = function resetFlags() {
+	    this.touched = false;
+	    this.dirty = false;
+	    this.modified = false;
+	    this._modified = false;
+	  };
+
+	  BaseValidation.prototype.reset = function reset() {
+	    each(this._validators, function (descriptor, key) {
+	      if (descriptor.initial && !descriptor._isNoopable) {
+	        descriptor._isNoopable = true;
+	      }
+	    });
+	    this.resetFlags();
+	    this._init = this._getValue(this._el);
+	  };
+
+	  BaseValidation.prototype.willUpdateClasses = function willUpdateClasses(results) {
+	    var _this4 = this;
+
+	    var el = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
+	    if (this._checkClassIds(el)) {
+	      (function () {
+	        var classIds = _this4._getClassIds(el);
+	        _this4.vm.$nextTick(function () {
+	          _this4.vm.$emit(VALIDATE_UPDATE, classIds, _this4, results);
+	        });
+	      })();
+	    } else {
+	      this.updateClasses(results);
+	    }
+	  };
+
+	  BaseValidation.prototype.updateClasses = function updateClasses(results) {
+	    var el = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
+	    this._updateClasses(el || this._el, results);
+	  };
+
+	  BaseValidation.prototype.guardValidate = function guardValidate(el, type) {
+	    if (type && type === 'blur' && !this.detectBlur) {
+	      return true;
+	    }
+
+	    if (type && type === 'input' && !this.detectChange) {
+	      return true;
+	    }
+
+	    if (type && type === 'change' && !this.detectChange) {
+	      return true;
+	    }
+
+	    if (type && type === 'click' && !this.detectChange) {
+	      return true;
+	    }
+
+	    return false;
+	  };
+
+	  BaseValidation.prototype._getValue = function _getValue(el) {
+	    return el.value;
+	  };
+
+	  BaseValidation.prototype._getScope = function _getScope() {
+	    return this._forScope || this._vm;
+	  };
+
+	  BaseValidation.prototype._getClassIds = function _getClassIds(el) {
+	    return this._classIds;
+	  };
+
+	  BaseValidation.prototype._checkModified = function _checkModified(target) {
+	    return this._init !== this._getValue(target);
+	  };
+
+	  BaseValidation.prototype._checkClassIds = function _checkClassIds(el) {
+	    return this._getClassIds(el);
+	  };
+
+	  BaseValidation.prototype._fireEvent = function _fireEvent(el, type, args) {
+	    trigger(el, type, args);
+	  };
+
+	  BaseValidation.prototype._evalModel = function _evalModel(model, filters) {
+	    var scope = this._getScope();
+
+	    var val = null;
+	    if (filters) {
+	      val = scope.$get(model);
+	      return filters ? this._applyFilters(val, null, filters) : val;
+	    } else {
+	      val = scope.$get(model);
+	      return val === undefined || val === null ? '' : val;
+	    }
+	  };
+
+	  BaseValidation.prototype._updateClasses = function _updateClasses(el, results) {
+	    this._toggleValid(el, results.valid);
+	    this._toggleTouched(el, results.touched);
+	    this._togglePristine(el, results.pristine);
+	    this._toggleModfied(el, results.modified);
+	  };
+
+	  BaseValidation.prototype._toggleValid = function _toggleValid(el, valid) {
+	    var _util$Vue$util = exports$1.Vue.util;
+	    var addClass = _util$Vue$util.addClass;
+	    var removeClass = _util$Vue$util.removeClass;
+
+	    var validClass = this._classes.valid || 'valid';
+	    var invalidClass = this._classes.invalid || 'invalid';
+
+	    if (valid) {
+	      toggleClasses(el, validClass, addClass);
+	      toggleClasses(el, invalidClass, removeClass);
+	    } else {
+	      toggleClasses(el, validClass, removeClass);
+	      toggleClasses(el, invalidClass, addClass);
+	    }
+	  };
+
+	  BaseValidation.prototype._toggleTouched = function _toggleTouched(el, touched) {
+	    var _util$Vue$util2 = exports$1.Vue.util;
+	    var addClass = _util$Vue$util2.addClass;
+	    var removeClass = _util$Vue$util2.removeClass;
+
+	    var touchedClass = this._classes.touched || 'touched';
+	    var untouchedClass = this._classes.untouched || 'untouched';
+
+	    if (touched) {
+	      toggleClasses(el, touchedClass, addClass);
+	      toggleClasses(el, untouchedClass, removeClass);
+	    } else {
+	      toggleClasses(el, touchedClass, removeClass);
+	      toggleClasses(el, untouchedClass, addClass);
+	    }
+	  };
+
+	  BaseValidation.prototype._togglePristine = function _togglePristine(el, pristine) {
+	    var _util$Vue$util3 = exports$1.Vue.util;
+	    var addClass = _util$Vue$util3.addClass;
+	    var removeClass = _util$Vue$util3.removeClass;
+
+	    var pristineClass = this._classes.pristine || 'pristine';
+	    var dirtyClass = this._classes.dirty || 'dirty';
+
+	    if (pristine) {
+	      toggleClasses(el, pristineClass, addClass);
+	      toggleClasses(el, dirtyClass, removeClass);
+	    } else {
+	      toggleClasses(el, pristineClass, removeClass);
+	      toggleClasses(el, dirtyClass, addClass);
+	    }
+	  };
+
+	  BaseValidation.prototype._toggleModfied = function _toggleModfied(el, modified) {
+	    var _util$Vue$util4 = exports$1.Vue.util;
+	    var addClass = _util$Vue$util4.addClass;
+	    var removeClass = _util$Vue$util4.removeClass;
+
+	    var modifiedClass = this._classes.modified || 'modified';
+
+	    if (modified) {
+	      toggleClasses(el, modifiedClass, addClass);
+	    } else {
+	      toggleClasses(el, modifiedClass, removeClass);
+	    }
+	  };
+
+	  BaseValidation.prototype._applyFilters = function _applyFilters(value, oldValue, filters, write) {
+	    var resolveAsset = exports$1.Vue.util.resolveAsset;
+	    var scope = this._getScope();
+
+	    var filter = void 0,
+	        fn = void 0,
+	        args = void 0,
+	        arg = void 0,
+	        offset = void 0,
+	        i = void 0,
+	        l = void 0,
+	        j = void 0,
+	        k = void 0;
+	    for (i = 0, l = filters.length; i < l; i++) {
+	      filter = filters[i];
+	      fn = resolveAsset(this._vm.$options, 'filters', filter.name);
+	      if (!fn) {
+	        continue;
+	      }
+
+	      fn = write ? fn.write : fn.read || fn;
+	      if (typeof fn !== 'function') {
+	        continue;
+	      }
+
+	      args = write ? [value, oldValue] : [value];
+	      offset = write ? 2 : 1;
+	      if (filter.args) {
+	        for (j = 0, k = filter.args.length; j < k; j++) {
+	          arg = filter.args[j];
+	          args[j + offset] = arg.dynamic ? scope.$get(arg.value) : arg.value;
+	        }
+	      }
+
+	      value = fn.apply(this._vm, args);
+	    }
+
+	    return value;
+	  };
+
+	  BaseValidation.prototype._runValidators = function _runValidators(fn, cb) {
+	    var validators = this._validators;
+	    var length = Object.keys(validators).length;
+
+	    var count = 0;
+	    each(validators, function (descriptor, name) {
+	      fn(descriptor, name, function () {
+	        ++count;
+	        count >= length && cb();
+	      });
+	    });
+	  };
+
+	  BaseValidation.prototype._invokeValidator = function _invokeValidator(vm, validator, val, arg, cb) {
+	    var future = validator.call(this, val, arg);
+	    if (typeof future === 'function') {
+	      // function
+	      future(function () {
+	        // resolve
+	        cb(true);
+	      }, function (msg) {
+	        // reject
+	        cb(false, msg);
+	      });
+	    } else if (isPromise(future)) {
+	      // promise
+	      future.then(function () {
+	        // resolve
+	        cb(true);
+	      }, function (msg) {
+	        // reject
+	        cb(false, msg);
+	      }).catch(function (err) {
+	        cb(false, err.message);
+	      });
+	    } else {
+	      // sync
+	      cb(future);
+	    }
+	  };
+
+	  BaseValidation.prototype._resolveValidator = function _resolveValidator(name) {
+	    var resolveAsset = exports$1.Vue.util.resolveAsset;
+	    return resolveAsset(this._vm.$options, 'validators', name);
+	  };
+
+	  babelHelpers.createClass(BaseValidation, [{
+	    key: 'vm',
+	    get: function get() {
+	      return this._vm;
+	    }
+	  }, {
+	    key: 'el',
+	    get: function get() {
+	      return this._el;
+	    }
+	  }, {
+	    key: 'detectChange',
+	    get: function get() {
+	      return this._detectChange;
+	    },
+	    set: function set(val) {
+	      this._detectChange = val;
+	    }
+	  }, {
+	    key: 'detectBlur',
+	    get: function get() {
+	      return this._detectBlur;
+	    },
+	    set: function set(val) {
+	      this._detectBlur = val;
+	    }
+	  }]);
+	  return BaseValidation;
+	}();
+
+	/**
+	 * CheckboxValidation class
+	 */
+
+	var CheckboxValidation = function (_BaseValidation) {
+	  babelHelpers.inherits(CheckboxValidation, _BaseValidation);
+
+	  function CheckboxValidation(field, model, vm, el, scope, validator, filters, detectBlur, detectChange) {
+	    babelHelpers.classCallCheck(this, CheckboxValidation);
+
+	    var _this = babelHelpers.possibleConstructorReturn(this, _BaseValidation.call(this, field, model, vm, el, scope, validator, filters, detectBlur, detectChange));
+
+	    _this._inits = [];
+	    return _this;
+	  }
+
+	  CheckboxValidation.prototype.manageElement = function manageElement(el, initial) {
+	    var _this2 = this;
+
+	    var scope = this._getScope();
+	    var item = this._addItem(el, initial);
+
+	    var model = item.model = this._model;
+	    if (model) {
+	      var value = this._evalModel(model, this._filters);
+	      if (Array.isArray(value)) {
+	        this._setChecked(value, item.el);
+	        item.unwatch = scope.$watch(model, function (val, old) {
+	          if (val !== old) {
+	            if (_this2.guardValidate(item.el, 'change')) {
+	              return;
+	            }
+
+	            _this2.handleValidate(item.el, { noopable: item.initial });
+	            if (item.initial) {
+	              item.initial = null;
+	            }
+	          }
+	        });
+	      } else {
+	        el.checked = value || false;
+	        this._init = el.checked;
+	        item.init = el.checked;
+	        item.value = el.value;
+	        item.unwatch = scope.$watch(model, function (val, old) {
+	          if (val !== old) {
+	            if (_this2.guardValidate(el, 'change')) {
+	              return;
+	            }
+
+	            _this2.handleValidate(el, { noopable: item.initial });
+	            if (item.initial) {
+	              item.initial = null;
+	            }
+	          }
+	        });
+	      }
+	    } else {
+	      var options = { field: this.field, noopable: initial };
+	      if (this._checkClassIds(el)) {
+	        options.el = el;
+	      }
+	      this._validator.validate(options);
+	    }
+	  };
+
+	  CheckboxValidation.prototype.unmanageElement = function unmanageElement(el) {
+	    var found = -1;
+	    each(this._inits, function (item, index) {
+	      if (item.el === el) {
+	        found = index;
+	        if (item.unwatch && item.model) {
+	          item.unwatch();
+	          item.unwatch = null;
+	          item.model = null;
+	        }
+	      }
+	    });
+	    if (found === -1) {
+	      return;
+	    }
+
+	    this._inits.splice(found, 1);
+	    this._validator.validate({ field: this.field });
+	  };
+
+	  CheckboxValidation.prototype.willUpdateFlags = function willUpdateFlags() {
+	    var _this3 = this;
+
+	    var touched = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+
+	    each(this._inits, function (item, index) {
+	      touched && _this3.willUpdateTouched(item.el, 'blur');
+	      _this3.willUpdateDirty(item.el);
+	      _this3.willUpdateModified(item.el);
+	    });
+	  };
+
+	  CheckboxValidation.prototype.reset = function reset() {
+	    this.resetFlags();
+	    each(this._inits, function (item, index) {
+	      item.init = item.el.checked;
+	      item.value = item.el.value;
+	    });
+	  };
+
+	  CheckboxValidation.prototype.updateClasses = function updateClasses(results) {
+	    var _this4 = this;
+
+	    var el = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
+	    if (el) {
+	      // for another element
+	      this._updateClasses(el, results);
+	    } else {
+	      each(this._inits, function (item, index) {
+	        _this4._updateClasses(item.el, results);
+	      });
+	    }
+	  };
+
+	  CheckboxValidation.prototype._addItem = function _addItem(el, initial) {
+	    var item = {
+	      el: el,
+	      init: el.checked,
+	      value: el.value,
+	      initial: initial
+	    };
+
+	    var classIds = el.getAttribute(VALIDATE_UPDATE);
+	    if (classIds) {
+	      el.removeAttribute(VALIDATE_UPDATE);
+	      item.classIds = classIds.split(',');
+	    }
+
+	    this._inits.push(item);
+	    return item;
+	  };
+
+	  CheckboxValidation.prototype._setChecked = function _setChecked(values, el) {
+	    for (var i = 0, l = values.length; i < l; i++) {
+	      var value = values[i];
+	      if (!el.disabled && el.value === value && !el.checked) {
+	        el.checked = true;
+	      }
+	    }
+	  };
+
+	  CheckboxValidation.prototype._getValue = function _getValue(el) {
+	    var _this5 = this;
+
+	    if (!this._inits || this._inits.length === 0) {
+	      return el.checked;
+	    } else {
+	      var _ret = function () {
+	        var vals = [];
+	        each(_this5._inits, function (item, index) {
+	          item.el.checked && vals.push(item.el.value);
+	        });
+	        return {
+	          v: vals
+	        };
+	      }();
+
+	      if ((typeof _ret === 'undefined' ? 'undefined' : babelHelpers.typeof(_ret)) === "object") return _ret.v;
+	    }
+	  };
+
+	  CheckboxValidation.prototype._getClassIds = function _getClassIds(el) {
+	    var classIds = void 0;
+	    each(this._inits, function (item, index) {
+	      if (item.el === el) {
+	        classIds = item.classIds;
+	      }
+	    });
+	    return classIds;
+	  };
+
+	  CheckboxValidation.prototype._checkModified = function _checkModified(target) {
+	    var _this6 = this;
+
+	    if (this._inits.length === 0) {
+	      return this._init !== target.checked;
+	    } else {
+	      var _ret2 = function () {
+	        var modified = false;
+	        each(_this6._inits, function (item, index) {
+	          if (!modified) {
+	            modified = item.init !== item.el.checked;
+	          }
+	        });
+	        return {
+	          v: modified
+	        };
+	      }();
+
+	      if ((typeof _ret2 === 'undefined' ? 'undefined' : babelHelpers.typeof(_ret2)) === "object") return _ret2.v;
+	    }
+	  };
+
+	  return CheckboxValidation;
+	}(BaseValidation);
+
+	/**
+	 * RadioValidation class
+	 */
+
+	var RadioValidation = function (_BaseValidation) {
+	  babelHelpers.inherits(RadioValidation, _BaseValidation);
+
+	  function RadioValidation(field, model, vm, el, scope, validator, filters, detectBlur, detectChange) {
+	    babelHelpers.classCallCheck(this, RadioValidation);
+
+	    var _this = babelHelpers.possibleConstructorReturn(this, _BaseValidation.call(this, field, model, vm, el, scope, validator, filters, detectBlur, detectChange));
+
+	    _this._inits = [];
+	    return _this;
+	  }
+
+	  RadioValidation.prototype.manageElement = function manageElement(el, initial) {
+	    var _this2 = this;
+
+	    var scope = this._getScope();
+	    var item = this._addItem(el, initial);
+
+	    var model = item.model = this._model;
+	    if (model) {
+	      var value = this._evalModel(model, this._filters);
+	      this._setChecked(value, el, item);
+	      item.unwatch = scope.$watch(model, function (val, old) {
+	        if (val !== old) {
+	          if (_this2.guardValidate(item.el, 'change')) {
+	            return;
+	          }
+
+	          _this2.handleValidate(el, { noopable: item.initial });
+	          if (item.initial) {
+	            item.initial = null;
+	          }
+	        }
+	      });
+	    } else {
+	      var options = { field: this.field, noopable: initial };
+	      if (this._checkClassIds(el)) {
+	        options.el = el;
+	      }
+	      this._validator.validate(options);
+	    }
+	  };
+
+	  RadioValidation.prototype.unmanageElement = function unmanageElement(el) {
+	    var found = -1;
+	    each(this._inits, function (item, index) {
+	      if (item.el === el) {
+	        found = index;
+	      }
+	    });
+	    if (found === -1) {
+	      return;
+	    }
+
+	    this._inits.splice(found, 1);
+	    this._validator.validate({ field: this.field });
+	  };
+
+	  RadioValidation.prototype.willUpdateFlags = function willUpdateFlags() {
+	    var _this3 = this;
+
+	    var touched = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+
+	    each(this._inits, function (item, index) {
+	      touched && _this3.willUpdateTouched(item.el, 'blur');
+	      _this3.willUpdateDirty(item.el);
+	      _this3.willUpdateModified(item.el);
+	    });
+	  };
+
+	  RadioValidation.prototype.reset = function reset() {
+	    this.resetFlags();
+	    each(this._inits, function (item, index) {
+	      item.init = item.el.checked;
+	      item.value = item.el.value;
+	    });
+	  };
+
+	  RadioValidation.prototype.updateClasses = function updateClasses(results) {
+	    var _this4 = this;
+
+	    var el = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
+	    if (el) {
+	      // for another element
+	      this._updateClasses(el, results);
+	    } else {
+	      each(this._inits, function (item, index) {
+	        _this4._updateClasses(item.el, results);
+	      });
+	    }
+	  };
+
+	  RadioValidation.prototype._addItem = function _addItem(el, initial) {
+	    var item = {
+	      el: el,
+	      init: el.checked,
+	      value: el.value,
+	      initial: initial
+	    };
+
+	    var classIds = el.getAttribute(VALIDATE_UPDATE);
+	    if (classIds) {
+	      el.removeAttribute(VALIDATE_UPDATE);
+	      item.classIds = classIds.split(',');
+	    }
+
+	    this._inits.push(item);
+	    return item;
+	  };
+
+	  RadioValidation.prototype._setChecked = function _setChecked(value, el, item) {
+	    if (el.value === value) {
+	      el.checked = true;
+	      this._init = el.checked;
+	      item.init = el.checked;
+	      item.value = value;
+	    }
+	  };
+
+	  RadioValidation.prototype._getValue = function _getValue(el) {
+	    var _this5 = this;
+
+	    if (!this._inits || this._inits.length === 0) {
+	      return el.checked;
+	    } else {
+	      var _ret = function () {
+	        var vals = [];
+	        each(_this5._inits, function (item, index) {
+	          item.el.checked && vals.push(item.el.value);
+	        });
+	        return {
+	          v: vals
+	        };
+	      }();
+
+	      if ((typeof _ret === 'undefined' ? 'undefined' : babelHelpers.typeof(_ret)) === "object") return _ret.v;
+	    }
+	  };
+
+	  RadioValidation.prototype._getClassIds = function _getClassIds(el) {
+	    var classIds = void 0;
+	    each(this._inits, function (item, index) {
+	      if (item.el === el) {
+	        classIds = item.classIds;
+	      }
+	    });
+	    return classIds;
+	  };
+
+	  RadioValidation.prototype._checkModified = function _checkModified(target) {
+	    var _this6 = this;
+
+	    if (this._inits.length === 0) {
+	      return this._init !== target.checked;
+	    } else {
+	      var _ret2 = function () {
+	        var modified = false;
+	        each(_this6._inits, function (item, index) {
+	          if (!modified) {
+	            modified = item.init !== item.el.checked;
+	          }
+	        });
+	        return {
+	          v: modified
+	        };
+	      }();
+
+	      if ((typeof _ret2 === 'undefined' ? 'undefined' : babelHelpers.typeof(_ret2)) === "object") return _ret2.v;
+	    }
+	  };
+
+	  return RadioValidation;
+	}(BaseValidation);
+
+	/**
+	 * SelectValidation class
+	 */
+
+	var SelectValidation = function (_BaseValidation) {
+	  babelHelpers.inherits(SelectValidation, _BaseValidation);
+
+	  function SelectValidation(field, model, vm, el, scope, validator, filters, detectBlur, detectChange) {
+	    babelHelpers.classCallCheck(this, SelectValidation);
+
+	    var _this = babelHelpers.possibleConstructorReturn(this, _BaseValidation.call(this, field, model, vm, el, scope, validator, filters, detectBlur, detectChange));
+
+	    _this._multiple = _this._el.hasAttribute('multiple');
+	    return _this;
+	  }
+
+	  SelectValidation.prototype.manageElement = function manageElement(el, initial) {
+	    var _this2 = this;
+
+	    var scope = this._getScope();
+	    var model = this._model;
+
+	    this._initial = initial;
+
+	    var classIds = el.getAttribute(VALIDATE_UPDATE);
+	    if (classIds) {
+	      el.removeAttribute(VALIDATE_UPDATE);
+	      this._classIds = classIds.split(',');
+	    }
+
+	    if (model) {
+	      var value = this._evalModel(model, this._filters);
+	      var values = !Array.isArray(value) ? [value] : value;
+	      this._setOption(values, el);
+	      this._unwatch = scope.$watch(model, function (val, old) {
+	        var values1 = !Array.isArray(val) ? [val] : val;
+	        var values2 = !Array.isArray(old) ? [old] : old;
+	        if (values1.slice().sort().toString() !== values2.slice().sort().toString()) {
+	          if (_this2.guardValidate(el, 'change')) {
+	            return;
+	          }
+
+	          _this2.handleValidate(el, { noopable: _this2._initial });
+	          if (_this2._initial) {
+	            _this2._initial = null;
+	          }
+	        }
+	      });
+	    }
+	  };
+
+	  SelectValidation.prototype.unmanageElement = function unmanageElement(el) {
+	    this._unwatch && this._unwatch();
+	  };
+
+	  SelectValidation.prototype.reset = function reset() {
+	    this.resetFlags();
+	  };
+
+	  SelectValidation.prototype._getValue = function _getValue(el) {
+	    var ret = [];
+
+	    for (var i = 0, l = el.options.length; i < l; i++) {
+	      var option = el.options[i];
+	      if (!option.disabled && option.selected) {
+	        ret.push(option.value);
+	      }
+	    }
+
+	    return ret;
+	  };
+
+	  SelectValidation.prototype._setOption = function _setOption(values, el) {
+	    for (var i = 0, l = values.length; i < l; i++) {
+	      var value = values[i];
+	      for (var j = 0, m = el.options.length; j < m; j++) {
+	        var option = el.options[j];
+	        if (!option.disabled && option.value === value && (!option.hasAttribute('selected') || !option.selected)) {
+	          option.selected = true;
+	        }
+	      }
+	    }
+	  };
+
+	  SelectValidation.prototype._checkModified = function _checkModified(target) {
+	    var values = this._getValue(target).slice().sort();
+	    if (this._init.length !== values.length) {
+	      return true;
+	    } else {
+	      var inits = this._init.slice().sort();
+	      return inits.toString() !== values.toString();
+	    }
+	  };
+
+	  return SelectValidation;
+	}(BaseValidation);
+
+	/**
+	 * Validator class
+	 */
+
+	var Validator$1 = function () {
+	  function Validator(name, dir, groups, classes) {
+	    var _this = this;
+
+	    babelHelpers.classCallCheck(this, Validator);
+
+	    this.name = name;
+
+	    this._scope = {};
+	    this._dir = dir;
+	    this._validations = {};
+	    this._checkboxValidations = {};
+	    this._radioValidations = {};
+	    this._groups = groups;
+	    this._groupValidations = {};
+	    this._events = {};
+	    this._modified = false;
+	    this._classes = classes;
+
+	    each(groups, function (group) {
+	      _this._groupValidations[group] = [];
+	    });
+	  }
+
+	  Validator.prototype.enableReactive = function enableReactive() {
+	    var vm = this._dir.vm;
+
+	    // define the validation scope
+	    exports$1.Vue.util.defineReactive(vm, this.name, this._scope);
+	    vm._validatorMaps[this.name] = this;
+
+	    // define the validation resetting meta method to vue instance
+	    this._defineResetValidation();
+
+	    // define the validate manually meta method to vue instance
+	    this._defineValidate();
+
+	    // define manually the validation errors
+	    this._defineSetValidationErrors();
+	  };
+
+	  Validator.prototype.disableReactive = function disableReactive() {
+	    var vm = this._dir.vm;
+	    vm.$setValidationErrors = null;
+	    delete vm['$setValidationErrors'];
+	    vm.$validate = null;
+	    delete vm['$validate'];
+	    vm.$validatorReset = null;
+	    delete vm['$validatorReset'];
+	    vm._validatorMaps[this.name] = null;
+	    delete vm._validatorMaps[this.name];
+	    vm[this.name] = null;
+	    delete vm[this.name];
+	  };
+
+	  Validator.prototype.registerEvents = function registerEvents() {
+	    var isSimplePath = exports$1.Vue.parsers.expression.isSimplePath;
+
+	    var attrs = this._dir.el.attributes;
+	    for (var i = 0, l = attrs.length; i < l; i++) {
+	      var event = attrs[i].name;
+	      if (REGEX_EVENT.test(event)) {
+	        var value = attrs[i].value;
+	        if (isSimplePath(value)) {
+	          value += '.apply(this, $arguments)';
+	        }
+	        event = event.replace(REGEX_EVENT, '');
+	        this._events[this._getEventName(event)] = this._dir.vm.$eval(value, true);
+	      }
+	    }
+	  };
+
+	  Validator.prototype.unregisterEvents = function unregisterEvents() {
+	    var _this2 = this;
+
+	    each(this._events, function (handler, event) {
+	      _this2._events[event] = null;
+	      delete _this2._events[event];
+	    });
+	  };
+
+	  Validator.prototype.manageValidation = function manageValidation(field, model, vm, el, scope, filters, initial, detectBlur, detectChange) {
+	    var validation = null;
+
+	    if (el.tagName === 'SELECT') {
+	      validation = this._manageSelectValidation(field, model, vm, el, scope, filters, initial, detectBlur, detectChange);
+	    } else if (el.type === 'checkbox') {
+	      validation = this._manageCheckboxValidation(field, model, vm, el, scope, filters, initial, detectBlur, detectChange);
+	    } else if (el.type === 'radio') {
+	      validation = this._manageRadioValidation(field, model, vm, el, scope, filters, initial, detectBlur, detectChange);
+	    } else {
+	      validation = this._manageBaseValidation(field, model, vm, el, scope, filters, initial, detectBlur, detectChange);
+	    }
+
+	    validation.setValidationClasses(this._classes);
+
+	    return validation;
+	  };
+
+	  Validator.prototype.unmanageValidation = function unmanageValidation(field, el) {
+	    if (el.type === 'checkbox') {
+	      this._unmanageCheckboxValidation(field, el);
+	    } else if (el.type === 'radio') {
+	      this._unmanageRadioValidation(field, el);
+	    } else if (el.tagName === 'SELECT') {
+	      this._unmanageSelectValidation(field, el);
+	    } else {
+	      this._unmanageBaseValidation(field, el);
+	    }
+	  };
+
+	  Validator.prototype.addGroupValidation = function addGroupValidation(group, field) {
+	    var indexOf = exports$1.Vue.util.indexOf;
+
+	    var validation = this._getValidationFrom(field);
+	    var validations = this._groupValidations[group];
+
+	    validations && ! ~indexOf(validations, validation) && validations.push(validation);
+	  };
+
+	  Validator.prototype.removeGroupValidation = function removeGroupValidation(group, field) {
+	    var validation = this._getValidationFrom(field);
+	    var validations = this._groupValidations[group];
+
+	    validations && pull(validations, validation);
+	  };
+
+	  Validator.prototype.validate = function validate() {
+	    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	    var _ref$el = _ref.el;
+	    var el = _ref$el === undefined ? null : _ref$el;
+	    var _ref$field = _ref.field;
+	    var field = _ref$field === undefined ? null : _ref$field;
+	    var _ref$touched = _ref.touched;
+	    var touched = _ref$touched === undefined ? false : _ref$touched;
+	    var _ref$noopable = _ref.noopable;
+	    var noopable = _ref$noopable === undefined ? false : _ref$noopable;
+	    var _ref$cb = _ref.cb;
+	    var cb = _ref$cb === undefined ? null : _ref$cb;
+
+	    if (!field) {
+	      // all
+	      each(this.validations, function (validation, key) {
+	        validation.willUpdateFlags(touched);
+	      });
+	      this._validates(cb);
+	    } else {
+	      // each field
+	      this._validate(field, touched, noopable, el, cb);
+	    }
+	  };
+
+	  Validator.prototype.setupScope = function setupScope() {
+	    var _this3 = this;
+
+	    this._defineProperties(function () {
+	      return _this3.validations;
+	    }, function () {
+	      return _this3._scope;
+	    });
+
+	    each(this._groups, function (name) {
+	      var validations = _this3._groupValidations[name];
+	      var group = {};
+	      exports$1.Vue.set(_this3._scope, name, group);
+	      _this3._defineProperties(function () {
+	        return validations;
+	      }, function () {
+	        return group;
+	      });
+	    });
+	  };
+
+	  Validator.prototype.waitFor = function waitFor(cb) {
+	    var method = '$activateValidator';
+	    var vm = this._dir.vm;
+
+	    vm[method] = function () {
+	      cb();
+	      vm[method] = null;
+	    };
+	  };
+
+	  Validator.prototype._defineResetValidation = function _defineResetValidation() {
+	    var _this4 = this;
+
+	    this._dir.vm.$resetValidation = function (cb) {
+	      _this4._resetValidation(cb);
+	    };
+	  };
+
+	  Validator.prototype._defineValidate = function _defineValidate() {
+	    var _this5 = this;
+
+	    this._dir.vm.$validate = function () {
+	      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	        args[_key] = arguments[_key];
+	      }
+
+	      var field = null;
+	      var touched = false;
+	      var cb = null;
+
+	      each(args, function (arg, index) {
+	        if (typeof arg === 'string') {
+	          field = arg;
+	        } else if (typeof arg === 'boolean') {
+	          touched = arg;
+	        } else if (typeof arg === 'function') {
+	          cb = arg;
+	        }
+	      });
+
+	      _this5.validate({ field: field, touched: touched, cb: cb });
+	    };
+	  };
+
+	  Validator.prototype._defineSetValidationErrors = function _defineSetValidationErrors() {
+	    var _this6 = this;
+
+	    this._dir.vm.$setValidationErrors = function (errors) {
+	      _this6._setValidationErrors(errors);
+	    };
+	  };
+
+	  Validator.prototype._validate = function _validate(field) {
+	    var touched = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+	    var noopable = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+
+	    var _this7 = this;
+
+	    var el = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
+	    var cb = arguments.length <= 4 || arguments[4] === undefined ? null : arguments[4];
+
+	    var scope = this._scope;
+
+	    var validation = this._getValidationFrom(field);
+	    if (validation) {
+	      validation.willUpdateFlags(touched);
+	      validation.validate(function (results) {
+	        exports$1.Vue.set(scope, field, results);
+	        _this7._fireEvents();
+	        cb && cb();
+	      }, noopable, el);
+	    }
+	  };
+
+	  Validator.prototype._validates = function _validates(cb) {
+	    var _this8 = this;
+
+	    var scope = this._scope;
+
+	    this._runValidates(function (validation, key, done) {
+	      validation.validate(function (results) {
+	        exports$1.Vue.set(scope, key, results);
+	        done();
+	      });
+	    }, function () {
+	      // finished
+	      _this8._fireEvents();
+	      cb && cb();
+	    });
+	  };
+
+	  Validator.prototype._getValidationFrom = function _getValidationFrom(field) {
+	    return this._validations[field] || this._checkboxValidations[field] && this._checkboxValidations[field].validation || this._radioValidations[field] && this._radioValidations[field].validation;
+	  };
+
+	  Validator.prototype._resetValidation = function _resetValidation(cb) {
+	    each(this.validations, function (validation, key) {
+	      validation.reset();
+	    });
+	    this._validates(cb);
+	  };
+
+	  Validator.prototype._setValidationErrors = function _setValidationErrors(errors) {
+	    var _this9 = this;
+
+	    var extend = exports$1.Vue.util.extend;
+
+	    // make tempolaly errors
+
+	    var temp = {};
+	    each(errors, function (error, index) {
+	      if (!temp[error.field]) {
+	        temp[error.field] = [];
+	      }
+	      temp[error.field].push(error);
+	    });
+
+	    // set errors
+	    each(temp, function (values, field) {
+	      var results = _this9._scope[field];
+	      var newResults = {};
+
+	      each(values, function (error) {
+	        if (error.validator) {
+	          results[error.validator] = error.message;
+	        }
+	      });
+
+	      results.valid = false;
+	      results.invalid = true;
+	      results.errors = values;
+	      extend(newResults, results);
+
+	      var validation = _this9._getValidationFrom(field);
+	      validation.willUpdateClasses(newResults, validation.el);
+
+	      exports$1.Vue.set(_this9._scope, field, newResults);
+	    });
+	  };
+
+	  Validator.prototype._manageBaseValidation = function _manageBaseValidation(field, model, vm, el, scope, filters, initial, detectBlur, detectChange) {
+	    var validation = this._validations[field] = new BaseValidation(field, model, vm, el, scope, this, filters, detectBlur, detectChange);
+	    validation.manageElement(el, initial);
+	    return validation;
+	  };
+
+	  Validator.prototype._unmanageBaseValidation = function _unmanageBaseValidation(field, el) {
+	    var validation = this._validations[field];
+	    if (validation) {
+	      validation.unmanageElement(el);
+	      exports$1.Vue.delete(this._scope, field);
+	      this._validations[field] = null;
+	      delete this._validations[field];
+	    }
+	  };
+
+	  Validator.prototype._manageCheckboxValidation = function _manageCheckboxValidation(field, model, vm, el, scope, filters, initial, detectBlur, detectChange) {
+	    var validationSet = this._checkboxValidations[field];
+	    if (!validationSet) {
+	      var validation = new CheckboxValidation(field, model, vm, el, scope, this, filters, detectBlur, detectChange);
+	      validationSet = { validation: validation, elements: 0 };
+	      this._checkboxValidations[field] = validationSet;
+	    }
+
+	    validationSet.elements++;
+	    validationSet.validation.manageElement(el, initial);
+	    return validationSet.validation;
+	  };
+
+	  Validator.prototype._unmanageCheckboxValidation = function _unmanageCheckboxValidation(field, el) {
+	    var validationSet = this._checkboxValidations[field];
+	    if (validationSet) {
+	      validationSet.elements--;
+	      validationSet.validation.unmanageElement(el);
+	      if (validationSet.elements === 0) {
+	        exports$1.Vue.delete(this._scope, field);
+	        this._checkboxValidations[field] = null;
+	        delete this._checkboxValidations[field];
+	      }
+	    }
+	  };
+
+	  Validator.prototype._manageRadioValidation = function _manageRadioValidation(field, model, vm, el, scope, filters, initial, detectBlur, detectChange) {
+	    var validationSet = this._radioValidations[field];
+	    if (!validationSet) {
+	      var validation = new RadioValidation(field, model, vm, el, scope, this, filters, detectBlur, detectChange);
+	      validationSet = { validation: validation, elements: 0 };
+	      this._radioValidations[field] = validationSet;
+	    }
+
+	    validationSet.elements++;
+	    validationSet.validation.manageElement(el, initial);
+	    return validationSet.validation;
+	  };
+
+	  Validator.prototype._unmanageRadioValidation = function _unmanageRadioValidation(field, el) {
+	    var validationSet = this._radioValidations[field];
+	    if (validationSet) {
+	      validationSet.elements--;
+	      validationSet.validation.unmanageElement(el);
+	      if (validationSet.elements === 0) {
+	        exports$1.Vue.delete(this._scope, field);
+	        this._radioValidations[field] = null;
+	        delete this._radioValidations[field];
+	      }
+	    }
+	  };
+
+	  Validator.prototype._manageSelectValidation = function _manageSelectValidation(field, model, vm, el, scope, filters, initial, detectBlur, detectChange) {
+	    var validation = this._validations[field] = new SelectValidation(field, model, vm, el, scope, this, filters, detectBlur, detectChange);
+	    validation.manageElement(el, initial);
+	    return validation;
+	  };
+
+	  Validator.prototype._unmanageSelectValidation = function _unmanageSelectValidation(field, el) {
+	    var validation = this._validations[field];
+	    if (validation) {
+	      validation.unmanageElement(el);
+	      exports$1.Vue.delete(this._scope, field);
+	      this._validations[field] = null;
+	      delete this._validations[field];
+	    }
+	  };
+
+	  Validator.prototype._fireEvent = function _fireEvent(type) {
+	    for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+	      args[_key2 - 1] = arguments[_key2];
+	    }
+
+	    var handler = this._events[this._getEventName(type)];
+	    handler && this._dir.vm.$nextTick(function () {
+	      handler.apply(null, args);
+	    });
+	  };
+
+	  Validator.prototype._fireEvents = function _fireEvents() {
+	    var scope = this._scope;
+
+	    scope.touched && this._fireEvent('touched');
+	    scope.dirty && this._fireEvent('dirty');
+
+	    if (this._modified !== scope.modified) {
+	      this._fireEvent('modified', scope.modified);
+	      this._modified = scope.modified;
+	    }
+
+	    var valid = scope.valid;
+	    this._fireEvent(valid ? 'valid' : 'invalid');
+	  };
+
+	  Validator.prototype._getEventName = function _getEventName(type) {
+	    return this.name + ':' + type;
+	  };
+
+	  Validator.prototype._defineProperties = function _defineProperties(validationsGetter, targetGetter) {
+	    var _this10 = this;
+
+	    var bind = exports$1.Vue.util.bind;
+
+	    each({
+	      valid: { fn: this._defineValid, arg: validationsGetter },
+	      invalid: { fn: this._defineInvalid, arg: targetGetter },
+	      touched: { fn: this._defineTouched, arg: validationsGetter },
+	      untouched: { fn: this._defineUntouched, arg: targetGetter },
+	      modified: { fn: this._defineModified, arg: validationsGetter },
+	      dirty: { fn: this._defineDirty, arg: validationsGetter },
+	      pristine: { fn: this._definePristine, arg: targetGetter },
+	      errors: { fn: this._defineErrors, arg: validationsGetter }
+	    }, function (descriptor, name) {
+	      Object.defineProperty(targetGetter(), name, {
+	        enumerable: true,
+	        configurable: true,
+	        get: function get() {
+	          return bind(descriptor.fn, _this10)(descriptor.arg);
+	        }
+	      });
+	    });
+	  };
+
+	  Validator.prototype._runValidates = function _runValidates(fn, cb) {
+	    var length = Object.keys(this.validations).length;
+
+	    var count = 0;
+	    each(this.validations, function (validation, key) {
+	      fn(validation, key, function () {
+	        ++count;
+	        count >= length && cb();
+	      });
+	    });
+	  };
+
+	  Validator.prototype._walkValidations = function _walkValidations(validations, property, condition) {
+	    var _this11 = this;
+
+	    var hasOwn = exports$1.Vue.util.hasOwn;
+	    var ret = condition;
+
+	    each(validations, function (validation, key) {
+	      if (ret === !condition) {
+	        return;
+	      }
+	      if (hasOwn(_this11._scope, validation.field)) {
+	        var target = _this11._scope[validation.field];
+	        if (target && target[property] === !condition) {
+	          ret = !condition;
+	        }
+	      }
+	    });
+
+	    return ret;
+	  };
+
+	  Validator.prototype._defineValid = function _defineValid(validationsGetter) {
+	    return this._walkValidations(validationsGetter(), 'valid', true);
+	  };
+
+	  Validator.prototype._defineInvalid = function _defineInvalid(scopeGetter) {
+	    return !scopeGetter().valid;
+	  };
+
+	  Validator.prototype._defineTouched = function _defineTouched(validationsGetter) {
+	    return this._walkValidations(validationsGetter(), 'touched', false);
+	  };
+
+	  Validator.prototype._defineUntouched = function _defineUntouched(scopeGetter) {
+	    return !scopeGetter().touched;
+	  };
+
+	  Validator.prototype._defineModified = function _defineModified(validationsGetter) {
+	    return this._walkValidations(validationsGetter(), 'modified', false);
+	  };
+
+	  Validator.prototype._defineDirty = function _defineDirty(validationsGetter) {
+	    return this._walkValidations(validationsGetter(), 'dirty', false);
+	  };
+
+	  Validator.prototype._definePristine = function _definePristine(scopeGetter) {
+	    return !scopeGetter().dirty;
+	  };
+
+	  Validator.prototype._defineErrors = function _defineErrors(validationsGetter) {
+	    var _this12 = this;
+
+	    var hasOwn = exports$1.Vue.util.hasOwn;
+	    var isPlainObject = exports$1.Vue.util.isPlainObject;
+	    var errors = [];
+
+	    each(validationsGetter(), function (validation, key) {
+	      if (hasOwn(_this12._scope, validation.field)) {
+	        var target = _this12._scope[validation.field];
+	        if (target && !empty(target.errors)) {
+	          each(target.errors, function (err, index) {
+	            var error = { field: validation.field };
+	            if (isPlainObject(err)) {
+	              if (err.validator) {
+	                error.validator = err.validator;
+	              }
+	              error.message = err.message;
+	            } else if (typeof err === 'string') {
+	              error.message = err;
+	            }
+	            errors.push(error);
+	          });
+	        }
+	      }
+	    });
+
+	    return empty(errors) ? undefined : errors.sort(function (a, b) {
+	      return a.field < b.field ? -1 : 1;
+	    });
+	  };
+
+	  babelHelpers.createClass(Validator, [{
+	    key: 'validations',
+	    get: function get() {
+	      var extend = exports$1.Vue.util.extend;
+
+	      var ret = {};
+	      extend(ret, this._validations);
+
+	      each(this._checkboxValidations, function (dataset, key) {
+	        ret[key] = dataset.validation;
+	      });
+
+	      each(this._radioValidations, function (dataset, key) {
+	        ret[key] = dataset.validation;
+	      });
+
+	      return ret;
+	    }
+	  }]);
+	  return Validator;
+	}();
+
+	function Validator (Vue) {
+	  var FragmentFactory = Vue.FragmentFactory;
+	  var vIf = Vue.directive('if');
+	  var _Vue$util = Vue.util;
+	  var isArray = _Vue$util.isArray;
+	  var isPlainObject = _Vue$util.isPlainObject;
+	  var createAnchor = _Vue$util.createAnchor;
+	  var replace = _Vue$util.replace;
+	  var extend = _Vue$util.extend;
+	  var camelize = _Vue$util.camelize;
+
+	  /**
+	   * `validator` element directive
+	   */
+
+	  Vue.elementDirective('validator', {
+	    params: ['name', 'groups', 'lazy', 'classes'],
+
+	    bind: function bind() {
+	      var params = this.params;
+
+	      if (process.env.NODE_ENV !== 'production' && !params.name) {
+	        warn('validator element requires a \'name\' attribute: ' + '(e.g. <validator name="validator1">...</validator>)');
+	        return;
+	      }
+
+	      this.validatorName = '$' + camelize(params.name);
+	      if (!this.vm._validatorMaps) {
+	        throw new Error('Invalid validator management error');
+	      }
+
+	      var classes = {};
+	      if (isPlainObject(this.params.classes)) {
+	        classes = this.params.classes;
+	      }
+
+	      this.setupValidator(classes);
+	      this.setupFragment(params.lazy);
+	    },
+	    unbind: function unbind() {
+	      this.teardownFragment();
+	      this.teardownValidator();
+	    },
+	    getGroups: function getGroups() {
+	      var params = this.params;
+	      var groups = [];
+
+	      if (params.groups) {
+	        if (isArray(params.groups)) {
+	          groups = params.groups;
+	        } else if (!isPlainObject(params.groups) && typeof params.groups === 'string') {
+	          groups.push(params.groups);
+	        }
+	      }
+
+	      return groups;
+	    },
+	    setupValidator: function setupValidator(classes) {
+	      var validator = this.validator = new Validator$1(this.validatorName, this, this.getGroups(), classes);
+	      validator.enableReactive();
+	      validator.setupScope();
+	      validator.registerEvents();
+	    },
+	    teardownValidator: function teardownValidator() {
+	      this.validator.unregisterEvents();
+	      this.validator.disableReactive();
+
+	      if (this.validatorName) {
+	        this.validatorName = null;
+	        this.validator = null;
+	      }
+	    },
+	    setupFragment: function setupFragment(lazy) {
+	      var _this = this;
+
+	      var vm = this.vm;
+
+	      this.validator.waitFor(function () {
+	        _this.anchor = createAnchor('vue-validator');
+	        replace(_this.el, _this.anchor);
+	        extend(vm.$options, { _validator: _this.validatorName });
+	        _this.factory = new FragmentFactory(vm, _this.el.innerHTML);
+	        vIf.insert.call(_this);
+	      });
+
+	      !lazy && vm.$activateValidator();
+	    },
+	    teardownFragment: function teardownFragment() {
+	      vIf.unbind.call(this);
+	    }
+	  });
+	}
+
+	function ValidatorError (Vue) {
+	  /**
+	   * ValidatorError component
+	   */
+
+	  var error = {
+	    name: 'validator-error',
+
+	    props: {
+	      field: {
+	        type: String,
+	        required: true
+	      },
+	      validator: {
+	        type: String
+	      },
+	      message: {
+	        type: String,
+	        required: true
+	      },
+	      partial: {
+	        type: String,
+	        default: 'validator-error-default'
+	      }
+	    },
+
+	    template: '<div><partial :name="partial"></partial></div>',
+
+	    partials: {}
+	  };
+
+	  // only use ValidatorError component
+	  error.partials['validator-error-default'] = '<p>{{field}}: {{message}}</p>';
+
+	  return error;
+	}
+
+	function Errors (Vue) {
+	  var _ = Vue.util;
+	  var error = ValidatorError(Vue); // import ValidatorError component
+
+	  /**
+	   * ValidatorErrors component
+	   */
+
+	  var errors = {
+	    name: 'validator-errors',
+
+	    props: {
+	      validation: {
+	        type: Object,
+	        required: true
+	      },
+	      group: {
+	        type: String,
+	        default: null
+	      },
+	      field: {
+	        type: String,
+	        default: null
+	      },
+	      component: {
+	        type: String,
+	        default: 'validator-error'
+	      }
+	    },
+
+	    computed: {
+	      errors: function errors() {
+	        var _this = this;
+
+	        if (this.group !== null) {
+	          return this.validation[this.group].errors;
+	        } else if (this.field !== null) {
+	          var target = this.validation[this.field];
+	          if (!target.errors) {
+	            return;
+	          }
+
+	          return target.errors.map(function (error) {
+	            var err = { field: _this.field };
+	            if (_.isPlainObject(error)) {
+	              if (error.validator) {
+	                err.validator = error.validator;
+	              }
+	              err.message = error.message;
+	            } else if (typeof error === 'string') {
+	              err.message = error;
+	            }
+	            return err;
+	          });
+	        } else {
+	          return this.validation.errors;
+	        }
+	      }
+	    },
+
+	    template: '<template v-for="error in errors">' + '<component :is="component" :partial="partial" :field="error.field" :validator="error.validator" :message="error.message">' + '</component>' + '</template>',
+
+	    components: {}
+	  };
+
+	  // define 'partial' prop
+	  errors.props['partial'] = error.props['partial'];
+
+	  // only use ValidatorErrors component
+	  errors.components[error.name] = error;
+
+	  // install ValidatorErrors component
+	  Vue.component(errors.name, errors);
+
+	  return errors;
+	}
+
+	/**
+	 * plugin
+	 *
+	 * @param {Function} Vue
+	 * @param {Object} options
+	 */
+
+	function plugin(Vue) {
+	  var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	  if (plugin.installed) {
+	    warn('already installed.');
+	    return;
+	  }
+
+	  exports$1.Vue = Vue;
+	  Asset(Vue);
+	  Errors(Vue);
+
+	  Override(Vue);
+	  Validator(Vue);
+	  ValidateClass(Vue);
+	  Validate(Vue);
+	}
+
+	plugin.version = '2.1.3';
+
+	if (typeof window !== 'undefined' && window.Vue) {
+	  window.Vue.use(plugin);
+	}
+
+	module.exports = plugin;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
+
+/***/ },
+/* 26 */,
+/* 27 */,
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Module dependencies.
+	 */
+
+	var Emitter = __webpack_require__(29);
+	var reduce = __webpack_require__(30);
+	var requestBase = __webpack_require__(31);
+	var isObject = __webpack_require__(32);
+
+	/**
+	 * Root reference for iframes.
+	 */
+
+	var root;
+	if (typeof window !== 'undefined') { // Browser window
+	  root = window;
+	} else if (typeof self !== 'undefined') { // Web Worker
+	  root = self;
+	} else { // Other environments
+	  root = this;
+	}
+
+	/**
+	 * Noop.
+	 */
+
+	function noop(){};
+
+	/**
+	 * Check if `obj` is a host object,
+	 * we don't want to serialize these :)
+	 *
+	 * TODO: future proof, move to compoent land
+	 *
+	 * @param {Object} obj
+	 * @return {Boolean}
+	 * @api private
+	 */
+
+	function isHost(obj) {
+	  var str = {}.toString.call(obj);
+
+	  switch (str) {
+	    case '[object File]':
+	    case '[object Blob]':
+	    case '[object FormData]':
+	      return true;
+	    default:
+	      return false;
+	  }
+	}
+
+	/**
+	 * Expose `request`.
+	 */
+
+	var request = module.exports = __webpack_require__(33).bind(null, Request);
+
+	/**
+	 * Determine XHR.
+	 */
+
+	request.getXHR = function () {
+	  if (root.XMLHttpRequest
+	      && (!root.location || 'file:' != root.location.protocol
+	          || !root.ActiveXObject)) {
+	    return new XMLHttpRequest;
+	  } else {
+	    try { return new ActiveXObject('Microsoft.XMLHTTP'); } catch(e) {}
+	    try { return new ActiveXObject('Msxml2.XMLHTTP.6.0'); } catch(e) {}
+	    try { return new ActiveXObject('Msxml2.XMLHTTP.3.0'); } catch(e) {}
+	    try { return new ActiveXObject('Msxml2.XMLHTTP'); } catch(e) {}
+	  }
+	  return false;
+	};
+
+	/**
+	 * Removes leading and trailing whitespace, added to support IE.
+	 *
+	 * @param {String} s
+	 * @return {String}
+	 * @api private
+	 */
+
+	var trim = ''.trim
+	  ? function(s) { return s.trim(); }
+	  : function(s) { return s.replace(/(^\s*|\s*$)/g, ''); };
+
+	/**
+	 * Serialize the given `obj`.
+	 *
+	 * @param {Object} obj
+	 * @return {String}
+	 * @api private
+	 */
+
+	function serialize(obj) {
+	  if (!isObject(obj)) return obj;
+	  var pairs = [];
+	  for (var key in obj) {
+	    if (null != obj[key]) {
+	      pushEncodedKeyValuePair(pairs, key, obj[key]);
+	        }
+	      }
+	  return pairs.join('&');
+	}
+
+	/**
+	 * Helps 'serialize' with serializing arrays.
+	 * Mutates the pairs array.
+	 *
+	 * @param {Array} pairs
+	 * @param {String} key
+	 * @param {Mixed} val
+	 */
+
+	function pushEncodedKeyValuePair(pairs, key, val) {
+	  if (Array.isArray(val)) {
+	    return val.forEach(function(v) {
+	      pushEncodedKeyValuePair(pairs, key, v);
+	    });
+	  }
+	  pairs.push(encodeURIComponent(key)
+	    + '=' + encodeURIComponent(val));
+	}
+
+	/**
+	 * Expose serialization method.
+	 */
+
+	 request.serializeObject = serialize;
+
+	 /**
+	  * Parse the given x-www-form-urlencoded `str`.
+	  *
+	  * @param {String} str
+	  * @return {Object}
+	  * @api private
+	  */
+
+	function parseString(str) {
+	  var obj = {};
+	  var pairs = str.split('&');
+	  var parts;
+	  var pair;
+
+	  for (var i = 0, len = pairs.length; i < len; ++i) {
+	    pair = pairs[i];
+	    parts = pair.split('=');
+	    obj[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
+	  }
+
+	  return obj;
+	}
+
+	/**
+	 * Expose parser.
+	 */
+
+	request.parseString = parseString;
+
+	/**
+	 * Default MIME type map.
+	 *
+	 *     superagent.types.xml = 'application/xml';
+	 *
+	 */
+
+	request.types = {
+	  html: 'text/html',
+	  json: 'application/json',
+	  xml: 'application/xml',
+	  urlencoded: 'application/x-www-form-urlencoded',
+	  'form': 'application/x-www-form-urlencoded',
+	  'form-data': 'application/x-www-form-urlencoded'
+	};
+
+	/**
+	 * Default serialization map.
+	 *
+	 *     superagent.serialize['application/xml'] = function(obj){
+	 *       return 'generated xml here';
+	 *     };
+	 *
+	 */
+
+	 request.serialize = {
+	   'application/x-www-form-urlencoded': serialize,
+	   'application/json': JSON.stringify
+	 };
+
+	 /**
+	  * Default parsers.
+	  *
+	  *     superagent.parse['application/xml'] = function(str){
+	  *       return { object parsed from str };
+	  *     };
+	  *
+	  */
+
+	request.parse = {
+	  'application/x-www-form-urlencoded': parseString,
+	  'application/json': JSON.parse
+	};
+
+	/**
+	 * Parse the given header `str` into
+	 * an object containing the mapped fields.
+	 *
+	 * @param {String} str
+	 * @return {Object}
+	 * @api private
+	 */
+
+	function parseHeader(str) {
+	  var lines = str.split(/\r?\n/);
+	  var fields = {};
+	  var index;
+	  var line;
+	  var field;
+	  var val;
+
+	  lines.pop(); // trailing CRLF
+
+	  for (var i = 0, len = lines.length; i < len; ++i) {
+	    line = lines[i];
+	    index = line.indexOf(':');
+	    field = line.slice(0, index).toLowerCase();
+	    val = trim(line.slice(index + 1));
+	    fields[field] = val;
+	  }
+
+	  return fields;
+	}
+
+	/**
+	 * Check if `mime` is json or has +json structured syntax suffix.
+	 *
+	 * @param {String} mime
+	 * @return {Boolean}
+	 * @api private
+	 */
+
+	function isJSON(mime) {
+	  return /[\/+]json\b/.test(mime);
+	}
+
+	/**
+	 * Return the mime type for the given `str`.
+	 *
+	 * @param {String} str
+	 * @return {String}
+	 * @api private
+	 */
+
+	function type(str){
+	  return str.split(/ *; */).shift();
+	};
+
+	/**
+	 * Return header field parameters.
+	 *
+	 * @param {String} str
+	 * @return {Object}
+	 * @api private
+	 */
+
+	function params(str){
+	  return reduce(str.split(/ *; */), function(obj, str){
+	    var parts = str.split(/ *= */)
+	      , key = parts.shift()
+	      , val = parts.shift();
+
+	    if (key && val) obj[key] = val;
+	    return obj;
+	  }, {});
+	};
+
+	/**
+	 * Initialize a new `Response` with the given `xhr`.
+	 *
+	 *  - set flags (.ok, .error, etc)
+	 *  - parse header
+	 *
+	 * Examples:
+	 *
+	 *  Aliasing `superagent` as `request` is nice:
+	 *
+	 *      request = superagent;
+	 *
+	 *  We can use the promise-like API, or pass callbacks:
+	 *
+	 *      request.get('/').end(function(res){});
+	 *      request.get('/', function(res){});
+	 *
+	 *  Sending data can be chained:
+	 *
+	 *      request
+	 *        .post('/user')
+	 *        .send({ name: 'tj' })
+	 *        .end(function(res){});
+	 *
+	 *  Or passed to `.send()`:
+	 *
+	 *      request
+	 *        .post('/user')
+	 *        .send({ name: 'tj' }, function(res){});
+	 *
+	 *  Or passed to `.post()`:
+	 *
+	 *      request
+	 *        .post('/user', { name: 'tj' })
+	 *        .end(function(res){});
+	 *
+	 * Or further reduced to a single call for simple cases:
+	 *
+	 *      request
+	 *        .post('/user', { name: 'tj' }, function(res){});
+	 *
+	 * @param {XMLHTTPRequest} xhr
+	 * @param {Object} options
+	 * @api private
+	 */
+
+	function Response(req, options) {
+	  options = options || {};
+	  this.req = req;
+	  this.xhr = this.req.xhr;
+	  // responseText is accessible only if responseType is '' or 'text' and on older browsers
+	  this.text = ((this.req.method !='HEAD' && (this.xhr.responseType === '' || this.xhr.responseType === 'text')) || typeof this.xhr.responseType === 'undefined')
+	     ? this.xhr.responseText
+	     : null;
+	  this.statusText = this.req.xhr.statusText;
+	  this.setStatusProperties(this.xhr.status);
+	  this.header = this.headers = parseHeader(this.xhr.getAllResponseHeaders());
+	  // getAllResponseHeaders sometimes falsely returns "" for CORS requests, but
+	  // getResponseHeader still works. so we get content-type even if getting
+	  // other headers fails.
+	  this.header['content-type'] = this.xhr.getResponseHeader('content-type');
+	  this.setHeaderProperties(this.header);
+	  this.body = this.req.method != 'HEAD'
+	    ? this.parseBody(this.text ? this.text : this.xhr.response)
+	    : null;
+	}
+
+	/**
+	 * Get case-insensitive `field` value.
+	 *
+	 * @param {String} field
+	 * @return {String}
+	 * @api public
+	 */
+
+	Response.prototype.get = function(field){
+	  return this.header[field.toLowerCase()];
+	};
+
+	/**
+	 * Set header related properties:
+	 *
+	 *   - `.type` the content type without params
+	 *
+	 * A response of "Content-Type: text/plain; charset=utf-8"
+	 * will provide you with a `.type` of "text/plain".
+	 *
+	 * @param {Object} header
+	 * @api private
+	 */
+
+	Response.prototype.setHeaderProperties = function(header){
+	  // content-type
+	  var ct = this.header['content-type'] || '';
+	  this.type = type(ct);
+
+	  // params
+	  var obj = params(ct);
+	  for (var key in obj) this[key] = obj[key];
+	};
+
+	/**
+	 * Parse the given body `str`.
+	 *
+	 * Used for auto-parsing of bodies. Parsers
+	 * are defined on the `superagent.parse` object.
+	 *
+	 * @param {String} str
+	 * @return {Mixed}
+	 * @api private
+	 */
+
+	Response.prototype.parseBody = function(str){
+	  var parse = request.parse[this.type];
+	  if (!parse && isJSON(this.type)) {
+	    parse = request.parse['application/json'];
+	  }
+	  return parse && str && (str.length || str instanceof Object)
+	    ? parse(str)
+	    : null;
+	};
+
+	/**
+	 * Set flags such as `.ok` based on `status`.
+	 *
+	 * For example a 2xx response will give you a `.ok` of __true__
+	 * whereas 5xx will be __false__ and `.error` will be __true__. The
+	 * `.clientError` and `.serverError` are also available to be more
+	 * specific, and `.statusType` is the class of error ranging from 1..5
+	 * sometimes useful for mapping respond colors etc.
+	 *
+	 * "sugar" properties are also defined for common cases. Currently providing:
+	 *
+	 *   - .noContent
+	 *   - .badRequest
+	 *   - .unauthorized
+	 *   - .notAcceptable
+	 *   - .notFound
+	 *
+	 * @param {Number} status
+	 * @api private
+	 */
+
+	Response.prototype.setStatusProperties = function(status){
+	  // handle IE9 bug: http://stackoverflow.com/questions/10046972/msie-returns-status-code-of-1223-for-ajax-request
+	  if (status === 1223) {
+	    status = 204;
+	  }
+
+	  var type = status / 100 | 0;
+
+	  // status / class
+	  this.status = this.statusCode = status;
+	  this.statusType = type;
+
+	  // basics
+	  this.info = 1 == type;
+	  this.ok = 2 == type;
+	  this.clientError = 4 == type;
+	  this.serverError = 5 == type;
+	  this.error = (4 == type || 5 == type)
+	    ? this.toError()
+	    : false;
+
+	  // sugar
+	  this.accepted = 202 == status;
+	  this.noContent = 204 == status;
+	  this.badRequest = 400 == status;
+	  this.unauthorized = 401 == status;
+	  this.notAcceptable = 406 == status;
+	  this.notFound = 404 == status;
+	  this.forbidden = 403 == status;
+	};
+
+	/**
+	 * Return an `Error` representative of this response.
+	 *
+	 * @return {Error}
+	 * @api public
+	 */
+
+	Response.prototype.toError = function(){
+	  var req = this.req;
+	  var method = req.method;
+	  var url = req.url;
+
+	  var msg = 'cannot ' + method + ' ' + url + ' (' + this.status + ')';
+	  var err = new Error(msg);
+	  err.status = this.status;
+	  err.method = method;
+	  err.url = url;
+
+	  return err;
+	};
+
+	/**
+	 * Expose `Response`.
+	 */
+
+	request.Response = Response;
+
+	/**
+	 * Initialize a new `Request` with the given `method` and `url`.
+	 *
+	 * @param {String} method
+	 * @param {String} url
+	 * @api public
+	 */
+
+	function Request(method, url) {
+	  var self = this;
+	  this._query = this._query || [];
+	  this.method = method;
+	  this.url = url;
+	  this.header = {}; // preserves header name case
+	  this._header = {}; // coerces header names to lowercase
+	  this.on('end', function(){
+	    var err = null;
+	    var res = null;
+
+	    try {
+	      res = new Response(self);
+	    } catch(e) {
+	      err = new Error('Parser is unable to parse the response');
+	      err.parse = true;
+	      err.original = e;
+	      // issue #675: return the raw response if the response parsing fails
+	      err.rawResponse = self.xhr && self.xhr.responseText ? self.xhr.responseText : null;
+	      // issue #876: return the http status code if the response parsing fails
+	      err.statusCode = self.xhr && self.xhr.status ? self.xhr.status : null;
+	      return self.callback(err);
+	    }
+
+	    self.emit('response', res);
+
+	    if (err) {
+	      return self.callback(err, res);
+	    }
+
+	    if (res.status >= 200 && res.status < 300) {
+	      return self.callback(err, res);
+	    }
+
+	    var new_err = new Error(res.statusText || 'Unsuccessful HTTP response');
+	    new_err.original = err;
+	    new_err.response = res;
+	    new_err.status = res.status;
+
+	    self.callback(new_err, res);
+	  });
+	}
+
+	/**
+	 * Mixin `Emitter` and `requestBase`.
+	 */
+
+	Emitter(Request.prototype);
+	for (var key in requestBase) {
+	  Request.prototype[key] = requestBase[key];
+	}
+
+	/**
+	 * Abort the request, and clear potential timeout.
+	 *
+	 * @return {Request}
+	 * @api public
+	 */
+
+	Request.prototype.abort = function(){
+	  if (this.aborted) return;
+	  this.aborted = true;
+	  this.xhr.abort();
+	  this.clearTimeout();
+	  this.emit('abort');
+	  return this;
+	};
+
+	/**
+	 * Set Content-Type to `type`, mapping values from `request.types`.
+	 *
+	 * Examples:
+	 *
+	 *      superagent.types.xml = 'application/xml';
+	 *
+	 *      request.post('/')
+	 *        .type('xml')
+	 *        .send(xmlstring)
+	 *        .end(callback);
+	 *
+	 *      request.post('/')
+	 *        .type('application/xml')
+	 *        .send(xmlstring)
+	 *        .end(callback);
+	 *
+	 * @param {String} type
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+
+	Request.prototype.type = function(type){
+	  this.set('Content-Type', request.types[type] || type);
+	  return this;
+	};
+
+	/**
+	 * Set responseType to `val`. Presently valid responseTypes are 'blob' and 
+	 * 'arraybuffer'.
+	 *
+	 * Examples:
+	 *
+	 *      req.get('/')
+	 *        .responseType('blob')
+	 *        .end(callback);
+	 *
+	 * @param {String} val
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+
+	Request.prototype.responseType = function(val){
+	  this._responseType = val;
+	  return this;
+	};
+
+	/**
+	 * Set Accept to `type`, mapping values from `request.types`.
+	 *
+	 * Examples:
+	 *
+	 *      superagent.types.json = 'application/json';
+	 *
+	 *      request.get('/agent')
+	 *        .accept('json')
+	 *        .end(callback);
+	 *
+	 *      request.get('/agent')
+	 *        .accept('application/json')
+	 *        .end(callback);
+	 *
+	 * @param {String} accept
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+
+	Request.prototype.accept = function(type){
+	  this.set('Accept', request.types[type] || type);
+	  return this;
+	};
+
+	/**
+	 * Set Authorization field value with `user` and `pass`.
+	 *
+	 * @param {String} user
+	 * @param {String} pass
+	 * @param {Object} options with 'type' property 'auto' or 'basic' (default 'basic')
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+
+	Request.prototype.auth = function(user, pass, options){
+	  if (!options) {
+	    options = {
+	      type: 'basic'
+	    }
+	  }
+
+	  switch (options.type) {
+	    case 'basic':
+	      var str = btoa(user + ':' + pass);
+	      this.set('Authorization', 'Basic ' + str);
+	    break;
+
+	    case 'auto':
+	      this.username = user;
+	      this.password = pass;
+	    break;
+	  }
+	  return this;
+	};
+
+	/**
+	* Add query-string `val`.
+	*
+	* Examples:
+	*
+	*   request.get('/shoes')
+	*     .query('size=10')
+	*     .query({ color: 'blue' })
+	*
+	* @param {Object|String} val
+	* @return {Request} for chaining
+	* @api public
+	*/
+
+	Request.prototype.query = function(val){
+	  if ('string' != typeof val) val = serialize(val);
+	  if (val) this._query.push(val);
+	  return this;
+	};
+
+	/**
+	 * Queue the given `file` as an attachment to the specified `field`,
+	 * with optional `filename`.
+	 *
+	 * ``` js
+	 * request.post('/upload')
+	 *   .attach(new Blob(['<a id="a"><b id="b">hey!</b></a>'], { type: "text/html"}))
+	 *   .end(callback);
+	 * ```
+	 *
+	 * @param {String} field
+	 * @param {Blob|File} file
+	 * @param {String} filename
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+
+	Request.prototype.attach = function(field, file, filename){
+	  this._getFormData().append(field, file, filename || file.name);
+	  return this;
+	};
+
+	Request.prototype._getFormData = function(){
+	  if (!this._formData) {
+	    this._formData = new root.FormData();
+	  }
+	  return this._formData;
+	};
+
+	/**
+	 * Send `data` as the request body, defaulting the `.type()` to "json" when
+	 * an object is given.
+	 *
+	 * Examples:
+	 *
+	 *       // manual json
+	 *       request.post('/user')
+	 *         .type('json')
+	 *         .send('{"name":"tj"}')
+	 *         .end(callback)
+	 *
+	 *       // auto json
+	 *       request.post('/user')
+	 *         .send({ name: 'tj' })
+	 *         .end(callback)
+	 *
+	 *       // manual x-www-form-urlencoded
+	 *       request.post('/user')
+	 *         .type('form')
+	 *         .send('name=tj')
+	 *         .end(callback)
+	 *
+	 *       // auto x-www-form-urlencoded
+	 *       request.post('/user')
+	 *         .type('form')
+	 *         .send({ name: 'tj' })
+	 *         .end(callback)
+	 *
+	 *       // defaults to x-www-form-urlencoded
+	  *      request.post('/user')
+	  *        .send('name=tobi')
+	  *        .send('species=ferret')
+	  *        .end(callback)
+	 *
+	 * @param {String|Object} data
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+
+	Request.prototype.send = function(data){
+	  var obj = isObject(data);
+	  var type = this._header['content-type'];
+
+	  // merge
+	  if (obj && isObject(this._data)) {
+	    for (var key in data) {
+	      this._data[key] = data[key];
+	    }
+	  } else if ('string' == typeof data) {
+	    if (!type) this.type('form');
+	    type = this._header['content-type'];
+	    if ('application/x-www-form-urlencoded' == type) {
+	      this._data = this._data
+	        ? this._data + '&' + data
+	        : data;
+	    } else {
+	      this._data = (this._data || '') + data;
+	    }
+	  } else {
+	    this._data = data;
+	  }
+
+	  if (!obj || isHost(data)) return this;
+	  if (!type) this.type('json');
+	  return this;
+	};
+
+	/**
+	 * @deprecated
+	 */
+	Response.prototype.parse = function serialize(fn){
+	  if (root.console) {
+	    console.warn("Client-side parse() method has been renamed to serialize(). This method is not compatible with superagent v2.0");
+	  }
+	  this.serialize(fn);
+	  return this;
+	};
+
+	Response.prototype.serialize = function serialize(fn){
+	  this._parser = fn;
+	  return this;
+	};
+
+	/**
+	 * Invoke the callback with `err` and `res`
+	 * and handle arity check.
+	 *
+	 * @param {Error} err
+	 * @param {Response} res
+	 * @api private
+	 */
+
+	Request.prototype.callback = function(err, res){
+	  var fn = this._callback;
+	  this.clearTimeout();
+	  fn(err, res);
+	};
+
+	/**
+	 * Invoke callback with x-domain error.
+	 *
+	 * @api private
+	 */
+
+	Request.prototype.crossDomainError = function(){
+	  var err = new Error('Request has been terminated\nPossible causes: the network is offline, Origin is not allowed by Access-Control-Allow-Origin, the page is being unloaded, etc.');
+	  err.crossDomain = true;
+
+	  err.status = this.status;
+	  err.method = this.method;
+	  err.url = this.url;
+
+	  this.callback(err);
+	};
+
+	/**
+	 * Invoke callback with timeout error.
+	 *
+	 * @api private
+	 */
+
+	Request.prototype.timeoutError = function(){
+	  var timeout = this._timeout;
+	  var err = new Error('timeout of ' + timeout + 'ms exceeded');
+	  err.timeout = timeout;
+	  this.callback(err);
+	};
+
+	/**
+	 * Enable transmission of cookies with x-domain requests.
+	 *
+	 * Note that for this to work the origin must not be
+	 * using "Access-Control-Allow-Origin" with a wildcard,
+	 * and also must set "Access-Control-Allow-Credentials"
+	 * to "true".
+	 *
+	 * @api public
+	 */
+
+	Request.prototype.withCredentials = function(){
+	  this._withCredentials = true;
+	  return this;
+	};
+
+	/**
+	 * Initiate request, invoking callback `fn(res)`
+	 * with an instanceof `Response`.
+	 *
+	 * @param {Function} fn
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+
+	Request.prototype.end = function(fn){
+	  var self = this;
+	  var xhr = this.xhr = request.getXHR();
+	  var query = this._query.join('&');
+	  var timeout = this._timeout;
+	  var data = this._formData || this._data;
+
+	  // store callback
+	  this._callback = fn || noop;
+
+	  // state change
+	  xhr.onreadystatechange = function(){
+	    if (4 != xhr.readyState) return;
+
+	    // In IE9, reads to any property (e.g. status) off of an aborted XHR will
+	    // result in the error "Could not complete the operation due to error c00c023f"
+	    var status;
+	    try { status = xhr.status } catch(e) { status = 0; }
+
+	    if (0 == status) {
+	      if (self.timedout) return self.timeoutError();
+	      if (self.aborted) return;
+	      return self.crossDomainError();
+	    }
+	    self.emit('end');
+	  };
+
+	  // progress
+	  var handleProgress = function(e){
+	    if (e.total > 0) {
+	      e.percent = e.loaded / e.total * 100;
+	    }
+	    e.direction = 'download';
+	    self.emit('progress', e);
+	  };
+	  if (this.hasListeners('progress')) {
+	    xhr.onprogress = handleProgress;
+	  }
+	  try {
+	    if (xhr.upload && this.hasListeners('progress')) {
+	      xhr.upload.onprogress = handleProgress;
+	    }
+	  } catch(e) {
+	    // Accessing xhr.upload fails in IE from a web worker, so just pretend it doesn't exist.
+	    // Reported here:
+	    // https://connect.microsoft.com/IE/feedback/details/837245/xmlhttprequest-upload-throws-invalid-argument-when-used-from-web-worker-context
+	  }
+
+	  // timeout
+	  if (timeout && !this._timer) {
+	    this._timer = setTimeout(function(){
+	      self.timedout = true;
+	      self.abort();
+	    }, timeout);
+	  }
+
+	  // querystring
+	  if (query) {
+	    query = request.serializeObject(query);
+	    this.url += ~this.url.indexOf('?')
+	      ? '&' + query
+	      : '?' + query;
+	  }
+
+	  // initiate request
+	  if (this.username && this.password) {
+	    xhr.open(this.method, this.url, true, this.username, this.password);
+	  } else {
+	    xhr.open(this.method, this.url, true);
+	  }
+
+	  // CORS
+	  if (this._withCredentials) xhr.withCredentials = true;
+
+	  // body
+	  if ('GET' != this.method && 'HEAD' != this.method && 'string' != typeof data && !isHost(data)) {
+	    // serialize stuff
+	    var contentType = this._header['content-type'];
+	    var serialize = this._parser || request.serialize[contentType ? contentType.split(';')[0] : ''];
+	    if (!serialize && isJSON(contentType)) serialize = request.serialize['application/json'];
+	    if (serialize) data = serialize(data);
+	  }
+
+	  // set header fields
+	  for (var field in this.header) {
+	    if (null == this.header[field]) continue;
+	    xhr.setRequestHeader(field, this.header[field]);
+	  }
+
+	  if (this._responseType) {
+	    xhr.responseType = this._responseType;
+	  }
+
+	  // send stuff
+	  this.emit('request', this);
+
+	  // IE11 xhr.send(undefined) sends 'undefined' string as POST payload (instead of nothing)
+	  // We need null here if data is undefined
+	  xhr.send(typeof data !== 'undefined' ? data : null);
+	  return this;
+	};
+
+
+	/**
+	 * Expose `Request`.
+	 */
+
+	request.Request = Request;
+
+	/**
+	 * GET `url` with optional callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed|Function} data or fn
+	 * @param {Function} fn
+	 * @return {Request}
+	 * @api public
+	 */
+
+	request.get = function(url, data, fn){
+	  var req = request('GET', url);
+	  if ('function' == typeof data) fn = data, data = null;
+	  if (data) req.query(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+
+	/**
+	 * HEAD `url` with optional callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed|Function} data or fn
+	 * @param {Function} fn
+	 * @return {Request}
+	 * @api public
+	 */
+
+	request.head = function(url, data, fn){
+	  var req = request('HEAD', url);
+	  if ('function' == typeof data) fn = data, data = null;
+	  if (data) req.send(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+
+	/**
+	 * DELETE `url` with optional callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Function} fn
+	 * @return {Request}
+	 * @api public
+	 */
+
+	function del(url, fn){
+	  var req = request('DELETE', url);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+
+	request['del'] = del;
+	request['delete'] = del;
+
+	/**
+	 * PATCH `url` with optional `data` and callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed} data
+	 * @param {Function} fn
+	 * @return {Request}
+	 * @api public
+	 */
+
+	request.patch = function(url, data, fn){
+	  var req = request('PATCH', url);
+	  if ('function' == typeof data) fn = data, data = null;
+	  if (data) req.send(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+
+	/**
+	 * POST `url` with optional `data` and callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed} data
+	 * @param {Function} fn
+	 * @return {Request}
+	 * @api public
+	 */
+
+	request.post = function(url, data, fn){
+	  var req = request('POST', url);
+	  if ('function' == typeof data) fn = data, data = null;
+	  if (data) req.send(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+
+	/**
+	 * PUT `url` with optional `data` and callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed|Function} data or fn
+	 * @param {Function} fn
+	 * @return {Request}
+	 * @api public
+	 */
+
+	request.put = function(url, data, fn){
+	  var req = request('PUT', url);
+	  if ('function' == typeof data) fn = data, data = null;
+	  if (data) req.send(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	/**
+	 * Expose `Emitter`.
+	 */
+
+	if (true) {
+	  module.exports = Emitter;
+	}
+
+	/**
+	 * Initialize a new `Emitter`.
+	 *
+	 * @api public
+	 */
+
+	function Emitter(obj) {
+	  if (obj) return mixin(obj);
+	};
+
+	/**
+	 * Mixin the emitter properties.
+	 *
+	 * @param {Object} obj
+	 * @return {Object}
+	 * @api private
+	 */
+
+	function mixin(obj) {
+	  for (var key in Emitter.prototype) {
+	    obj[key] = Emitter.prototype[key];
+	  }
+	  return obj;
+	}
+
+	/**
+	 * Listen on the given `event` with `fn`.
+	 *
+	 * @param {String} event
+	 * @param {Function} fn
+	 * @return {Emitter}
+	 * @api public
+	 */
+
+	Emitter.prototype.on =
+	Emitter.prototype.addEventListener = function(event, fn){
+	  this._callbacks = this._callbacks || {};
+	  (this._callbacks['$' + event] = this._callbacks['$' + event] || [])
+	    .push(fn);
+	  return this;
+	};
+
+	/**
+	 * Adds an `event` listener that will be invoked a single
+	 * time then automatically removed.
+	 *
+	 * @param {String} event
+	 * @param {Function} fn
+	 * @return {Emitter}
+	 * @api public
+	 */
+
+	Emitter.prototype.once = function(event, fn){
+	  function on() {
+	    this.off(event, on);
+	    fn.apply(this, arguments);
+	  }
+
+	  on.fn = fn;
+	  this.on(event, on);
+	  return this;
+	};
+
+	/**
+	 * Remove the given callback for `event` or all
+	 * registered callbacks.
+	 *
+	 * @param {String} event
+	 * @param {Function} fn
+	 * @return {Emitter}
+	 * @api public
+	 */
+
+	Emitter.prototype.off =
+	Emitter.prototype.removeListener =
+	Emitter.prototype.removeAllListeners =
+	Emitter.prototype.removeEventListener = function(event, fn){
+	  this._callbacks = this._callbacks || {};
+
+	  // all
+	  if (0 == arguments.length) {
+	    this._callbacks = {};
+	    return this;
+	  }
+
+	  // specific event
+	  var callbacks = this._callbacks['$' + event];
+	  if (!callbacks) return this;
+
+	  // remove all handlers
+	  if (1 == arguments.length) {
+	    delete this._callbacks['$' + event];
+	    return this;
+	  }
+
+	  // remove specific handler
+	  var cb;
+	  for (var i = 0; i < callbacks.length; i++) {
+	    cb = callbacks[i];
+	    if (cb === fn || cb.fn === fn) {
+	      callbacks.splice(i, 1);
+	      break;
+	    }
+	  }
+	  return this;
+	};
+
+	/**
+	 * Emit `event` with the given args.
+	 *
+	 * @param {String} event
+	 * @param {Mixed} ...
+	 * @return {Emitter}
+	 */
+
+	Emitter.prototype.emit = function(event){
+	  this._callbacks = this._callbacks || {};
+	  var args = [].slice.call(arguments, 1)
+	    , callbacks = this._callbacks['$' + event];
+
+	  if (callbacks) {
+	    callbacks = callbacks.slice(0);
+	    for (var i = 0, len = callbacks.length; i < len; ++i) {
+	      callbacks[i].apply(this, args);
+	    }
+	  }
+
+	  return this;
+	};
+
+	/**
+	 * Return array of callbacks for `event`.
+	 *
+	 * @param {String} event
+	 * @return {Array}
+	 * @api public
+	 */
+
+	Emitter.prototype.listeners = function(event){
+	  this._callbacks = this._callbacks || {};
+	  return this._callbacks['$' + event] || [];
+	};
+
+	/**
+	 * Check if this emitter has `event` handlers.
+	 *
+	 * @param {String} event
+	 * @return {Boolean}
+	 * @api public
+	 */
+
+	Emitter.prototype.hasListeners = function(event){
+	  return !! this.listeners(event).length;
+	};
+
+
+/***/ },
+/* 30 */
+/***/ function(module, exports) {
+
+	
+	/**
+	 * Reduce `arr` with `fn`.
+	 *
+	 * @param {Array} arr
+	 * @param {Function} fn
+	 * @param {Mixed} initial
+	 *
+	 * TODO: combatible error handling?
+	 */
+
+	module.exports = function(arr, fn, initial){  
+	  var idx = 0;
+	  var len = arr.length;
+	  var curr = arguments.length == 3
+	    ? initial
+	    : arr[idx++];
+
+	  while (idx < len) {
+	    curr = fn.call(null, curr, arr[idx], ++idx, arr);
+	  }
+	  
+	  return curr;
+	};
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Module of mixed-in functions shared between node and client code
+	 */
+	var isObject = __webpack_require__(32);
+
+	/**
+	 * Clear previous timeout.
+	 *
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+
+	exports.clearTimeout = function _clearTimeout(){
+	  this._timeout = 0;
+	  clearTimeout(this._timer);
+	  return this;
+	};
+
+	/**
+	 * Force given parser
+	 *
+	 * Sets the body parser no matter type.
+	 *
+	 * @param {Function}
+	 * @api public
+	 */
+
+	exports.parse = function parse(fn){
+	  this._parser = fn;
+	  return this;
+	};
+
+	/**
+	 * Set timeout to `ms`.
+	 *
+	 * @param {Number} ms
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+
+	exports.timeout = function timeout(ms){
+	  this._timeout = ms;
+	  return this;
+	};
+
+	/**
+	 * Faux promise support
+	 *
+	 * @param {Function} fulfill
+	 * @param {Function} reject
+	 * @return {Request}
+	 */
+
+	exports.then = function then(fulfill, reject) {
+	  return this.end(function(err, res) {
+	    err ? reject(err) : fulfill(res);
+	  });
+	}
+
+	/**
+	 * Allow for extension
+	 */
+
+	exports.use = function use(fn) {
+	  fn(this);
+	  return this;
+	}
+
+
+	/**
+	 * Get request header `field`.
+	 * Case-insensitive.
+	 *
+	 * @param {String} field
+	 * @return {String}
+	 * @api public
+	 */
+
+	exports.get = function(field){
+	  return this._header[field.toLowerCase()];
+	};
+
+	/**
+	 * Get case-insensitive header `field` value.
+	 * This is a deprecated internal API. Use `.get(field)` instead.
+	 *
+	 * (getHeader is no longer used internally by the superagent code base)
+	 *
+	 * @param {String} field
+	 * @return {String}
+	 * @api private
+	 * @deprecated
+	 */
+
+	exports.getHeader = exports.get;
+
+	/**
+	 * Set header `field` to `val`, or multiple fields with one object.
+	 * Case-insensitive.
+	 *
+	 * Examples:
+	 *
+	 *      req.get('/')
+	 *        .set('Accept', 'application/json')
+	 *        .set('X-API-Key', 'foobar')
+	 *        .end(callback);
+	 *
+	 *      req.get('/')
+	 *        .set({ Accept: 'application/json', 'X-API-Key': 'foobar' })
+	 *        .end(callback);
+	 *
+	 * @param {String|Object} field
+	 * @param {String} val
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+
+	exports.set = function(field, val){
+	  if (isObject(field)) {
+	    for (var key in field) {
+	      this.set(key, field[key]);
+	    }
+	    return this;
+	  }
+	  this._header[field.toLowerCase()] = val;
+	  this.header[field] = val;
+	  return this;
+	};
+
+	/**
+	 * Remove header `field`.
+	 * Case-insensitive.
+	 *
+	 * Example:
+	 *
+	 *      req.get('/')
+	 *        .unset('User-Agent')
+	 *        .end(callback);
+	 *
+	 * @param {String} field
+	 */
+	exports.unset = function(field){
+	  delete this._header[field.toLowerCase()];
+	  delete this.header[field];
+	  return this;
+	};
+
+	/**
+	 * Write the field `name` and `val` for "multipart/form-data"
+	 * request bodies.
+	 *
+	 * ``` js
+	 * request.post('/upload')
+	 *   .field('foo', 'bar')
+	 *   .end(callback);
+	 * ```
+	 *
+	 * @param {String} name
+	 * @param {String|Blob|File|Buffer|fs.ReadStream} val
+	 * @return {Request} for chaining
+	 * @api public
+	 */
+	exports.field = function(name, val) {
+	  this._getFormData().append(name, val);
+	  return this;
+	};
+
+
+/***/ },
+/* 32 */
+/***/ function(module, exports) {
+
+	/**
+	 * Check if `obj` is an object.
+	 *
+	 * @param {Object} obj
+	 * @return {Boolean}
+	 * @api private
+	 */
+
+	function isObject(obj) {
+	  return null != obj && 'object' == typeof obj;
+	}
+
+	module.exports = isObject;
+
+
+/***/ },
+/* 33 */
+/***/ function(module, exports) {
+
+	// The node and browser modules expose versions of this with the
+	// appropriate constructor function bound as first argument
+	/**
+	 * Issue a request:
+	 *
+	 * Examples:
+	 *
+	 *    request('GET', '/users').end(callback)
+	 *    request('/users').end(callback)
+	 *    request('/users', callback)
+	 *
+	 * @param {String} method
+	 * @param {String|Function} url or callback
+	 * @return {Request}
+	 * @api public
+	 */
+
+	function request(RequestConstructor, method, url) {
+	  // callback
+	  if ('function' == typeof url) {
+	    return new RequestConstructor('GET', method).end(url);
+	  }
+
+	  // url first
+	  if (2 == arguments.length) {
+	    return new RequestConstructor('GET', method);
+	  }
+
+	  return new RequestConstructor(method, url);
+	}
+
+	module.exports = request;
+
+
+/***/ },
+/* 34 */,
+/* 35 */,
+/* 36 */,
+/* 37 */,
+/* 38 */,
+/* 39 */,
+/* 40 */,
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */,
+/* 45 */,
 /* 46 */,
 /* 47 */,
 /* 48 */,
-/* 49 */
+/* 49 */,
+/* 50 */,
+/* 51 */,
+/* 52 */,
+/* 53 */,
+/* 54 */,
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -14268,22 +16885,789 @@
 
 
 /***/ },
-/* 50 */,
-/* 51 */,
-/* 52 */,
-/* 53 */,
-/* 54 */,
-/* 55 */,
-/* 56 */,
-/* 57 */,
-/* 58 */,
-/* 59 */,
 /* 60 */,
 /* 61 */,
 /* 62 */,
 /* 63 */,
 /* 64 */,
-/* 65 */
+/* 65 */,
+/* 66 */,
+/* 67 */,
+/* 68 */,
+/* 69 */,
+/* 70 */,
+/* 71 */,
+/* 72 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (global, factory) {
+	    if (true) {
+	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [module, __webpack_require__(73), __webpack_require__(75), __webpack_require__(76)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	    } else if (typeof exports !== "undefined") {
+	        factory(module, require('./clipboard-action'), require('tiny-emitter'), require('good-listener'));
+	    } else {
+	        var mod = {
+	            exports: {}
+	        };
+	        factory(mod, global.clipboardAction, global.tinyEmitter, global.goodListener);
+	        global.clipboard = mod.exports;
+	    }
+	})(this, function (module, _clipboardAction, _tinyEmitter, _goodListener) {
+	    'use strict';
+
+	    var _clipboardAction2 = _interopRequireDefault(_clipboardAction);
+
+	    var _tinyEmitter2 = _interopRequireDefault(_tinyEmitter);
+
+	    var _goodListener2 = _interopRequireDefault(_goodListener);
+
+	    function _interopRequireDefault(obj) {
+	        return obj && obj.__esModule ? obj : {
+	            default: obj
+	        };
+	    }
+
+	    function _classCallCheck(instance, Constructor) {
+	        if (!(instance instanceof Constructor)) {
+	            throw new TypeError("Cannot call a class as a function");
+	        }
+	    }
+
+	    function _possibleConstructorReturn(self, call) {
+	        if (!self) {
+	            throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+	        }
+
+	        return call && (typeof call === "object" || typeof call === "function") ? call : self;
+	    }
+
+	    function _inherits(subClass, superClass) {
+	        if (typeof superClass !== "function" && superClass !== null) {
+	            throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+	        }
+
+	        subClass.prototype = Object.create(superClass && superClass.prototype, {
+	            constructor: {
+	                value: subClass,
+	                enumerable: false,
+	                writable: true,
+	                configurable: true
+	            }
+	        });
+	        if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+	    }
+
+	    var Clipboard = function (_Emitter) {
+	        _inherits(Clipboard, _Emitter);
+
+	        /**
+	         * @param {String|HTMLElement|HTMLCollection|NodeList} trigger
+	         * @param {Object} options
+	         */
+
+	        function Clipboard(trigger, options) {
+	            _classCallCheck(this, Clipboard);
+
+	            var _this = _possibleConstructorReturn(this, _Emitter.call(this));
+
+	            _this.resolveOptions(options);
+	            _this.listenClick(trigger);
+	            return _this;
+	        }
+
+	        /**
+	         * Defines if attributes would be resolved using internal setter functions
+	         * or custom functions that were passed in the constructor.
+	         * @param {Object} options
+	         */
+
+
+	        Clipboard.prototype.resolveOptions = function resolveOptions() {
+	            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	            this.action = typeof options.action === 'function' ? options.action : this.defaultAction;
+	            this.target = typeof options.target === 'function' ? options.target : this.defaultTarget;
+	            this.text = typeof options.text === 'function' ? options.text : this.defaultText;
+	        };
+
+	        Clipboard.prototype.listenClick = function listenClick(trigger) {
+	            var _this2 = this;
+
+	            this.listener = (0, _goodListener2.default)(trigger, 'click', function (e) {
+	                return _this2.onClick(e);
+	            });
+	        };
+
+	        Clipboard.prototype.onClick = function onClick(e) {
+	            var trigger = e.delegateTarget || e.currentTarget;
+
+	            if (this.clipboardAction) {
+	                this.clipboardAction = null;
+	            }
+
+	            this.clipboardAction = new _clipboardAction2.default({
+	                action: this.action(trigger),
+	                target: this.target(trigger),
+	                text: this.text(trigger),
+	                trigger: trigger,
+	                emitter: this
+	            });
+	        };
+
+	        Clipboard.prototype.defaultAction = function defaultAction(trigger) {
+	            return getAttributeValue('action', trigger);
+	        };
+
+	        Clipboard.prototype.defaultTarget = function defaultTarget(trigger) {
+	            var selector = getAttributeValue('target', trigger);
+
+	            if (selector) {
+	                return document.querySelector(selector);
+	            }
+	        };
+
+	        Clipboard.prototype.defaultText = function defaultText(trigger) {
+	            return getAttributeValue('text', trigger);
+	        };
+
+	        Clipboard.prototype.destroy = function destroy() {
+	            this.listener.destroy();
+
+	            if (this.clipboardAction) {
+	                this.clipboardAction.destroy();
+	                this.clipboardAction = null;
+	            }
+	        };
+
+	        return Clipboard;
+	    }(_tinyEmitter2.default);
+
+	    /**
+	     * Helper function to retrieve attribute value.
+	     * @param {String} suffix
+	     * @param {Element} element
+	     */
+	    function getAttributeValue(suffix, element) {
+	        var attribute = 'data-clipboard-' + suffix;
+
+	        if (!element.hasAttribute(attribute)) {
+	            return;
+	        }
+
+	        return element.getAttribute(attribute);
+	    }
+
+	    module.exports = Clipboard;
+	});
+
+/***/ },
+/* 73 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (global, factory) {
+	    if (true) {
+	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [module, __webpack_require__(74)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	    } else if (typeof exports !== "undefined") {
+	        factory(module, require('select'));
+	    } else {
+	        var mod = {
+	            exports: {}
+	        };
+	        factory(mod, global.select);
+	        global.clipboardAction = mod.exports;
+	    }
+	})(this, function (module, _select) {
+	    'use strict';
+
+	    var _select2 = _interopRequireDefault(_select);
+
+	    function _interopRequireDefault(obj) {
+	        return obj && obj.__esModule ? obj : {
+	            default: obj
+	        };
+	    }
+
+	    var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+	        return typeof obj;
+	    } : function (obj) {
+	        return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
+	    };
+
+	    function _classCallCheck(instance, Constructor) {
+	        if (!(instance instanceof Constructor)) {
+	            throw new TypeError("Cannot call a class as a function");
+	        }
+	    }
+
+	    var _createClass = function () {
+	        function defineProperties(target, props) {
+	            for (var i = 0; i < props.length; i++) {
+	                var descriptor = props[i];
+	                descriptor.enumerable = descriptor.enumerable || false;
+	                descriptor.configurable = true;
+	                if ("value" in descriptor) descriptor.writable = true;
+	                Object.defineProperty(target, descriptor.key, descriptor);
+	            }
+	        }
+
+	        return function (Constructor, protoProps, staticProps) {
+	            if (protoProps) defineProperties(Constructor.prototype, protoProps);
+	            if (staticProps) defineProperties(Constructor, staticProps);
+	            return Constructor;
+	        };
+	    }();
+
+	    var ClipboardAction = function () {
+	        /**
+	         * @param {Object} options
+	         */
+
+	        function ClipboardAction(options) {
+	            _classCallCheck(this, ClipboardAction);
+
+	            this.resolveOptions(options);
+	            this.initSelection();
+	        }
+
+	        /**
+	         * Defines base properties passed from constructor.
+	         * @param {Object} options
+	         */
+
+
+	        ClipboardAction.prototype.resolveOptions = function resolveOptions() {
+	            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	            this.action = options.action;
+	            this.emitter = options.emitter;
+	            this.target = options.target;
+	            this.text = options.text;
+	            this.trigger = options.trigger;
+
+	            this.selectedText = '';
+	        };
+
+	        ClipboardAction.prototype.initSelection = function initSelection() {
+	            if (this.text) {
+	                this.selectFake();
+	            } else if (this.target) {
+	                this.selectTarget();
+	            }
+	        };
+
+	        ClipboardAction.prototype.selectFake = function selectFake() {
+	            var _this = this;
+
+	            var isRTL = document.documentElement.getAttribute('dir') == 'rtl';
+
+	            this.removeFake();
+
+	            this.fakeHandlerCallback = function () {
+	                return _this.removeFake();
+	            };
+	            this.fakeHandler = document.body.addEventListener('click', this.fakeHandlerCallback) || true;
+
+	            this.fakeElem = document.createElement('textarea');
+	            // Prevent zooming on iOS
+	            this.fakeElem.style.fontSize = '12pt';
+	            // Reset box model
+	            this.fakeElem.style.border = '0';
+	            this.fakeElem.style.padding = '0';
+	            this.fakeElem.style.margin = '0';
+	            // Move element out of screen horizontally
+	            this.fakeElem.style.position = 'absolute';
+	            this.fakeElem.style[isRTL ? 'right' : 'left'] = '-9999px';
+	            // Move element to the same position vertically
+	            this.fakeElem.style.top = (window.pageYOffset || document.documentElement.scrollTop) + 'px';
+	            this.fakeElem.setAttribute('readonly', '');
+	            this.fakeElem.value = this.text;
+
+	            document.body.appendChild(this.fakeElem);
+
+	            this.selectedText = (0, _select2.default)(this.fakeElem);
+	            this.copyText();
+	        };
+
+	        ClipboardAction.prototype.removeFake = function removeFake() {
+	            if (this.fakeHandler) {
+	                document.body.removeEventListener('click', this.fakeHandlerCallback);
+	                this.fakeHandler = null;
+	                this.fakeHandlerCallback = null;
+	            }
+
+	            if (this.fakeElem) {
+	                document.body.removeChild(this.fakeElem);
+	                this.fakeElem = null;
+	            }
+	        };
+
+	        ClipboardAction.prototype.selectTarget = function selectTarget() {
+	            this.selectedText = (0, _select2.default)(this.target);
+	            this.copyText();
+	        };
+
+	        ClipboardAction.prototype.copyText = function copyText() {
+	            var succeeded = undefined;
+
+	            try {
+	                succeeded = document.execCommand(this.action);
+	            } catch (err) {
+	                succeeded = false;
+	            }
+
+	            this.handleResult(succeeded);
+	        };
+
+	        ClipboardAction.prototype.handleResult = function handleResult(succeeded) {
+	            if (succeeded) {
+	                this.emitter.emit('success', {
+	                    action: this.action,
+	                    text: this.selectedText,
+	                    trigger: this.trigger,
+	                    clearSelection: this.clearSelection.bind(this)
+	                });
+	            } else {
+	                this.emitter.emit('error', {
+	                    action: this.action,
+	                    trigger: this.trigger,
+	                    clearSelection: this.clearSelection.bind(this)
+	                });
+	            }
+	        };
+
+	        ClipboardAction.prototype.clearSelection = function clearSelection() {
+	            if (this.target) {
+	                this.target.blur();
+	            }
+
+	            window.getSelection().removeAllRanges();
+	        };
+
+	        ClipboardAction.prototype.destroy = function destroy() {
+	            this.removeFake();
+	        };
+
+	        _createClass(ClipboardAction, [{
+	            key: 'action',
+	            set: function set() {
+	                var action = arguments.length <= 0 || arguments[0] === undefined ? 'copy' : arguments[0];
+
+	                this._action = action;
+
+	                if (this._action !== 'copy' && this._action !== 'cut') {
+	                    throw new Error('Invalid "action" value, use either "copy" or "cut"');
+	                }
+	            },
+	            get: function get() {
+	                return this._action;
+	            }
+	        }, {
+	            key: 'target',
+	            set: function set(target) {
+	                if (target !== undefined) {
+	                    if (target && (typeof target === 'undefined' ? 'undefined' : _typeof(target)) === 'object' && target.nodeType === 1) {
+	                        if (this.action === 'copy' && target.hasAttribute('disabled')) {
+	                            throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');
+	                        }
+
+	                        if (this.action === 'cut' && (target.hasAttribute('readonly') || target.hasAttribute('disabled'))) {
+	                            throw new Error('Invalid "target" attribute. You can\'t cut text from elements with "readonly" or "disabled" attributes');
+	                        }
+
+	                        this._target = target;
+	                    } else {
+	                        throw new Error('Invalid "target" value, use a valid Element');
+	                    }
+	                }
+	            },
+	            get: function get() {
+	                return this._target;
+	            }
+	        }]);
+
+	        return ClipboardAction;
+	    }();
+
+	    module.exports = ClipboardAction;
+	});
+
+/***/ },
+/* 74 */
+/***/ function(module, exports) {
+
+	function select(element) {
+	    var selectedText;
+
+	    if (element.nodeName === 'INPUT' || element.nodeName === 'TEXTAREA') {
+	        element.focus();
+	        element.setSelectionRange(0, element.value.length);
+
+	        selectedText = element.value;
+	    }
+	    else {
+	        if (element.hasAttribute('contenteditable')) {
+	            element.focus();
+	        }
+
+	        var selection = window.getSelection();
+	        var range = document.createRange();
+
+	        range.selectNodeContents(element);
+	        selection.removeAllRanges();
+	        selection.addRange(range);
+
+	        selectedText = selection.toString();
+	    }
+
+	    return selectedText;
+	}
+
+	module.exports = select;
+
+
+/***/ },
+/* 75 */
+/***/ function(module, exports) {
+
+	function E () {
+		// Keep this empty so it's easier to inherit from
+	  // (via https://github.com/lipsmack from https://github.com/scottcorgan/tiny-emitter/issues/3)
+	}
+
+	E.prototype = {
+		on: function (name, callback, ctx) {
+	    var e = this.e || (this.e = {});
+
+	    (e[name] || (e[name] = [])).push({
+	      fn: callback,
+	      ctx: ctx
+	    });
+
+	    return this;
+	  },
+
+	  once: function (name, callback, ctx) {
+	    var self = this;
+	    function listener () {
+	      self.off(name, listener);
+	      callback.apply(ctx, arguments);
+	    };
+
+	    listener._ = callback
+	    return this.on(name, listener, ctx);
+	  },
+
+	  emit: function (name) {
+	    var data = [].slice.call(arguments, 1);
+	    var evtArr = ((this.e || (this.e = {}))[name] || []).slice();
+	    var i = 0;
+	    var len = evtArr.length;
+
+	    for (i; i < len; i++) {
+	      evtArr[i].fn.apply(evtArr[i].ctx, data);
+	    }
+
+	    return this;
+	  },
+
+	  off: function (name, callback) {
+	    var e = this.e || (this.e = {});
+	    var evts = e[name];
+	    var liveEvents = [];
+
+	    if (evts && callback) {
+	      for (var i = 0, len = evts.length; i < len; i++) {
+	        if (evts[i].fn !== callback && evts[i].fn._ !== callback)
+	          liveEvents.push(evts[i]);
+	      }
+	    }
+
+	    // Remove event from queue to prevent memory leak
+	    // Suggested by https://github.com/lazd
+	    // Ref: https://github.com/scottcorgan/tiny-emitter/commit/c6ebfaa9bc973b33d110a84a307742b7cf94c953#commitcomment-5024910
+
+	    (liveEvents.length)
+	      ? e[name] = liveEvents
+	      : delete e[name];
+
+	    return this;
+	  }
+	};
+
+	module.exports = E;
+
+
+/***/ },
+/* 76 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var is = __webpack_require__(77);
+	var delegate = __webpack_require__(78);
+
+	/**
+	 * Validates all params and calls the right
+	 * listener function based on its target type.
+	 *
+	 * @param {String|HTMLElement|HTMLCollection|NodeList} target
+	 * @param {String} type
+	 * @param {Function} callback
+	 * @return {Object}
+	 */
+	function listen(target, type, callback) {
+	    if (!target && !type && !callback) {
+	        throw new Error('Missing required arguments');
+	    }
+
+	    if (!is.string(type)) {
+	        throw new TypeError('Second argument must be a String');
+	    }
+
+	    if (!is.fn(callback)) {
+	        throw new TypeError('Third argument must be a Function');
+	    }
+
+	    if (is.node(target)) {
+	        return listenNode(target, type, callback);
+	    }
+	    else if (is.nodeList(target)) {
+	        return listenNodeList(target, type, callback);
+	    }
+	    else if (is.string(target)) {
+	        return listenSelector(target, type, callback);
+	    }
+	    else {
+	        throw new TypeError('First argument must be a String, HTMLElement, HTMLCollection, or NodeList');
+	    }
+	}
+
+	/**
+	 * Adds an event listener to a HTML element
+	 * and returns a remove listener function.
+	 *
+	 * @param {HTMLElement} node
+	 * @param {String} type
+	 * @param {Function} callback
+	 * @return {Object}
+	 */
+	function listenNode(node, type, callback) {
+	    node.addEventListener(type, callback);
+
+	    return {
+	        destroy: function() {
+	            node.removeEventListener(type, callback);
+	        }
+	    }
+	}
+
+	/**
+	 * Add an event listener to a list of HTML elements
+	 * and returns a remove listener function.
+	 *
+	 * @param {NodeList|HTMLCollection} nodeList
+	 * @param {String} type
+	 * @param {Function} callback
+	 * @return {Object}
+	 */
+	function listenNodeList(nodeList, type, callback) {
+	    Array.prototype.forEach.call(nodeList, function(node) {
+	        node.addEventListener(type, callback);
+	    });
+
+	    return {
+	        destroy: function() {
+	            Array.prototype.forEach.call(nodeList, function(node) {
+	                node.removeEventListener(type, callback);
+	            });
+	        }
+	    }
+	}
+
+	/**
+	 * Add an event listener to a selector
+	 * and returns a remove listener function.
+	 *
+	 * @param {String} selector
+	 * @param {String} type
+	 * @param {Function} callback
+	 * @return {Object}
+	 */
+	function listenSelector(selector, type, callback) {
+	    return delegate(document.body, selector, type, callback);
+	}
+
+	module.exports = listen;
+
+
+/***/ },
+/* 77 */
+/***/ function(module, exports) {
+
+	/**
+	 * Check if argument is a HTML element.
+	 *
+	 * @param {Object} value
+	 * @return {Boolean}
+	 */
+	exports.node = function(value) {
+	    return value !== undefined
+	        && value instanceof HTMLElement
+	        && value.nodeType === 1;
+	};
+
+	/**
+	 * Check if argument is a list of HTML elements.
+	 *
+	 * @param {Object} value
+	 * @return {Boolean}
+	 */
+	exports.nodeList = function(value) {
+	    var type = Object.prototype.toString.call(value);
+
+	    return value !== undefined
+	        && (type === '[object NodeList]' || type === '[object HTMLCollection]')
+	        && ('length' in value)
+	        && (value.length === 0 || exports.node(value[0]));
+	};
+
+	/**
+	 * Check if argument is a string.
+	 *
+	 * @param {Object} value
+	 * @return {Boolean}
+	 */
+	exports.string = function(value) {
+	    return typeof value === 'string'
+	        || value instanceof String;
+	};
+
+	/**
+	 * Check if argument is a function.
+	 *
+	 * @param {Object} value
+	 * @return {Boolean}
+	 */
+	exports.fn = function(value) {
+	    var type = Object.prototype.toString.call(value);
+
+	    return type === '[object Function]';
+	};
+
+
+/***/ },
+/* 78 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var closest = __webpack_require__(79);
+
+	/**
+	 * Delegates event to a selector.
+	 *
+	 * @param {Element} element
+	 * @param {String} selector
+	 * @param {String} type
+	 * @param {Function} callback
+	 * @param {Boolean} useCapture
+	 * @return {Object}
+	 */
+	function delegate(element, selector, type, callback, useCapture) {
+	    var listenerFn = listener.apply(this, arguments);
+
+	    element.addEventListener(type, listenerFn, useCapture);
+
+	    return {
+	        destroy: function() {
+	            element.removeEventListener(type, listenerFn, useCapture);
+	        }
+	    }
+	}
+
+	/**
+	 * Finds closest match and invokes callback.
+	 *
+	 * @param {Element} element
+	 * @param {String} selector
+	 * @param {String} type
+	 * @param {Function} callback
+	 * @return {Function}
+	 */
+	function listener(element, selector, type, callback) {
+	    return function(e) {
+	        e.delegateTarget = closest(e.target, selector, true);
+
+	        if (e.delegateTarget) {
+	            callback.call(element, e);
+	        }
+	    }
+	}
+
+	module.exports = delegate;
+
+
+/***/ },
+/* 79 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var matches = __webpack_require__(80)
+
+	module.exports = function (element, selector, checkYoSelf) {
+	  var parent = checkYoSelf ? element : element.parentNode
+
+	  while (parent && parent !== document) {
+	    if (matches(parent, selector)) return parent;
+	    parent = parent.parentNode
+	  }
+	}
+
+
+/***/ },
+/* 80 */
+/***/ function(module, exports) {
+
+	
+	/**
+	 * Element prototype.
+	 */
+
+	var proto = Element.prototype;
+
+	/**
+	 * Vendor function.
+	 */
+
+	var vendor = proto.matchesSelector
+	  || proto.webkitMatchesSelector
+	  || proto.mozMatchesSelector
+	  || proto.msMatchesSelector
+	  || proto.oMatchesSelector;
+
+	/**
+	 * Expose `match()`.
+	 */
+
+	module.exports = match;
+
+	/**
+	 * Match `el` to `selector`.
+	 *
+	 * @param {Element} el
+	 * @param {String} selector
+	 * @return {Boolean}
+	 * @api public
+	 */
+
+	function match(el, selector) {
+	  if (vendor) return vendor.call(el, selector);
+	  var nodes = el.parentNode.querySelectorAll(selector);
+	  for (var i = 0; i < nodes.length; ++i) {
+	    if (nodes[i] == el) return true;
+	  }
+	  return false;
+	}
+
+/***/ },
+/* 81 */,
+/* 82 */,
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -14922,8 +18306,8 @@
 	}));
 
 /***/ },
-/* 66 */,
-/* 67 */
+/* 84 */,
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {//! moment.js
@@ -15324,7 +18708,7 @@
 	                module && module.exports) {
 	            try {
 	                oldLocale = globalLocale._abbr;
-	                __webpack_require__(69)("./" + name);
+	                __webpack_require__(87)("./" + name);
 	                // because defineLocale currently also sets the global locale, we
 	                // want to undo that for lazy loaded locales
 	                locale_locales__getSetGlobalLocale(oldLocale);
@@ -18966,10 +22350,10 @@
 	    return _moment;
 
 	}));
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(68)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(86)(module)))
 
 /***/ },
-/* 68 */
+/* 86 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -18985,210 +22369,210 @@
 
 
 /***/ },
-/* 69 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./af": 70,
-		"./af.js": 70,
-		"./ar": 71,
-		"./ar-ma": 72,
-		"./ar-ma.js": 72,
-		"./ar-sa": 73,
-		"./ar-sa.js": 73,
-		"./ar-tn": 74,
-		"./ar-tn.js": 74,
-		"./ar.js": 71,
-		"./az": 75,
-		"./az.js": 75,
-		"./be": 76,
-		"./be.js": 76,
-		"./bg": 77,
-		"./bg.js": 77,
-		"./bn": 78,
-		"./bn.js": 78,
-		"./bo": 79,
-		"./bo.js": 79,
-		"./br": 80,
-		"./br.js": 80,
-		"./bs": 81,
-		"./bs.js": 81,
-		"./ca": 82,
-		"./ca.js": 82,
-		"./cs": 83,
-		"./cs.js": 83,
-		"./cv": 84,
-		"./cv.js": 84,
-		"./cy": 85,
-		"./cy.js": 85,
-		"./da": 86,
-		"./da.js": 86,
-		"./de": 87,
-		"./de-at": 88,
-		"./de-at.js": 88,
-		"./de.js": 87,
-		"./dv": 89,
-		"./dv.js": 89,
-		"./el": 90,
-		"./el.js": 90,
-		"./en-au": 91,
-		"./en-au.js": 91,
-		"./en-ca": 92,
-		"./en-ca.js": 92,
-		"./en-gb": 93,
-		"./en-gb.js": 93,
-		"./en-ie": 94,
-		"./en-ie.js": 94,
-		"./en-nz": 95,
-		"./en-nz.js": 95,
-		"./eo": 96,
-		"./eo.js": 96,
-		"./es": 97,
-		"./es.js": 97,
-		"./et": 98,
-		"./et.js": 98,
-		"./eu": 99,
-		"./eu.js": 99,
-		"./fa": 100,
-		"./fa.js": 100,
-		"./fi": 101,
-		"./fi.js": 101,
-		"./fo": 102,
-		"./fo.js": 102,
-		"./fr": 103,
-		"./fr-ca": 104,
-		"./fr-ca.js": 104,
-		"./fr-ch": 105,
-		"./fr-ch.js": 105,
-		"./fr.js": 103,
-		"./fy": 106,
-		"./fy.js": 106,
-		"./gd": 107,
-		"./gd.js": 107,
-		"./gl": 108,
-		"./gl.js": 108,
-		"./he": 109,
-		"./he.js": 109,
-		"./hi": 110,
-		"./hi.js": 110,
-		"./hr": 111,
-		"./hr.js": 111,
-		"./hu": 112,
-		"./hu.js": 112,
-		"./hy-am": 113,
-		"./hy-am.js": 113,
-		"./id": 114,
-		"./id.js": 114,
-		"./is": 115,
-		"./is.js": 115,
-		"./it": 116,
-		"./it.js": 116,
-		"./ja": 117,
-		"./ja.js": 117,
-		"./jv": 118,
-		"./jv.js": 118,
-		"./ka": 119,
-		"./ka.js": 119,
-		"./kk": 120,
-		"./kk.js": 120,
-		"./km": 121,
-		"./km.js": 121,
-		"./ko": 122,
-		"./ko.js": 122,
-		"./ky": 123,
-		"./ky.js": 123,
-		"./lb": 124,
-		"./lb.js": 124,
-		"./lo": 125,
-		"./lo.js": 125,
-		"./lt": 126,
-		"./lt.js": 126,
-		"./lv": 127,
-		"./lv.js": 127,
-		"./me": 128,
-		"./me.js": 128,
-		"./mk": 129,
-		"./mk.js": 129,
-		"./ml": 130,
-		"./ml.js": 130,
-		"./mr": 131,
-		"./mr.js": 131,
-		"./ms": 132,
-		"./ms-my": 133,
-		"./ms-my.js": 133,
-		"./ms.js": 132,
-		"./my": 134,
-		"./my.js": 134,
-		"./nb": 135,
-		"./nb.js": 135,
-		"./ne": 136,
-		"./ne.js": 136,
-		"./nl": 137,
-		"./nl.js": 137,
-		"./nn": 138,
-		"./nn.js": 138,
-		"./pa-in": 139,
-		"./pa-in.js": 139,
-		"./pl": 140,
-		"./pl.js": 140,
-		"./pt": 141,
-		"./pt-br": 142,
-		"./pt-br.js": 142,
-		"./pt.js": 141,
-		"./ro": 143,
-		"./ro.js": 143,
-		"./ru": 144,
-		"./ru.js": 144,
-		"./se": 145,
-		"./se.js": 145,
-		"./si": 146,
-		"./si.js": 146,
-		"./sk": 147,
-		"./sk.js": 147,
-		"./sl": 148,
-		"./sl.js": 148,
-		"./sq": 149,
-		"./sq.js": 149,
-		"./sr": 150,
-		"./sr-cyrl": 151,
-		"./sr-cyrl.js": 151,
-		"./sr.js": 150,
-		"./ss": 152,
-		"./ss.js": 152,
-		"./sv": 153,
-		"./sv.js": 153,
-		"./sw": 154,
-		"./sw.js": 154,
-		"./ta": 155,
-		"./ta.js": 155,
-		"./te": 156,
-		"./te.js": 156,
-		"./th": 157,
-		"./th.js": 157,
-		"./tl-ph": 158,
-		"./tl-ph.js": 158,
-		"./tlh": 159,
-		"./tlh.js": 159,
-		"./tr": 160,
-		"./tr.js": 160,
-		"./tzl": 161,
-		"./tzl.js": 161,
-		"./tzm": 162,
-		"./tzm-latn": 163,
-		"./tzm-latn.js": 163,
-		"./tzm.js": 162,
-		"./uk": 164,
-		"./uk.js": 164,
-		"./uz": 165,
-		"./uz.js": 165,
-		"./vi": 166,
-		"./vi.js": 166,
-		"./x-pseudo": 167,
-		"./x-pseudo.js": 167,
-		"./zh-cn": 168,
-		"./zh-cn.js": 168,
-		"./zh-tw": 169,
-		"./zh-tw.js": 169
+		"./af": 88,
+		"./af.js": 88,
+		"./ar": 89,
+		"./ar-ma": 90,
+		"./ar-ma.js": 90,
+		"./ar-sa": 91,
+		"./ar-sa.js": 91,
+		"./ar-tn": 92,
+		"./ar-tn.js": 92,
+		"./ar.js": 89,
+		"./az": 93,
+		"./az.js": 93,
+		"./be": 94,
+		"./be.js": 94,
+		"./bg": 95,
+		"./bg.js": 95,
+		"./bn": 96,
+		"./bn.js": 96,
+		"./bo": 97,
+		"./bo.js": 97,
+		"./br": 98,
+		"./br.js": 98,
+		"./bs": 99,
+		"./bs.js": 99,
+		"./ca": 100,
+		"./ca.js": 100,
+		"./cs": 101,
+		"./cs.js": 101,
+		"./cv": 102,
+		"./cv.js": 102,
+		"./cy": 103,
+		"./cy.js": 103,
+		"./da": 104,
+		"./da.js": 104,
+		"./de": 105,
+		"./de-at": 106,
+		"./de-at.js": 106,
+		"./de.js": 105,
+		"./dv": 107,
+		"./dv.js": 107,
+		"./el": 108,
+		"./el.js": 108,
+		"./en-au": 109,
+		"./en-au.js": 109,
+		"./en-ca": 110,
+		"./en-ca.js": 110,
+		"./en-gb": 111,
+		"./en-gb.js": 111,
+		"./en-ie": 112,
+		"./en-ie.js": 112,
+		"./en-nz": 113,
+		"./en-nz.js": 113,
+		"./eo": 114,
+		"./eo.js": 114,
+		"./es": 115,
+		"./es.js": 115,
+		"./et": 116,
+		"./et.js": 116,
+		"./eu": 117,
+		"./eu.js": 117,
+		"./fa": 118,
+		"./fa.js": 118,
+		"./fi": 119,
+		"./fi.js": 119,
+		"./fo": 120,
+		"./fo.js": 120,
+		"./fr": 121,
+		"./fr-ca": 122,
+		"./fr-ca.js": 122,
+		"./fr-ch": 123,
+		"./fr-ch.js": 123,
+		"./fr.js": 121,
+		"./fy": 124,
+		"./fy.js": 124,
+		"./gd": 125,
+		"./gd.js": 125,
+		"./gl": 126,
+		"./gl.js": 126,
+		"./he": 127,
+		"./he.js": 127,
+		"./hi": 128,
+		"./hi.js": 128,
+		"./hr": 129,
+		"./hr.js": 129,
+		"./hu": 130,
+		"./hu.js": 130,
+		"./hy-am": 131,
+		"./hy-am.js": 131,
+		"./id": 132,
+		"./id.js": 132,
+		"./is": 133,
+		"./is.js": 133,
+		"./it": 134,
+		"./it.js": 134,
+		"./ja": 135,
+		"./ja.js": 135,
+		"./jv": 136,
+		"./jv.js": 136,
+		"./ka": 137,
+		"./ka.js": 137,
+		"./kk": 138,
+		"./kk.js": 138,
+		"./km": 139,
+		"./km.js": 139,
+		"./ko": 140,
+		"./ko.js": 140,
+		"./ky": 141,
+		"./ky.js": 141,
+		"./lb": 142,
+		"./lb.js": 142,
+		"./lo": 143,
+		"./lo.js": 143,
+		"./lt": 144,
+		"./lt.js": 144,
+		"./lv": 145,
+		"./lv.js": 145,
+		"./me": 146,
+		"./me.js": 146,
+		"./mk": 147,
+		"./mk.js": 147,
+		"./ml": 148,
+		"./ml.js": 148,
+		"./mr": 149,
+		"./mr.js": 149,
+		"./ms": 150,
+		"./ms-my": 151,
+		"./ms-my.js": 151,
+		"./ms.js": 150,
+		"./my": 152,
+		"./my.js": 152,
+		"./nb": 153,
+		"./nb.js": 153,
+		"./ne": 154,
+		"./ne.js": 154,
+		"./nl": 155,
+		"./nl.js": 155,
+		"./nn": 156,
+		"./nn.js": 156,
+		"./pa-in": 157,
+		"./pa-in.js": 157,
+		"./pl": 158,
+		"./pl.js": 158,
+		"./pt": 159,
+		"./pt-br": 160,
+		"./pt-br.js": 160,
+		"./pt.js": 159,
+		"./ro": 161,
+		"./ro.js": 161,
+		"./ru": 162,
+		"./ru.js": 162,
+		"./se": 163,
+		"./se.js": 163,
+		"./si": 164,
+		"./si.js": 164,
+		"./sk": 165,
+		"./sk.js": 165,
+		"./sl": 166,
+		"./sl.js": 166,
+		"./sq": 167,
+		"./sq.js": 167,
+		"./sr": 168,
+		"./sr-cyrl": 169,
+		"./sr-cyrl.js": 169,
+		"./sr.js": 168,
+		"./ss": 170,
+		"./ss.js": 170,
+		"./sv": 171,
+		"./sv.js": 171,
+		"./sw": 172,
+		"./sw.js": 172,
+		"./ta": 173,
+		"./ta.js": 173,
+		"./te": 174,
+		"./te.js": 174,
+		"./th": 175,
+		"./th.js": 175,
+		"./tl-ph": 176,
+		"./tl-ph.js": 176,
+		"./tlh": 177,
+		"./tlh.js": 177,
+		"./tr": 178,
+		"./tr.js": 178,
+		"./tzl": 179,
+		"./tzl.js": 179,
+		"./tzm": 180,
+		"./tzm-latn": 181,
+		"./tzm-latn.js": 181,
+		"./tzm.js": 180,
+		"./uk": 182,
+		"./uk.js": 182,
+		"./uz": 183,
+		"./uz.js": 183,
+		"./vi": 184,
+		"./vi.js": 184,
+		"./x-pseudo": 185,
+		"./x-pseudo.js": 185,
+		"./zh-cn": 186,
+		"./zh-cn.js": 186,
+		"./zh-tw": 187,
+		"./zh-tw.js": 187
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -19201,11 +22585,11 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 69;
+	webpackContext.id = 87;
 
 
 /***/ },
-/* 70 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -19213,7 +22597,7 @@
 	//! author : Werner Mollentze : https://github.com/wernerm
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -19282,7 +22666,7 @@
 	}));
 
 /***/ },
-/* 71 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -19292,7 +22676,7 @@
 	//! Native plural forms: forabi https://github.com/forabi
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -19423,7 +22807,7 @@
 	}));
 
 /***/ },
-/* 72 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -19432,7 +22816,7 @@
 	//! author : Abdel Said : https://github.com/abdelsaid
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -19487,7 +22871,7 @@
 	}));
 
 /***/ },
-/* 73 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -19495,7 +22879,7 @@
 	//! author : Suhail Alkowaileet : https://github.com/xsoh
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -19595,14 +22979,14 @@
 	}));
 
 /***/ },
-/* 74 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
 	//! locale  : Tunisian Arabic (ar-tn)
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -19657,7 +23041,7 @@
 	}));
 
 /***/ },
-/* 75 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -19665,7 +23049,7 @@
 	//! author : topchiyev : https://github.com/topchiyev
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -19766,7 +23150,7 @@
 	}));
 
 /***/ },
-/* 76 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -19776,7 +23160,7 @@
 	//! Author : Menelion Elensúle : https://github.com/Oire
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -19904,7 +23288,7 @@
 	}));
 
 /***/ },
-/* 77 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -19912,7 +23296,7 @@
 	//! author : Krasen Borisov : https://github.com/kraz
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -19998,7 +23382,7 @@
 	}));
 
 /***/ },
-/* 78 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -20006,7 +23390,7 @@
 	//! author : Kaushik Gandhi : https://github.com/kaushikgandhi
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -20121,7 +23505,7 @@
 	}));
 
 /***/ },
-/* 79 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -20129,7 +23513,7 @@
 	//! author : Thupten N. Chakrishar : https://github.com/vajradog
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -20244,7 +23628,7 @@
 	}));
 
 /***/ },
-/* 80 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -20252,7 +23636,7 @@
 	//! author : Jean-Baptiste Le Duigou : https://github.com/jbleduigou
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -20356,7 +23740,7 @@
 	}));
 
 /***/ },
-/* 81 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -20365,7 +23749,7 @@
 	//! based on (hr) translation by Bojan Marković
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -20503,7 +23887,7 @@
 	}));
 
 /***/ },
-/* 82 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -20511,7 +23895,7 @@
 	//! author : Juan G. Hurtado : https://github.com/juanghurtado
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -20588,7 +23972,7 @@
 	}));
 
 /***/ },
-/* 83 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -20596,7 +23980,7 @@
 	//! author : petrbela : https://github.com/petrbela
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -20763,7 +24147,7 @@
 	}));
 
 /***/ },
-/* 84 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -20771,7 +24155,7 @@
 	//! author : Anatoly Mironov : https://github.com/mirontoli
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -20830,7 +24214,7 @@
 	}));
 
 /***/ },
-/* 85 */
+/* 103 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -20838,7 +24222,7 @@
 	//! author : Robert Allen
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -20914,7 +24298,7 @@
 	}));
 
 /***/ },
-/* 86 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -20922,7 +24306,7 @@
 	//! author : Ulrik Nielsen : https://github.com/mrbase
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -20978,7 +24362,7 @@
 	}));
 
 /***/ },
-/* 87 */
+/* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -20988,7 +24372,7 @@
 	//! author : Mikolaj Dadela : https://github.com/mik01aj
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -21060,7 +24444,7 @@
 	}));
 
 /***/ },
-/* 88 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -21071,7 +24455,7 @@
 	//! author : Mikolaj Dadela : https://github.com/mik01aj
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -21143,7 +24527,7 @@
 	}));
 
 /***/ },
-/* 89 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -21151,7 +24535,7 @@
 	//! author : Jawish Hameed : https://github.com/jawish
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -21246,7 +24630,7 @@
 	}));
 
 /***/ },
-/* 90 */
+/* 108 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -21254,7 +24638,7 @@
 	//! author : Aggelos Karalias : https://github.com/mehiel
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -21348,14 +24732,14 @@
 	}));
 
 /***/ },
-/* 91 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
 	//! locale : australian english (en-au)
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -21418,7 +24802,7 @@
 	}));
 
 /***/ },
-/* 92 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -21426,7 +24810,7 @@
 	//! author : Jonathan Abourbih : https://github.com/jonbca
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -21485,7 +24869,7 @@
 	}));
 
 /***/ },
-/* 93 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -21493,7 +24877,7 @@
 	//! author : Chris Gedrim : https://github.com/chrisgedrim
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -21556,7 +24940,7 @@
 	}));
 
 /***/ },
-/* 94 */
+/* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -21564,7 +24948,7 @@
 	//! author : Chris Cartlidge : https://github.com/chriscartlidge
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -21627,14 +25011,14 @@
 	}));
 
 /***/ },
-/* 95 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
 	//! locale : New Zealand english (en-nz)
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -21697,7 +25081,7 @@
 	}));
 
 /***/ },
-/* 96 */
+/* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -21707,7 +25091,7 @@
 	//!          Se ne, bonvolu korekti kaj avizi min por ke mi povas lerni!
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -21774,7 +25158,7 @@
 	}));
 
 /***/ },
-/* 97 */
+/* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -21782,7 +25166,7 @@
 	//! author : Julio Napurí : https://github.com/julionc
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -21859,7 +25243,7 @@
 	}));
 
 /***/ },
-/* 98 */
+/* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -21868,7 +25252,7 @@
 	//! improvements : Illimar Tambek : https://github.com/ragulka
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -21943,7 +25327,7 @@
 	}));
 
 /***/ },
-/* 99 */
+/* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -21951,7 +25335,7 @@
 	//! author : Eneko Illarramendi : https://github.com/eillarra
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -22013,7 +25397,7 @@
 	}));
 
 /***/ },
-/* 100 */
+/* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -22021,7 +25405,7 @@
 	//! author : Ebrahim Byagowi : https://github.com/ebraminio
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -22123,7 +25507,7 @@
 	}));
 
 /***/ },
-/* 101 */
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -22131,7 +25515,7 @@
 	//! author : Tarmo Aidantausta : https://github.com/bleadof
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -22234,7 +25618,7 @@
 	}));
 
 /***/ },
-/* 102 */
+/* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -22242,7 +25626,7 @@
 	//! author : Ragnar Johannesen : https://github.com/ragnar123
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -22298,7 +25682,7 @@
 	}));
 
 /***/ },
-/* 103 */
+/* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -22306,7 +25690,7 @@
 	//! author : John Fischer : https://github.com/jfroffice
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -22366,7 +25750,7 @@
 	}));
 
 /***/ },
-/* 104 */
+/* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -22374,7 +25758,7 @@
 	//! author : Jonathan Abourbih : https://github.com/jonbca
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -22430,7 +25814,7 @@
 	}));
 
 /***/ },
-/* 105 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -22438,7 +25822,7 @@
 	//! author : Gaspard Bucher : https://github.com/gaspard
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -22498,7 +25882,7 @@
 	}));
 
 /***/ },
-/* 106 */
+/* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -22506,7 +25890,7 @@
 	//! author : Robin van der Vliet : https://github.com/robin0van0der0v
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -22575,7 +25959,7 @@
 	}));
 
 /***/ },
-/* 107 */
+/* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -22583,7 +25967,7 @@
 	//! author : Jon Ashdown : https://github.com/jonashdown
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -22655,7 +26039,7 @@
 	}));
 
 /***/ },
-/* 108 */
+/* 126 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -22663,7 +26047,7 @@
 	//! author : Juan G. Hurtado : https://github.com/juanghurtado
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -22736,7 +26120,7 @@
 	}));
 
 /***/ },
-/* 109 */
+/* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -22746,7 +26130,7 @@
 	//! author : Tal Ater : https://github.com/TalAter
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -22839,7 +26223,7 @@
 	}));
 
 /***/ },
-/* 110 */
+/* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -22847,7 +26231,7 @@
 	//! author : Mayank Singhal : https://github.com/mayanksinghal
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -22967,7 +26351,7 @@
 	}));
 
 /***/ },
-/* 111 */
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -22975,7 +26359,7 @@
 	//! author : Bojan Marković : https://github.com/bmarkovic
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -23116,7 +26500,7 @@
 	}));
 
 /***/ },
-/* 112 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -23124,7 +26508,7 @@
 	//! author : Adam Brunner : https://github.com/adambrunner
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -23229,7 +26613,7 @@
 	}));
 
 /***/ },
-/* 113 */
+/* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -23237,7 +26621,7 @@
 	//! author : Armendarabyan : https://github.com/armendarabyan
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -23328,7 +26712,7 @@
 	}));
 
 /***/ },
-/* 114 */
+/* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -23337,7 +26721,7 @@
 	//! reference: http://id.wikisource.org/wiki/Pedoman_Umum_Ejaan_Bahasa_Indonesia_yang_Disempurnakan
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -23415,7 +26799,7 @@
 	}));
 
 /***/ },
-/* 115 */
+/* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -23423,7 +26807,7 @@
 	//! author : Hinrik Örn Sigurðsson : https://github.com/hinrik
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -23546,7 +26930,7 @@
 	}));
 
 /***/ },
-/* 116 */
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -23555,7 +26939,7 @@
 	//! author: Mattia Larentis: https://github.com/nostalgiaz
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -23620,7 +27004,7 @@
 	}));
 
 /***/ },
-/* 117 */
+/* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -23628,7 +27012,7 @@
 	//! author : LI Long : https://github.com/baryon
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -23700,7 +27084,7 @@
 	}));
 
 /***/ },
-/* 118 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -23709,7 +27093,7 @@
 	//! reference: http://jv.wikipedia.org/wiki/Basa_Jawa
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -23787,7 +27171,7 @@
 	}));
 
 /***/ },
-/* 119 */
+/* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -23795,7 +27179,7 @@
 	//! author : Irakli Janiashvili : https://github.com/irakli-janiashvili
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -23880,7 +27264,7 @@
 	}));
 
 /***/ },
-/* 120 */
+/* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -23888,7 +27272,7 @@
 	//! authors : Nurlan Rakhimzhanov : https://github.com/nurlan
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -23971,7 +27355,7 @@
 	}));
 
 /***/ },
-/* 121 */
+/* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -23979,7 +27363,7 @@
 	//! author : Kruy Vanna : https://github.com/kruyvanna
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -24033,7 +27417,7 @@
 	}));
 
 /***/ },
-/* 122 */
+/* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -24045,7 +27429,7 @@
 	//! - Jeeeyul Lee <jeeeyul@gmail.com>
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -24105,7 +27489,7 @@
 	}));
 
 /***/ },
-/* 123 */
+/* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -24113,7 +27497,7 @@
 	//! author : Chyngyz Arystan uulu : https://github.com/chyngyz
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -24197,7 +27581,7 @@
 	}));
 
 /***/ },
-/* 124 */
+/* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -24205,7 +27589,7 @@
 	//! author : mweimerskirch : https://github.com/mweimerskirch, David Raison : https://github.com/kwisatz
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -24337,7 +27721,7 @@
 	}));
 
 /***/ },
-/* 125 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -24345,7 +27729,7 @@
 	//! author : Ryan Hart : https://github.com/ryanhart2
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -24411,7 +27795,7 @@
 	}));
 
 /***/ },
-/* 126 */
+/* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -24419,7 +27803,7 @@
 	//! author : Mindaugas Mozūras : https://github.com/mmozuras
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -24531,7 +27915,7 @@
 	}));
 
 /***/ },
-/* 127 */
+/* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -24540,7 +27924,7 @@
 	//! author : Jānis Elmeris : https://github.com/JanisE
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -24632,7 +28016,7 @@
 	}));
 
 /***/ },
-/* 128 */
+/* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -24640,7 +28024,7 @@
 	//! author : Miodrag Nikač <miodrag@restartit.me> : https://github.com/miodragnikac
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -24747,7 +28131,7 @@
 	}));
 
 /***/ },
-/* 129 */
+/* 147 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -24755,7 +28139,7 @@
 	//! author : Borislav Mickov : https://github.com/B0k0
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -24841,7 +28225,7 @@
 	}));
 
 /***/ },
-/* 130 */
+/* 148 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -24849,7 +28233,7 @@
 	//! author : Floyd Pink : https://github.com/floydpink
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -24926,7 +28310,7 @@
 	}));
 
 /***/ },
-/* 131 */
+/* 149 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -24935,7 +28319,7 @@
 	//! author : Vivek Athalye : https://github.com/vnathalye
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -25089,7 +28473,7 @@
 	}));
 
 /***/ },
-/* 132 */
+/* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -25097,7 +28481,7 @@
 	//! author : Weldan Jamili : https://github.com/weldan
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -25175,7 +28559,7 @@
 	}));
 
 /***/ },
-/* 133 */
+/* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -25183,7 +28567,7 @@
 	//! author : Weldan Jamili : https://github.com/weldan
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -25261,7 +28645,7 @@
 	}));
 
 /***/ },
-/* 134 */
+/* 152 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -25269,7 +28653,7 @@
 	//! author : Squar team, mysquar.com
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -25358,7 +28742,7 @@
 	}));
 
 /***/ },
-/* 135 */
+/* 153 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -25367,7 +28751,7 @@
 	//!           Sigurd Gartmann : https://github.com/sigurdga
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -25425,7 +28809,7 @@
 	}));
 
 /***/ },
-/* 136 */
+/* 154 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -25433,7 +28817,7 @@
 	//! author : suvash : https://github.com/suvash
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -25552,7 +28936,7 @@
 	}));
 
 /***/ },
-/* 137 */
+/* 155 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -25560,7 +28944,7 @@
 	//! author : Joris Röling : https://github.com/jjupiter
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -25629,7 +29013,7 @@
 	}));
 
 /***/ },
-/* 138 */
+/* 156 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -25637,7 +29021,7 @@
 	//! author : https://github.com/mechuwind
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -25693,7 +29077,7 @@
 	}));
 
 /***/ },
-/* 139 */
+/* 157 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -25701,7 +29085,7 @@
 	//! author : Harpreet Singh : https://github.com/harpreetkhalsagtbit
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -25821,7 +29205,7 @@
 	}));
 
 /***/ },
-/* 140 */
+/* 158 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -25829,7 +29213,7 @@
 	//! author : Rafal Hirsz : https://github.com/evoL
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -25930,7 +29314,7 @@
 	}));
 
 /***/ },
-/* 141 */
+/* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -25938,7 +29322,7 @@
 	//! author : Jefferson : https://github.com/jalex79
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -25999,7 +29383,7 @@
 	}));
 
 /***/ },
-/* 142 */
+/* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -26007,7 +29391,7 @@
 	//! author : Caio Ribeiro Pereira : https://github.com/caio-ribeiro-pereira
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -26064,7 +29448,7 @@
 	}));
 
 /***/ },
-/* 143 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -26073,7 +29457,7 @@
 	//! author : Valentin Agachi : https://github.com/avaly
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -26143,7 +29527,7 @@
 	}));
 
 /***/ },
-/* 144 */
+/* 162 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -26153,7 +29537,7 @@
 	//! author : Коренберг Марк : https://github.com/socketpair
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -26322,7 +29706,7 @@
 	}));
 
 /***/ },
-/* 145 */
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -26330,7 +29714,7 @@
 	//! authors : Bård Rolstad Henriksen : https://github.com/karamell
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -26387,7 +29771,7 @@
 	}));
 
 /***/ },
-/* 146 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -26395,7 +29779,7 @@
 	//! author : Sampath Sitinamaluwa : https://github.com/sampathsris
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -26462,7 +29846,7 @@
 	}));
 
 /***/ },
-/* 147 */
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -26471,7 +29855,7 @@
 	//! based on work of petrbela : https://github.com/petrbela
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -26616,7 +30000,7 @@
 	}));
 
 /***/ },
-/* 148 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -26624,7 +30008,7 @@
 	//! author : Robert Sedovšek : https://github.com/sedovsek
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -26782,7 +30166,7 @@
 	}));
 
 /***/ },
-/* 149 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -26792,7 +30176,7 @@
 	//! author : Oerd Cukalla : https://github.com/oerd (fixes)
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -26856,7 +30240,7 @@
 	}));
 
 /***/ },
-/* 150 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -26864,7 +30248,7 @@
 	//! author : Milan Janačković<milanjanackovic@gmail.com> : https://github.com/milan-j
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -26970,7 +30354,7 @@
 	}));
 
 /***/ },
-/* 151 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -26978,7 +30362,7 @@
 	//! author : Milan Janačković<milanjanackovic@gmail.com> : https://github.com/milan-j
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -27084,7 +30468,7 @@
 	}));
 
 /***/ },
-/* 152 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -27092,7 +30476,7 @@
 	//! author : Nicolai Davies<mail@nicolai.io> : https://github.com/nicolaidavies
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -27177,7 +30561,7 @@
 	}));
 
 /***/ },
-/* 153 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -27185,7 +30569,7 @@
 	//! author : Jens Alm : https://github.com/ulmus
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -27250,7 +30634,7 @@
 	}));
 
 /***/ },
-/* 154 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -27258,7 +30642,7 @@
 	//! author : Fahad Kassim : https://github.com/fadsel
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -27313,7 +30697,7 @@
 	}));
 
 /***/ },
-/* 155 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -27321,7 +30705,7 @@
 	//! author : Arjunkumar Krishnamoorthy : https://github.com/tk120404
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -27446,7 +30830,7 @@
 	}));
 
 /***/ },
-/* 156 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -27454,7 +30838,7 @@
 	//! author : Krishna Chaitanya Thota : https://github.com/kcthota
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -27539,7 +30923,7 @@
 	}));
 
 /***/ },
-/* 157 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -27547,7 +30931,7 @@
 	//! author : Kridsada Thanabulpong : https://github.com/sirn
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -27610,7 +30994,7 @@
 	}));
 
 /***/ },
-/* 158 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -27618,7 +31002,7 @@
 	//! author : Dan Hagman
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -27676,7 +31060,7 @@
 	}));
 
 /***/ },
-/* 159 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -27684,7 +31068,7 @@
 	//! author : Dominika Kruk : https://github.com/amaranthrose
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -27800,7 +31184,7 @@
 	}));
 
 /***/ },
-/* 160 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -27809,7 +31193,7 @@
 	//!           Burak Yiğit Kaya: https://github.com/BYK
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -27894,7 +31278,7 @@
 	}));
 
 /***/ },
-/* 161 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -27902,7 +31286,7 @@
 	//! author : Robin van der Vliet : https://github.com/robin0van0der0v with the help of Iustì Canun
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -27989,7 +31373,7 @@
 	}));
 
 /***/ },
-/* 162 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -27997,7 +31381,7 @@
 	//! author : Abdel Said : https://github.com/abdelsaid
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -28051,7 +31435,7 @@
 	}));
 
 /***/ },
-/* 163 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -28059,7 +31443,7 @@
 	//! author : Abdel Said : https://github.com/abdelsaid
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -28113,7 +31497,7 @@
 	}));
 
 /***/ },
-/* 164 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -28122,7 +31506,7 @@
 	//! Author : Menelion Elensúle : https://github.com/Oire
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -28263,7 +31647,7 @@
 	}));
 
 /***/ },
-/* 165 */
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -28271,7 +31655,7 @@
 	//! author : Sardor Muminov : https://github.com/muminoff
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -28325,7 +31709,7 @@
 	}));
 
 /***/ },
-/* 166 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -28333,7 +31717,7 @@
 	//! author : Bang Nguyen : https://github.com/bangnk
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -28408,7 +31792,7 @@
 	}));
 
 /***/ },
-/* 167 */
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -28416,7 +31800,7 @@
 	//! author : Andrew Hood : https://github.com/andrewhood125
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -28480,7 +31864,7 @@
 	}));
 
 /***/ },
-/* 168 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -28489,7 +31873,7 @@
 	//! author : Zeno Zeng : https://github.com/zenozeng
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -28611,7 +31995,7 @@
 	}));
 
 /***/ },
-/* 169 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -28619,7 +32003,7 @@
 	//! author : Ben : https://github.com/ben-lin
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(67)) :
+	    true ? factory(__webpack_require__(85)) :
 	   typeof define === 'function' && define.amd ? define(['moment'], factory) :
 	   factory(global.moment)
 	}(this, function (moment) { 'use strict';
@@ -28714,6 +32098,14 @@
 	    return zh_tw;
 
 	}));
+
+/***/ },
+/* 188 */,
+/* 189 */
+/***/ function(module, exports) {
+
+	// Export namespace
+	module.exports = 'qrcodejs';
 
 /***/ }
 /******/ ]);
