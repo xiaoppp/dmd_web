@@ -175,8 +175,7 @@
 .incomeC .sad{width:100%; margin-top:5px; }
 .incomeC .sad a{padding:6px 20px; margin-left:3%; font-size:16px; color:#43C328; border:1px solid #43C328; border-radius:4px; }
 .incomeC .sad a.on{background:#43C328; color:#fff; }
-.incomeC ul{display:none; width:100%; margin-top:30px; }
-.incomeC ul.u1{display:block; }
+.incomeC ul{ width:100%; margin-top:30px; }
 .incomeC ul h2{width:100%; overflow:hidden; margin-bottom:20px; }
 .incomeC ul h2 span{margin-left:40px; font-size:16px; color:#fff; }
 .incomeC ul h2 span b{font-size:16px; color:#FEC107; }

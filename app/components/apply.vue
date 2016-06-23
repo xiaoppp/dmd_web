@@ -1,72 +1,64 @@
 <template>
-    <div>
-        <button @click="changeName">XXXX</button>
-        {{getName}}
-    <div class="rmain">
-        <div class="offerC">
-            <h1><b>我要播种</b></h1>
-            <h2>请选择播种金额</h2>
-            <ul>
-                <li>
-                    <a href="javascript:;" class="money" data-i="0">
-                        <span>1000</span> 首次购买激活币
-                    </a>
-                </li>
-                <dd class="tips">平台提示：</dd>
-                <li class="sm">本平台只提供大家一个信息交流的渠道，平台不收取任何费用，资金在会员中流转，闲钱互助，风险自控！请在自愿的前提下完成交易。</li>
-                <center>
-                    <label class="agree_label">
-                        <input type="checkbox" class="agree"> 我已阅读并同意</label>
-                </center>
-                <br>
-                <br>
-                <li>
-                    <input type="button" class="btn" id="offer_help_btn" value=" ">
-                </li>
-            </ul>
-        </div>
-    </div>
+<div class="rmain">
+  <div class="applyC">
+  	<h1><b>我要收获</b></h1>
+  	<h2>请输入收获金额</h2>
+  	<ul>
+  		<li><input type="number" class="text" v-model="model" step="" id="money"></li>
+  		<li class="sm">
+			  您的账户总额：{{$parent.total | currency '￥'}}元，
+			  冻结总额：{{$parent.freeze | currency '￥'}}元，
+			  正在提现总额：{{$parent.money_apply | currency '￥'}}元，
+			  可提现总额：{{$parent.available | currency '￥'}}元。
+		</li>
+  		<li class="sm">收获金额最少{{config3.min | currency '￥'}}元，不能大于账户可用总余额，且必须是{{config3.time}}的整倍数。</li>
+  		<li><input type="button" class="btn" @click="submit" id="apply_help_btn"></li>
+  	</ul>
   </div>
+</div>
 </template>
+
 <script>
 
-    import {getName} from '../js/getters';
-    import {changeName} from '../js/actions';
+import {alert2} from '../js/utils'
+import {API} from '../js/api'
 
-    export default {
-        vuex:{
-            getters:{
-                getName:getName
-            },
-            actions: {
-                changeName: changeName
-            }
-        }
+export default {
+    data(){
+		return {
+			model: 0
+		};
+    },
+	methods:{
+		submit(evt){
+			let vm = this
+			let money = vm.model
+			let min = vm.config3.min
+			let time = vm.config3.time
+
+			if(money > vm.available) alert2('你的可提现总额不足，无法提现。')
+			else if(money < min) alert2('提现金额不可小于' + min + '元。')
+			else if(money % time !== 0) alert2('提现金额必须是' + time + '的倍数。')
+			else {
+				API.Apply(money).then(function(data){
+					if(data.isSuccess){
+						alert2('正在提现...')
+					} else {
+						alert2(data.error.message)
+					}
+				}).catch(function(err){
+					console.log(err)
+				});
+			}
+		}
+	},
+    computed:{
+		config3(){
+			let p = this.$parent
+			let cfg = p.config3.val.split('-')
+			return { min:cfg[0], time:cfg[1] }
+		}
     }
+
+}
 </script>
-<style>
-    .tips {
-        width: 92%;
-        margin: auto;
-        margin-bottom: 5px;
-        text-align: left;
-        font-size: 18px;
-        color: #FCC006;
-    }
-
-    .agree_label {
-        font-size: 18px;
-        color: #fff;
-    }
-
-    .agree_label .agree {
-        width: 20px;
-        height: 20px;
-    }
-
-    .agree_label .agree:checked {
-        -webkit-appearance: none;
-        background: #49A2DC url(/images/admin/checkbox_ed.png) no-repeat center center;
-        background-size: 100%;
-    }
-</style>

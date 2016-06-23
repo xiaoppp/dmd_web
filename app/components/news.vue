@@ -12,7 +12,7 @@
 		</li>
 	</ul>
 </div>
-<pagination urlname="news" :page="page" :total="total"></pagination>
+<pagination :page="page" :total="total"></pagination>
 
 </div>
 </template>
@@ -32,17 +32,28 @@ export default {
 	},
 	route:{
 		data(transition){
-			var page = transition.to.query.page || this.page;
-			API.News(page).then(function(data){
-				var d = data.data;
-				var count = d.count;
-				var rows = d.rows;
-				transition.next({"model": rows,'page': page,'total': count});
-			}).catch(function(err){
-				console.log(err);
-			});
+			this.load(this.page)
+			transition.next()
 		}
     },
+	methods:{
+		load(page){
+			let vm = this
+			API.News(page).then(function(data){
+				var d = data.data
+				vm.$set('model',d.rows)
+				vm.$set('page',page)
+				vm.$set('total',d.count)
+			}).catch(function(err){
+				console.log(err)
+			});
+		}
+	},
+	events:{
+		'on-page-changed':function(page){
+			this.load(page)
+		}
+	},
 	components:{pagination}
 }
 

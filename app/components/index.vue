@@ -3,10 +3,10 @@
 
 	<div class="nifo">
 		<ul>
-			<li><b>DMD币</b><span>{{dmd|currency '￥'}}</span></li>
-			<li><b>本金总额</b><span>{{income|currency '￥'}}</span></li>
+			<li><b>DMD币</b><span>{{dmd | currency '￥'}}</span></li>
+			<li><b>本金总额</b><span>{{$parent.capitalSum | currency '￥'}}</span></li>
 			<li><b>利息总额</b><span>{{$parent.member.interest|currency '￥'}}</span></li>
-			<li><b>奖金总额</b><span>{{bonus|currency '￥'}}</span></li>
+			<li><b>奖金总额</b><span>{{$parent.bonusSum | currency '￥'}}</span></li>
 		</ul>
 	</div>
 
@@ -55,17 +55,11 @@ export default {
 		dmd(){
 			return 0;
 		},
-		income(){
-			return this.$parent.member.money + this.$parent.moneyFreeze;
-		},
-		bonus(){
-			return this.$parent.member.bonus + this.$parent.bonusFreeze;
-		},
 		aboutIncome(){
-			var p = this.$parent;
-			var offer = p.offer;
-			if(offer.fst == 0) return offer.money*p.config6.val*p.config24.val;
-			else return 0;
+			var p = this.$parent
+			var offer = p.offer
+			if(offer.fst == 0) return offer.money * p.config6.val * p.config24.val
+			else return 0
 		}
 	},
 	methods:{

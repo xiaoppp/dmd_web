@@ -8,5 +8,3 @@ Vue.filter('datetime',function(input){
 Vue.filter('level', function(input){
     return  input + '级会员';
 });
-
-export default "";

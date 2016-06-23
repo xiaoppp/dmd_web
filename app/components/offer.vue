@@ -1,68 +1,124 @@
 <template>
-<div class="rmain">
-  <div class="applyC">
-  	<h1><b>我要收获</b></h1>
-  	<h2>请输入收获金额</h2>
-  	<ul>
-  		<li><input type="number" class="text" v-model="model" id="money" min="500" max="0" step="100"></li>
-  		<li class="sm">
-			  您的账户总额：{{total|currency '￥'}}元，
-			  冻结总额：{{freeze|currency '￥'}}元，
-			  正在提现总额：{{going|currency '￥'}}元，
-			  可提现总额：{{available|currency '￥'}}元。
-		</li>
-  		<li class="sm">收获金额最少500元，不能大于账户可用总余额，且必须是100的整倍数。</li>
-  		<li><input type="button" class="btn" @click="submit" id="apply_help_btn"></li>
-  	</ul>
-  </div>
-</div>
-</template>
+    <div>
+    <div class="rmain">
+        <div class="offerC">
+            <h1><b>我要播种</b></h1>
+            <h2>请选择播种金额</h2>
 
+            <ul v-if="first">
+                <li>
+                    <a href="javascript:;" class="money on" @click="select(0)">
+                        <span>{{config2[0]}}</span>
+                        首次购买激活币
+                    </a>
+                </li>
+            </ul>
+
+            <ul v-if="!first">
+                <li>
+                    <a href="javascript:;" class="money"  :class="{'on': model.i == 0}"  @click="select(0)"><span>{{config2[0]}}</span></a>
+                </li>
+
+                <li>
+                    <a href="javascript:;" class="money" :class="{'on': model.i == 1}"  @click="select(1)"><span>{{config2[1]}}</span></a>
+                    <a href="javascript:;" class="money" :class="{'on': model.i == 2}"   @click="select(2)"><span>{{config2[2]}}</span></a>
+                </li>
+
+                <li>
+                    <a href="javascript:;" class="money" :class="{'on': model.i == 3}"   @click="select(3)"><span>{{config2[3]}}</span></a>
+                    <a href="javascript:;" class="money" :class="{'on': model.i == 4}"   @click="select(4)"><span>{{config2[4]}}</span></a>
+                    <a href="javascript:;" class="money" :class="{'on': model.i == 5}"   @click="select(5)"><span>{{config2[5]}}</span></a>
+                </li>
+            </ul>
+
+            <ul>
+                <li class="sm">
+                    <strong class="tips">平台提示：</strong>
+                    本平台只提供大家一个信息交流的渠道，平台不收取任何费用，资金在会员中流转，闲钱互助，风险自控！请在自愿的前提下完成交易。
+                    <br/><br/>
+                    <br/>
+                    <label class="agree_label"><input type="checkbox" v-model="model.agree" class="agree">我已阅读并同意</label>
+                </li>
+                <li>
+                    <input type="button" class="btn" id="offer_help_btn" @click="submit">
+                </li>
+            </ul>
+        </div>
+    </div>
+  </div>
+</template>
 <script>
 
-import {alert2} from '../js/utils';
-import {API} from '../js/api';
+    import {alert2} from '../js/utils'
+    import {API} from '../js/api'
 
-export default {
-    data(){
-		return {
-			model:0
-		};
-    },
-	methods:{
-		submit(evt){
-			var vm = this;
-			var money = vm.model;
-			if(money > vm.available) alert2('你的可提现总额不足，无法提现。');
-			else if(money < 500) alert2('提现金额不可小于500元。');
-			else if(money % 100 !== 0) alert2('提现金额必须是100的倍数。');
-			else {
-				API.Offer(money).then(function(data){
-					if(data.isSuccess){
-						alert2('正在提现...');
-					} else {
-						alert2(data.error.message);
-					}
-				}).catch(function(err){
-					console.log(err);
-				});
-			}
-		}
-	},
-    computed:{
-        total(){
-			return 0;
-		},
-		freeze(){
-			return 0;
-		},
-		going(){
-			return 0;
-		},
-		available(){
-			return 0;
-		}
+    export default {
+        data(){
+            return {
+                first: false,
+                min2Offer : 1000,
+                model : {
+                    money : 0,
+                    agree : false,
+                    i     : 0
+                },
+                config2 : {
+                    0 : 1000,
+                    1 : 3000,
+                    2 : 5000,
+                    3 : 10000,
+                    4 : 30000,
+                    5 : 50000
+                }
+            }
+        },
+        methods:{
+            submit(){
+                let vm = this
+                if(!vm.model.agree)alert2('请先阅读平台提示！')
+                else {
+                    API.Offer(vm.model.money).then(function(data){
+                        if(data.isSuccess){
+                            alert2('恭喜！ 播种成功')
+                        } else {
+                            alert2(data.error.message)
+                        }
+                    }).catch(function(err){
+                        console.log(err)
+                    })
+                }
+            },
+            select(i){
+                let vm = this
+                vm.model.i = i
+                vm.model.money = vm.config2[i]
+            }
+        }
+    }
+</script>
+<style>
+    .tips {
+        width: 92%;
+        margin: auto;
+        margin-bottom: 5px;
+        text-align: left;
+        font-size: 18px;
+        color: #FCC006;
     }
 
-}
-</script>
+    .agree_label {
+        font-size: 18px;
+        color: #fff;
+    }
+
+    .agree_label .agree {
+        width: 20px;
+        height: 20px;
+    }
+
+    .agree_label .agree:checked {
+        -webkit-appearance: none;
+        background: #49A2DC url(/images/admin/checkbox_ed.png) no-repeat center center;
+        background-size: 100%;
+    }
+</style>

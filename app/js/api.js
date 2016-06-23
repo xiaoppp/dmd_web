@@ -1,9 +1,9 @@
-import request from 'superagent';
-import Q from 'q';
+import request from 'superagent'
+import Q from 'q'
 import config from './config'
 
-const API_HOST = 'http://192.168.1.102:3000/api/';
-export const LOGIN_KEY = "member.login.information";
+const API_HOST = 'http://192.168.1.104:3000/api/'
+const LOGIN_KEY = "member.login.information"
 
 export const API = {
     News(page){
@@ -94,26 +94,40 @@ export const API = {
         return HTTP_GET(_Combine('member/children/',id));
     },
     Offer(money){
-        let model = {money : money};
-        return HTTP_POST(_Combine('offer'),model);
+        let who = GET_MEMBER_LOGIN_INFO()
+        let model = {money : money, memberid:who.memberid}
+        return HTTP_POST(_Combine('offer/member'), model)
+    },
+    Apply(money){
+        let who = GET_MEMBER_LOGIN_INFO()
+        let model = { memberid:who.memberid, money:money }
+        return HTTP_POST(_Combine('apply/member'), model)
     },
     TeamScope(id){
         return HTTP_GET(_Combine('member/children/amount/',id));
+    },
+    IncomeRecords(type,page){
+        let who = GET_MEMBER_INFO()
+        return HTTP_GET(_Combine('income/',type,'/',who.id,'/',page))
     }
 }
 
 //** Utilities
 
-function _Combine(){
-    if(arguments.length===0) return API_HOST;
+function _Combine(...parts){
+    let len = parts.length;
+    if(len === 0) throw 'no parts provided';
     else {
-        var len = arguments.length;
-        var raw = API_HOST;
-        for(var i=0;i<len;i++){
-            raw += arguments[i];
+        let raw = API_HOST;
+        for(let i=0; i < len; i++){
+            raw += parts[i];
         }
         return raw;
     }
+}
+
+function _HttpErrorHandle_(err) {
+    //if(err) window.location.href = '/error.html'
 }
 
 //*** Abstract Tools
@@ -141,10 +155,9 @@ export function HTTP_GET (url,data){
         .get(url)
         .timeout(6000)
         .query(data)
-        .on('error',function(err){
-        })
         .end(function(err,res){
             if(err){
+                _HttpErrorHandle_(err);
                 deferred.reject("error");
             } else {
                 deferred.resolve(res.body);

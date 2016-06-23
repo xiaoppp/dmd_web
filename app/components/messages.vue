@@ -11,14 +11,14 @@
 				</li>
 			</ul>
 		</div>
-		<pagination urlname="messages" :page="page" :total="total"></pagination>
+		<pagination :page="page" :total="total"></pagination>
 	</div>
 </div>
 </template>
 <script>
 
-import {API} from '../js/api';
-import pagination from './_pagination.vue';
+import {API} from '../js/api'
+import pagination from './_pagination.vue'
 
 export default {
 	data(){
@@ -30,21 +30,34 @@ export default {
 	},
 	route:{
 		data:function(transition){
-			var page = transition.to.query.page || this.page;
-			API.Messages(page).then(function(data){
-				var d = data.data;
-				var count = d.count;
-				var rows = d.rows;
-				if(rows){
-					rows.forEach(function(item,key){
-						if(item.state==0) item.state = "w";
-						else item.state = "ed";
-					});
-				}
-				transition.next({"model": rows,'page': page,'total': count});
+			this.load(this.page)
+			transition.next()
+		}
+	},
+	methods:{
+		load(page){
+			let vm = this
+			API.News(page).then(function(data){
+				var d = data.data
+
+				var count = d.count
+				var rows = d.rows
+				rows.forEach(function(item,key){
+					if(item.state==0) item.state = "w"
+					else item.state = "ed"
+				});
+				vm.$set('model',rows)
+				vm.$set('page',page)
+				vm.$set('total',count)
+
 			}).catch(function(err){
-				console.log(err);
+				console.log(err)
 			});
+		}
+	},
+	events:{
+		'on-page-changed':function(page){
+			this.load(page)
 		}
 	},
 	components:{pagination}

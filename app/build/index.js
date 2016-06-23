@@ -12,19 +12,17 @@ webpackJsonp([0],[
 
 	var _router2 = _interopRequireDefault(_router);
 
-	var _store = __webpack_require__(82);
+	var _store = __webpack_require__(87);
 
 	var _store2 = _interopRequireDefault(_store);
 
-	__webpack_require__(84);
+	__webpack_require__(89);
 
-	__webpack_require__(26);
+	__webpack_require__(34);
 
-	var _api = __webpack_require__(27);
+	var _api = __webpack_require__(13);
 
 	var _utils = __webpack_require__(7);
-
-	__webpack_require__(188);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -34,6 +32,7 @@ webpackJsonp([0],[
 	            member: {},
 	            config6: {},
 	            config24: {},
+	            config3: {},
 	            bonusFreeze: 0,
 	            moneyFreeze: 0,
 	            offer: {},
@@ -53,7 +52,35 @@ webpackJsonp([0],[
 	            return "images/xin0" + i + ".png";
 	        }
 	    },
+	    computed: {
+	        //本金总额
+
+	        capitalSum: function capitalSum() {
+	            return this.member.money + this.moneyFreeze;
+	        },
+
+	        //奖金总额
+	        bonusSum: function bonusSum() {
+	            return this.member.bonus + this.bonusFreeze;
+	        },
+
+	        //账户总资产
+	        total: function total() {
+	            return this.member.money + this.member.interest + this.member.bonus + this.moneyFreeze + this.bonusFreeze;
+	        },
+
+	        //账户冻结资产
+	        freeze: function freeze() {
+	            return this.moneyFreeze + this.bonusFreeze;
+	        },
+
+	        //账户可提现总资产
+	        available: function available() {
+	            return this.member.money + this.member.interest + this.member.bonus - this.money_apply;
+	        }
+	    },
 	    created: function created() {
+
 	        var vm = this;
 
 	        _api.API.IndexData().then(function (data) {
@@ -63,12 +90,15 @@ webpackJsonp([0],[
 	                vm.member = (0, _api.GET_MEMBER_INFO)();
 	                vm.config6 = d.config6;
 	                vm.config24 = d.config24;
+	                vm.config3 = d.config3;
+	                vm.money_apply = d.money_apply || 10;
 	                vm.moneyFreeze = d.moneyFreeze;
 	                vm.bonusFreeze = d.bonusFreeze;
 	                vm.offer = d.offer;
 	                vm.offerPairs = d.offerPairs;
 	                vm.showNews = d.showNews;
 	                vm.apply = d.apply;
+
 	                console.log(data.data);
 	            } else {
 	                (0, _utils.alert2)(data.error.message);
@@ -124,11 +154,11 @@ webpackJsonp([0],[
 
 	var _offer2 = _interopRequireDefault(_offer);
 
-	var _apply = __webpack_require__(14);
+	var _apply = __webpack_require__(22);
 
 	var _apply2 = _interopRequireDefault(_apply);
 
-	var _info = __webpack_require__(23);
+	var _info = __webpack_require__(31);
 
 	var _info2 = _interopRequireDefault(_info);
 
@@ -136,35 +166,35 @@ webpackJsonp([0],[
 
 	var _team2 = _interopRequireDefault(_team);
 
-	var _income = __webpack_require__(43);
+	var _income = __webpack_require__(48);
 
 	var _income2 = _interopRequireDefault(_income);
 
-	var _record = __webpack_require__(48);
+	var _record = __webpack_require__(53);
 
 	var _record2 = _interopRequireDefault(_record);
 
-	var _news = __webpack_require__(51);
+	var _news = __webpack_require__(56);
 
 	var _news2 = _interopRequireDefault(_news);
 
-	var _newssingle = __webpack_require__(57);
+	var _newssingle = __webpack_require__(62);
 
 	var _newssingle2 = _interopRequireDefault(_newssingle);
 
-	var _messages = __webpack_require__(61);
+	var _messages = __webpack_require__(66);
 
 	var _messages2 = _interopRequireDefault(_messages);
 
-	var _messagesingle = __webpack_require__(64);
+	var _messagesingle = __webpack_require__(69);
 
 	var _messagesingle2 = _interopRequireDefault(_messagesingle);
 
-	var _leavemsg = __webpack_require__(67);
+	var _leavemsg = __webpack_require__(72);
 
 	var _leavemsg2 = _interopRequireDefault(_leavemsg);
 
-	var _share = __webpack_require__(70);
+	var _share = __webpack_require__(75);
 
 	var _share2 = _interopRequireDefault(_share);
 
@@ -3012,12 +3042,6 @@ webpackJsonp([0],[
 			dmd: function dmd() {
 				return 0;
 			},
-			income: function income() {
-				return this.$parent.member.money + this.$parent.moneyFreeze;
-			},
-			bonus: function bonus() {
-				return this.$parent.member.bonus + this.$parent.bonusFreeze;
-			},
 			aboutIncome: function aboutIncome() {
 				var p = this.$parent;
 				var offer = p.offer;
@@ -3096,19 +3120,20 @@ webpackJsonp([0],[
 /* 10 */
 /***/ function(module, exports) {
 
-	module.exports = "\r\n<div class=\"rmain\" style=\"background:#26272C;\">\r\n\r\n\t<div class=\"nifo\">\r\n\t\t<ul>\r\n\t\t\t<li><b>DMD币</b><span>{{dmd|currency '￥'}}</span></li>\r\n\t\t\t<li><b>本金总额</b><span>{{income|currency '￥'}}</span></li>\r\n\t\t\t<li><b>利息总额</b><span>{{$parent.member.interest|currency '￥'}}</span></li>\r\n\t\t\t<li><b>奖金总额</b><span>{{bonus|currency '￥'}}</span></li>\r\n\t\t</ul>\r\n\t</div>\r\n\r\n\t<div class=\"anniu\">\r\n\t\t<a href=\"\" v-link=\"{name:'offer'}\"><img src=\"/images/btn_bozhong.png\"></a>\r\n\t\t<a href=\"\" v-link=\"{name:'apply'}\"><img src=\"/images/btn_shouhuo.png\"></a>\r\n\t</div>\r\n\r\n\t<div class=\"bzsh\">\r\n\t\t<a href=\"javascript:void(0);\" @click=\"goOffer\" class=\"bs bz\" title=\"查看详情\">\r\n\t\t<i>{{offer?\"正在\":\"等待\"}}播种</i>\r\n\t\t\t<ul v-if=\"offer\">\r\n\t\t\t\t<li><span>金额：</span><b class=\"rd\">{{offer.money|currency '￥'}}</b></li>\r\n\t\t\t\t<li><span>匹配人数：</span><b>{{$parent.offerPairs}}人</b></li>\r\n\t\t\t\t<li><span>发起时间：</span><b>{{offer.the_time|datetime}}</b></li>\r\n\t\t\t\t<li><span>预计收益：</span><b>{{aboutIncome}}</b></li>\r\n\t\t\t\t<li><span>状态：</span><b class=\"rd\">{{offer.state==100?\"订单完成\":\"进行中...\"}}</b></li>\r\n\t\t\t</ul>\r\n\t\t</a>\r\n\t\t<a href=\"javascript:void(0);\" @click=\"goApply\" class=\"bs sh\" title=\"查看详情\">\r\n\t\t<i class=\"i\">{{apply?\"正在\":\"等待\"}}收获</i>\r\n\t\t\t<ul v-if=\"apply\">\r\n\t\t\t\t<li><span>金额：</span><b class=\"rd\">{{apply.money}}</b></li>\r\n\t\t\t\t<li><span>匹配人数：</span><b>{{$parent.applyPairs}}人</b></li>\r\n\t\t\t\t<li><span>发起时间：</span><b>{{apply.the_time|datetime}}</b></li>\r\n\t\t\t\t<li><span>状态：</span><b class=\"rd\">{{apply.state==100?\"订单完成\":\"进行中...\"}}</b></li>\r\n\t\t\t</ul>\r\n\t\t</a>\r\n\t</div>\r\n</div>\r\n";
+	module.exports = "\r\n<div class=\"rmain\" style=\"background:#26272C;\">\r\n\r\n\t<div class=\"nifo\">\r\n\t\t<ul>\r\n\t\t\t<li><b>DMD币</b><span>{{dmd | currency '￥'}}</span></li>\r\n\t\t\t<li><b>本金总额</b><span>{{$parent.capitalSum | currency '￥'}}</span></li>\r\n\t\t\t<li><b>利息总额</b><span>{{$parent.member.interest|currency '￥'}}</span></li>\r\n\t\t\t<li><b>奖金总额</b><span>{{$parent.bonusSum | currency '￥'}}</span></li>\r\n\t\t</ul>\r\n\t</div>\r\n\r\n\t<div class=\"anniu\">\r\n\t\t<a href=\"\" v-link=\"{name:'offer'}\"><img src=\"/images/btn_bozhong.png\"></a>\r\n\t\t<a href=\"\" v-link=\"{name:'apply'}\"><img src=\"/images/btn_shouhuo.png\"></a>\r\n\t</div>\r\n\r\n\t<div class=\"bzsh\">\r\n\t\t<a href=\"javascript:void(0);\" @click=\"goOffer\" class=\"bs bz\" title=\"查看详情\">\r\n\t\t<i>{{offer?\"正在\":\"等待\"}}播种</i>\r\n\t\t\t<ul v-if=\"offer\">\r\n\t\t\t\t<li><span>金额：</span><b class=\"rd\">{{offer.money|currency '￥'}}</b></li>\r\n\t\t\t\t<li><span>匹配人数：</span><b>{{$parent.offerPairs}}人</b></li>\r\n\t\t\t\t<li><span>发起时间：</span><b>{{offer.the_time|datetime}}</b></li>\r\n\t\t\t\t<li><span>预计收益：</span><b>{{aboutIncome}}</b></li>\r\n\t\t\t\t<li><span>状态：</span><b class=\"rd\">{{offer.state==100?\"订单完成\":\"进行中...\"}}</b></li>\r\n\t\t\t</ul>\r\n\t\t</a>\r\n\t\t<a href=\"javascript:void(0);\" @click=\"goApply\" class=\"bs sh\" title=\"查看详情\">\r\n\t\t<i class=\"i\">{{apply?\"正在\":\"等待\"}}收获</i>\r\n\t\t\t<ul v-if=\"apply\">\r\n\t\t\t\t<li><span>金额：</span><b class=\"rd\">{{apply.money}}</b></li>\r\n\t\t\t\t<li><span>匹配人数：</span><b>{{$parent.applyPairs}}人</b></li>\r\n\t\t\t\t<li><span>发起时间：</span><b>{{apply.the_time|datetime}}</b></li>\r\n\t\t\t\t<li><span>状态：</span><b class=\"rd\">{{apply.state==100?\"订单完成\":\"进行中...\"}}</b></li>\r\n\t\t\t</ul>\r\n\t\t</a>\r\n\t</div>\r\n</div>\r\n";
 
 /***/ },
 /* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
+	__webpack_require__(195)
 	__vue_script__ = __webpack_require__(12)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] app\\components\\offer.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(13)
+	__vue_template__ = __webpack_require__(21)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -3133,72 +3158,339 @@ webpackJsonp([0],[
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	    value: true
 	});
 
 	var _utils = __webpack_require__(7);
 
-	var _api = __webpack_require__(27);
+	var _api = __webpack_require__(13);
 
 	exports.default = {
-		data: function data() {
-			return {
-				model: 0
-			};
-		},
+	    data: function data() {
+	        return {
+	            first: false,
+	            min2Offer: 1000,
+	            model: {
+	                money: 0,
+	                agree: false,
+	                i: 0
+	            },
+	            config2: {
+	                0: 1000,
+	                1: 3000,
+	                2: 5000,
+	                3: 10000,
+	                4: 30000,
+	                5: 50000
+	            }
+	        };
+	    },
 
-		methods: {
-			submit: function submit(evt) {
-				var vm = this;
-				var money = vm.model;
-				if (money > vm.available) (0, _utils.alert2)('你的可提现总额不足，无法提现。');else if (money < 500) (0, _utils.alert2)('提现金额不可小于500元。');else if (money % 100 !== 0) (0, _utils.alert2)('提现金额必须是100的倍数。');else {
-					_api.API.Offer(money).then(function (data) {
-						if (data.isSuccess) {
-							(0, _utils.alert2)('正在提现...');
-						} else {
-							(0, _utils.alert2)(data.error.message);
-						}
-					}).catch(function (err) {
-						console.log(err);
-					});
-				}
-			}
-		},
-		computed: {
-			total: function total() {
-				return 0;
-			},
-			freeze: function freeze() {
-				return 0;
-			},
-			going: function going() {
-				return 0;
-			},
-			available: function available() {
-				return 0;
-			}
-		}
-
+	    methods: {
+	        submit: function submit() {
+	            var vm = this;
+	            if (!vm.model.agree) (0, _utils.alert2)('请先阅读平台提示！');else {
+	                _api.API.Offer(vm.model.money).then(function (data) {
+	                    if (data.isSuccess) {
+	                        (0, _utils.alert2)('恭喜！ 播种成功');
+	                    } else {
+	                        (0, _utils.alert2)(data.error.message);
+	                    }
+	                }).catch(function (err) {
+	                    console.log(err);
+	                });
+	            }
+	        },
+	        select: function select(i) {
+	            var vm = this;
+	            vm.model.i = i;
+	            vm.model.money = vm.config2[i];
+	        }
+	    }
 	};
 
 /***/ },
 /* 13 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "\r\n<div class=\"rmain\">\r\n  <div class=\"applyC\">\r\n  \t<h1><b>我要收获</b></h1>\r\n  \t<h2>请输入收获金额</h2>\r\n  \t<ul>\r\n  \t\t<li><input type=\"number\" class=\"text\" v-model=\"model\" id=\"money\" min=\"500\" max=\"0\" step=\"100\"></li>\r\n  \t\t<li class=\"sm\">\r\n\t\t\t  您的账户总额：{{total|currency '￥'}}元，\r\n\t\t\t  冻结总额：{{freeze|currency '￥'}}元，\r\n\t\t\t  正在提现总额：{{going|currency '￥'}}元，\r\n\t\t\t  可提现总额：{{available|currency '￥'}}元。\r\n\t\t</li>\r\n  \t\t<li class=\"sm\">收获金额最少500元，不能大于账户可用总余额，且必须是100的整倍数。</li>\r\n  \t\t<li><input type=\"button\" class=\"btn\" @click=\"submit\" id=\"apply_help_btn\"></li>\r\n  \t</ul>\r\n  </div>\r\n</div>\r\n";
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.API = undefined;
+	exports.HTTP_POST = HTTP_POST;
+	exports.HTTP_GET = HTTP_GET;
+	exports.HTTP_PUT = HTTP_PUT;
+	exports.HTTP_DELETE = HTTP_DELETE;
+	exports.GET_MEMBER_LOGIN_INFO = GET_MEMBER_LOGIN_INFO;
+	exports.HAS_LOGIN = HAS_LOGIN;
+	exports.GET_MEMBER_INFO = GET_MEMBER_INFO;
+	exports.SET_MEMBER_INFO = SET_MEMBER_INFO;
+
+	var _superagent = __webpack_require__(14);
+
+	var _superagent2 = _interopRequireDefault(_superagent);
+
+	var _q = __webpack_require__(8);
+
+	var _q2 = _interopRequireDefault(_q);
+
+	var _config = __webpack_require__(20);
+
+	var _config2 = _interopRequireDefault(_config);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var API_HOST = 'http://192.168.1.104:3000/api/';
+	var LOGIN_KEY = "member.login.information";
+
+	var API = exports.API = {
+	    News: function News(page) {
+	        return HTTP_GET(_Combine('news/page/', page));
+	    },
+	    NewsSingle: function NewsSingle(id) {
+	        return HTTP_GET(_Combine('news/', id));
+	    },
+	    Messages: function Messages(page) {
+	        var who = GET_MEMBER_LOGIN_INFO();
+	        return HTTP_GET(_Combine('messages/page/', who.memberid, '/', page));
+	    },
+	    MessageSingle: function MessageSingle(id) {
+	        return HTTP_GET(_Combine('message/', id));
+	    },
+	    MessageReplies: function MessageReplies() {
+	        var who = GET_MEMBER_LOGIN_INFO();
+	        return HTTP_GET(_Combine('messages/reply/', who.memberid));
+	    },
+	    PostMsg: function PostMsg(model) {
+	        var who = GET_MEMBER_LOGIN_INFO();
+	        model.member_id = who.memberid;
+	        model.to_member_id = 0;
+	        model.state = 0;
+	        console.log(model);
+	        return HTTP_POST(_Combine('message/action/leavemsg'), model);
+	    },
+	    Login: function Login(model) {
+	        console.log(model);
+	        var deferred = _q2.default.defer();
+	        _config2.default.ajaxRequireToken = false;
+	        HTTP_POST(_Combine('member/signin'), model, true).then(function (data) {
+	            if (data.isSuccess) {
+	                //data.data   { memberid, token}
+	                //save the login info in localStorage
+	                window.localStorage.setItem(LOGIN_KEY, JSON.stringify(data.data));
+	                _config2.default.ajaxRequireToken = true;
+	            }
+	            deferred.resolve(data);
+	        }).catch(function (err) {
+	            deferred.reject(err);
+	        });
+	        return deferred.promise;
+	    },
+	    Logout: function Logout(model) {
+	        var deferred = _q2.default.defer();
+	        HTTP_POST(_Combine('member/signout'), model).then(function (data) {
+	            window.localStorage.removeItem(LOGIN_KEY);
+	            deferred.resolve(data);
+	        }).catch(function (err) {
+	            deferred.reject(err);
+	        });
+	        return deferred.promise;
+	    },
+	    Register: function Register(model) {
+	        var deferred = _q2.default.defer();
+	        _config2.default.ajaxRequireToken = false;
+	        HTTP_POST(_Combine('member/signup'), model).then(function (data) {
+	            window.localStorage.setItem(LOGIN_KEY, data.data);
+	            _config2.default.ajaxRequireToken = true;
+	            deferred.resolve(data);
+	        }).catch(function (err) {
+	            deferred.reject(err);
+	        });
+	        return deferred.promise;
+	    },
+	    Member: function Member(username) {
+	        return HTTP_GET(_Combine('member/', username));
+	    },
+	    ParentMember: function ParentMember(id) {
+	        return HTTP_GET(_Combine('member/info/', id));
+	    },
+	    IndexData: function IndexData() {
+	        var who = GET_MEMBER_LOGIN_INFO();
+	        return HTTP_GET(_Combine('index/info/', who.memberid));
+	    },
+	    EditMemberInfo: function EditMemberInfo(model) {
+	        return HTTP_POST(_Combine('member/edit/info'), model);
+	    },
+	    EditPwd: function EditPwd(model) {
+	        return HTTP_POST(_Combine('member/reset'), model);
+	    },
+	    EditPayPwd: function EditPayPwd(model, mode) {
+	        //mode //  0 通过原始安全密码,  1 通过手机验证码
+	    },
+	    TeamTree: function TeamTree(id) {
+	        //member/children
+	        return HTTP_GET(_Combine('member/children/', id));
+	    },
+	    Offer: function Offer(money) {
+	        var who = GET_MEMBER_LOGIN_INFO();
+	        var model = { money: money, memberid: who.memberid };
+	        return HTTP_POST(_Combine('offer/member'), model);
+	    },
+	    Apply: function Apply(money) {
+	        var who = GET_MEMBER_LOGIN_INFO();
+	        var model = { memberid: who.memberid, money: money };
+	        return HTTP_POST(_Combine('apply/member'), model);
+	    },
+	    TeamScope: function TeamScope(id) {
+	        return HTTP_GET(_Combine('member/children/amount/', id));
+	    },
+	    IncomeRecords: function IncomeRecords(type, page) {
+	        var who = GET_MEMBER_INFO();
+	        return HTTP_GET(_Combine('income/', type, '/', who.id, '/', page));
+	    }
+	};
+
+	//** Utilities
+
+	function _Combine() {
+	    for (var _len = arguments.length, parts = Array(_len), _key = 0; _key < _len; _key++) {
+	        parts[_key] = arguments[_key];
+	    }
+
+	    var len = parts.length;
+	    if (len === 0) throw 'no parts provided';else {
+	        var raw = API_HOST;
+	        for (var i = 0; i < len; i++) {
+	            raw += parts[i];
+	        }
+	        return raw;
+	    }
+	}
+
+	function _HttpErrorHandle_(err) {}
+	//if(err) window.location.href = '/error.html'
+
+
+	//*** Abstract Tools
+
+	function HTTP_POST(url, data) {
+	    console.log('------------post', url);
+	    var deferred = _q2.default.defer();
+	    _superagent2.default.post(url).send(data).end(function (err, res) {
+	        if (err) {
+	            deferred.reject(err);
+	        } else {
+	            deferred.resolve(res.body);
+	        }
+	    });
+	    return deferred.promise;
+	}
+
+	function HTTP_GET(url, data) {
+	    console.log('------------get', url);
+	    var deferred = _q2.default.defer();
+	    _superagent2.default.get(url).timeout(6000).query(data).end(function (err, res) {
+	        if (err) {
+	            _HttpErrorHandle_(err);
+	            deferred.reject("error");
+	        } else {
+	            deferred.resolve(res.body);
+	        }
+	    });
+	    return deferred.promise;
+	}
+
+	function HTTP_PUT(url, data) {
+	    console.log('--------------put', url);
+	    var deferred = _q2.default.defer();
+	    _superagent2.default.put(url).send(data).end(function (err, res) {
+	        if (err) {
+	            deferred.reject("error");
+	        } else {
+	            deferred.resolve(res.body);
+	        }
+	    });
+	    return deferred.promise;
+	}
+
+	function HTTP_DELETE(url, data) {
+	    console.log('delete', url);
+	    var deferred = _q2.default.defer();
+	    _superagent2.default.del(url).send(data).end(function (err, res) {
+	        if (err) {
+	            deferred.reject("error");
+	        } else {
+	            deferred.resolve(res.body);
+	        }
+	    });
+	    return deferred.promise;
+	}
+
+	//** LocalStrorage  & Member Info
+
+	var MEMBER_INFO = {};
+
+	//取会员登录时保存在LocalStorage中的值
+	function GET_MEMBER_LOGIN_INFO() {
+	    var who = window.localStorage.getItem(LOGIN_KEY);
+	    if (!who) throw "no member login";
+	    who = JSON.parse(who);
+	    return who;
+	}
+
+	function HAS_LOGIN() {
+	    var who = window.localStorage.getItem(LOGIN_KEY);
+	    if (!who) return false;else return true;
+	}
+
+	//取当前会员信息
+	function GET_MEMBER_INFO() {
+	    if (MEMBER_INFO && MEMBER_INFO.id) return MEMBER_INFO;else throw "no member info provided.";
+	}
+
+	function SET_MEMBER_INFO(value) {
+	    MEMBER_INFO = value;
+	}
 
 /***/ },
-/* 14 */
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = {
+	    ajaxRequireToken: true,
+	    pageSize: 12
+	};
+
+/***/ },
+/* 21 */
+/***/ function(module, exports) {
+
+	module.exports = "\n  <div>\n  <div class=\"rmain\">\n      <div class=\"offerC\">\n          <h1><b>我要播种</b></h1>\n          <h2>请选择播种金额</h2>\n\n          <ul v-if=\"first\">\n              <li>\n                  <a href=\"javascript:;\" class=\"money on\" @click=\"select(0)\">\n                      <span>{{config2[0]}}</span>\n                      首次购买激活币\n                  </a>\n              </li>\n          </ul>\n\n          <ul v-if=\"!first\">\n              <li>\n                  <a href=\"javascript:;\" class=\"money\"  :class=\"{'on': model.i == 0}\"  @click=\"select(0)\"><span>{{config2[0]}}</span></a>\n              </li>\n\n              <li>\n                  <a href=\"javascript:;\" class=\"money\" :class=\"{'on': model.i == 1}\"  @click=\"select(1)\"><span>{{config2[1]}}</span></a>\n                  <a href=\"javascript:;\" class=\"money\" :class=\"{'on': model.i == 2}\"   @click=\"select(2)\"><span>{{config2[2]}}</span></a>\n              </li>\n\n              <li>\n                  <a href=\"javascript:;\" class=\"money\" :class=\"{'on': model.i == 3}\"   @click=\"select(3)\"><span>{{config2[3]}}</span></a>\n                  <a href=\"javascript:;\" class=\"money\" :class=\"{'on': model.i == 4}\"   @click=\"select(4)\"><span>{{config2[4]}}</span></a>\n                  <a href=\"javascript:;\" class=\"money\" :class=\"{'on': model.i == 5}\"   @click=\"select(5)\"><span>{{config2[5]}}</span></a>\n              </li>\n          </ul>\n\n          <ul>\n              <li class=\"sm\">\n                  <strong class=\"tips\">平台提示：</strong>\n                  本平台只提供大家一个信息交流的渠道，平台不收取任何费用，资金在会员中流转，闲钱互助，风险自控！请在自愿的前提下完成交易。\n                  <br/><br/>\n                  <br/>\n                  <label class=\"agree_label\"><input type=\"checkbox\" v-model=\"model.agree\" class=\"agree\">我已阅读并同意</label>\n              </li>\n              <li>\n                  <input type=\"button\" class=\"btn\" id=\"offer_help_btn\" @click=\"submit\">\n              </li>\n          </ul>\n      </div>\n  </div>\n</div>\n";
+
+/***/ },
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__webpack_require__(15)
-	__vue_script__ = __webpack_require__(19)
+	__vue_script__ = __webpack_require__(27)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] app\\components\\apply.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(22)
+	__vue_template__ = __webpack_require__(30)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -3217,47 +3509,9 @@ webpackJsonp([0],[
 	})()}
 
 /***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(16);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(18)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./apply.vue", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./apply.vue");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(17)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.tips {\n    width: 92%;\n    margin: auto;\n    margin-bottom: 5px;\n    text-align: left;\n    font-size: 18px;\n    color: #FCC006;\n}\n\n.agree_label {\n    font-size: 18px;\n    color: #fff;\n}\n\n.agree_label .agree {\n    width: 20px;\n    height: 20px;\n}\n\n.agree_label .agree:checked {\n    -webkit-appearance: none;\n    background: #49A2DC url(/images/admin/checkbox_ed.png) no-repeat center center;\n    background-size: 100%;\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 17 */
+/* 23 */,
+/* 24 */,
+/* 25 */
 /***/ function(module, exports) {
 
 	/*
@@ -3313,7 +3567,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 18 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -3535,72 +3789,70 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 19 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+		value: true
 	});
 
-	var _getters = __webpack_require__(20);
+	var _utils = __webpack_require__(7);
 
-	var _actions = __webpack_require__(21);
+	var _api = __webpack_require__(13);
 
 	exports.default = {
-	    vuex: {
-	        getters: {
-	            getName: _getters.getName
-	        },
-	        actions: {
-	            changeName: _actions.changeName
-	        }
-	    }
+		data: function data() {
+			return {
+				model: 0
+			};
+		},
+
+		methods: {
+			submit: function submit(evt) {
+				var vm = this;
+				var money = vm.model;
+				var min = vm.config3.min;
+				var time = vm.config3.time;
+
+				if (money > vm.available) (0, _utils.alert2)('你的可提现总额不足，无法提现。');else if (money < min) (0, _utils.alert2)('提现金额不可小于' + min + '元。');else if (money % time !== 0) (0, _utils.alert2)('提现金额必须是' + time + '的倍数。');else {
+					_api.API.Apply(money).then(function (data) {
+						if (data.isSuccess) {
+							(0, _utils.alert2)('正在提现...');
+						} else {
+							(0, _utils.alert2)(data.error.message);
+						}
+					}).catch(function (err) {
+						console.log(err);
+					});
+				}
+			}
+		},
+		computed: {
+			config3: function config3() {
+				var p = this.$parent;
+				var cfg = p.config3.val.split('-');
+				return { min: cfg[0], time: cfg[1] };
+			}
+		}
+
 	};
 
 /***/ },
-/* 20 */
+/* 28 */,
+/* 29 */,
+/* 30 */
 /***/ function(module, exports) {
 
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.getName = getName;
-	function getName(state) {
-	    return state.name;
-	}
+	module.exports = "\r\n<div class=\"rmain\">\r\n  <div class=\"applyC\">\r\n  \t<h1><b>我要收获</b></h1>\r\n  \t<h2>请输入收获金额</h2>\r\n  \t<ul>\r\n  \t\t<li><input type=\"number\" class=\"text\" v-model=\"model\" step=\"\" id=\"money\"></li>\r\n  \t\t<li class=\"sm\">\r\n\t\t\t  您的账户总额：{{$parent.total | currency '￥'}}元，\r\n\t\t\t  冻结总额：{{$parent.freeze | currency '￥'}}元，\r\n\t\t\t  正在提现总额：{{$parent.money_apply | currency '￥'}}元，\r\n\t\t\t  可提现总额：{{$parent.available | currency '￥'}}元。\r\n\t\t</li>\r\n  \t\t<li class=\"sm\">收获金额最少{{config3.min | currency '￥'}}元，不能大于账户可用总余额，且必须是{{config3.time}}的整倍数。</li>\r\n  \t\t<li><input type=\"button\" class=\"btn\" @click=\"submit\" id=\"apply_help_btn\"></li>\r\n  \t</ul>\r\n  </div>\r\n</div>\r\n";
 
 /***/ },
-/* 21 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var changeName = exports.changeName = function changeName(_ref) {
-	    var dispatch = _ref.dispatch;
-	    var state = _ref.state;
-
-	    dispatch('CHANGENAME', 1);
-	};
-
-/***/ },
-/* 22 */
-/***/ function(module, exports) {
-
-	module.exports = "\n  <div>\n      <button @click=\"changeName\">XXXX</button>\n      {{getName}}\n  <div class=\"rmain\">\n      <div class=\"offerC\">\n          <h1><b>我要播种</b></h1>\n          <h2>请选择播种金额</h2>\n          <ul>\n              <li>\n                  <a href=\"javascript:;\" class=\"money\" data-i=\"0\">\n                      <span>1000</span> 首次购买激活币\n                  </a>\n              </li>\n              <dd class=\"tips\">平台提示：</dd>\n              <li class=\"sm\">本平台只提供大家一个信息交流的渠道，平台不收取任何费用，资金在会员中流转，闲钱互助，风险自控！请在自愿的前提下完成交易。</li>\n              <center>\n                  <label class=\"agree_label\">\n                      <input type=\"checkbox\" class=\"agree\"> 我已阅读并同意</label>\n              </center>\n              <br>\n              <br>\n              <li>\n                  <input type=\"button\" class=\"btn\" id=\"offer_help_btn\" value=\" \">\n              </li>\n          </ul>\n      </div>\n  </div>\n</div>\n";
-
-/***/ },
-/* 23 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(24)
+	__vue_script__ = __webpack_require__(32)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
@@ -3624,7 +3876,7 @@ webpackJsonp([0],[
 	})()}
 
 /***/ },
-/* 24 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3637,13 +3889,13 @@ webpackJsonp([0],[
 
 	var _vue2 = _interopRequireDefault(_vue);
 
-	var _vueValidator = __webpack_require__(25);
+	var _vueValidator = __webpack_require__(33);
 
 	var _vueValidator2 = _interopRequireDefault(_vueValidator);
 
-	var _constants = __webpack_require__(26);
+	var _constants = __webpack_require__(34);
 
-	var _api = __webpack_require__(27);
+	var _api = __webpack_require__(13);
 
 	var _utils = __webpack_require__(7);
 
@@ -3728,8 +3980,8 @@ webpackJsonp([0],[
 	};
 
 /***/ },
-/* 25 */,
-/* 26 */
+/* 33 */,
+/* 34 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -3740,251 +3992,6 @@ webpackJsonp([0],[
 	var MsgTypes = exports.MsgTypes = [{ value: 'complaint', text: '意见或建议' }, { value: 'ask', text: '信息咨询' }, { value: 'thaw', text: '申请账号解冻' }, { value: 'report', text: '投诉举报' }];
 
 	var Banks = exports.Banks = [{ value: 'ccb', text: '中国建设银行' }, { value: 'abc', text: '中国农业银行' }, { value: 'icbc', text: '中国工商银行' }, { value: 'boc', text: '中国银行' }, { value: 'psbc', text: '中国邮政银行' }, { value: 'bmc', text: '中国交通银行' }, { value: 'cmb', text: '中国招商银行' }, { value: 'cmbc', text: '中国民生银行' }, { value: 'cib', text: '中国兴业银行' }, { value: 'ceb', text: '中国光大银行' }, { value: 'other', text: '其它银行（写在分行前）' }];
-
-/***/ },
-/* 27 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.API = exports.LOGIN_KEY = undefined;
-	exports.HTTP_POST = HTTP_POST;
-	exports.HTTP_GET = HTTP_GET;
-	exports.HTTP_PUT = HTTP_PUT;
-	exports.HTTP_DELETE = HTTP_DELETE;
-	exports.GET_MEMBER_LOGIN_INFO = GET_MEMBER_LOGIN_INFO;
-	exports.HAS_LOGIN = HAS_LOGIN;
-	exports.GET_MEMBER_INFO = GET_MEMBER_INFO;
-	exports.SET_MEMBER_INFO = SET_MEMBER_INFO;
-
-	var _superagent = __webpack_require__(28);
-
-	var _superagent2 = _interopRequireDefault(_superagent);
-
-	var _q = __webpack_require__(8);
-
-	var _q2 = _interopRequireDefault(_q);
-
-	var _config = __webpack_require__(34);
-
-	var _config2 = _interopRequireDefault(_config);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var API_HOST = 'http://192.168.1.102:3000/api/';
-	var LOGIN_KEY = exports.LOGIN_KEY = "member.login.information";
-
-	var API = exports.API = {
-	    News: function News(page) {
-	        return HTTP_GET(_Combine('news/page/', page));
-	    },
-	    NewsSingle: function NewsSingle(id) {
-	        return HTTP_GET(_Combine('news/', id));
-	    },
-	    Messages: function Messages(page) {
-	        var who = GET_MEMBER_LOGIN_INFO();
-	        return HTTP_GET(_Combine('messages/page/', who.memberid, '/', page));
-	    },
-	    MessageSingle: function MessageSingle(id) {
-	        return HTTP_GET(_Combine('message/', id));
-	    },
-	    MessageReplies: function MessageReplies() {
-	        var who = GET_MEMBER_LOGIN_INFO();
-	        return HTTP_GET(_Combine('messages/reply/', who.memberid));
-	    },
-	    PostMsg: function PostMsg(model) {
-	        var who = GET_MEMBER_LOGIN_INFO();
-	        model.member_id = who.memberid;
-	        model.to_member_id = 0;
-	        model.state = 0;
-	        console.log(model);
-	        return HTTP_POST(_Combine('message/action/leavemsg'), model);
-	    },
-	    Login: function Login(model) {
-	        console.log(model);
-	        var deferred = _q2.default.defer();
-	        _config2.default.ajaxRequireToken = false;
-	        HTTP_POST(_Combine('member/signin'), model, true).then(function (data) {
-	            if (data.isSuccess) {
-	                //data.data   { memberid, token}
-	                //save the login info in localStorage
-	                window.localStorage.setItem(LOGIN_KEY, JSON.stringify(data.data));
-	                _config2.default.ajaxRequireToken = true;
-	            }
-	            deferred.resolve(data);
-	        }).catch(function (err) {
-	            deferred.reject(err);
-	        });
-	        return deferred.promise;
-	    },
-	    Logout: function Logout(model) {
-	        var deferred = _q2.default.defer();
-	        HTTP_POST(_Combine('member/signout'), model).then(function (data) {
-	            window.localStorage.removeItem(LOGIN_KEY);
-	            deferred.resolve(data);
-	        }).catch(function (err) {
-	            deferred.reject(err);
-	        });
-	        return deferred.promise;
-	    },
-	    Register: function Register(model) {
-	        var deferred = _q2.default.defer();
-	        _config2.default.ajaxRequireToken = false;
-	        HTTP_POST(_Combine('member/signup'), model).then(function (data) {
-	            window.localStorage.setItem(LOGIN_KEY, data.data);
-	            _config2.default.ajaxRequireToken = true;
-	            deferred.resolve(data);
-	        }).catch(function (err) {
-	            deferred.reject(err);
-	        });
-	        return deferred.promise;
-	    },
-	    Member: function Member(username) {
-	        return HTTP_GET(_Combine('member/', username));
-	    },
-	    ParentMember: function ParentMember(id) {
-	        return HTTP_GET(_Combine('member/info/', id));
-	    },
-	    IndexData: function IndexData() {
-	        var who = GET_MEMBER_LOGIN_INFO();
-	        return HTTP_GET(_Combine('index/info/', who.memberid));
-	    },
-	    EditMemberInfo: function EditMemberInfo(model) {
-	        return HTTP_POST(_Combine('member/edit/info'), model);
-	    },
-	    EditPwd: function EditPwd(model) {
-	        return HTTP_POST(_Combine('member/reset'), model);
-	    },
-	    EditPayPwd: function EditPayPwd(model, mode) {
-	        //mode //  0 通过原始安全密码,  1 通过手机验证码
-	    },
-	    TeamTree: function TeamTree(id) {
-	        //member/children
-	        return HTTP_GET(_Combine('member/children/', id));
-	    },
-	    Offer: function Offer(money) {
-	        var model = { money: money };
-	        return HTTP_POST(_Combine('offer'), model);
-	    },
-	    TeamScope: function TeamScope(id) {
-	        return HTTP_GET(_Combine('member/children/amount/', id));
-	    }
-	};
-
-	//** Utilities
-
-	function _Combine() {
-	    if (arguments.length === 0) return API_HOST;else {
-	        var len = arguments.length;
-	        var raw = API_HOST;
-	        for (var i = 0; i < len; i++) {
-	            raw += arguments[i];
-	        }
-	        return raw;
-	    }
-	}
-
-	//*** Abstract Tools
-
-	function HTTP_POST(url, data) {
-	    console.log('------------post', url);
-	    var deferred = _q2.default.defer();
-	    _superagent2.default.post(url).send(data).end(function (err, res) {
-	        if (err) {
-	            deferred.reject(err);
-	        } else {
-	            deferred.resolve(res.body);
-	        }
-	    });
-	    return deferred.promise;
-	}
-
-	function HTTP_GET(url, data) {
-	    console.log('------------get', url);
-	    var deferred = _q2.default.defer();
-	    _superagent2.default.get(url).timeout(6000).query(data).on('error', function (err) {}).end(function (err, res) {
-	        if (err) {
-	            deferred.reject("error");
-	        } else {
-	            deferred.resolve(res.body);
-	        }
-	    });
-	    return deferred.promise;
-	}
-
-	function HTTP_PUT(url, data) {
-	    console.log('--------------put', url);
-	    var deferred = _q2.default.defer();
-	    _superagent2.default.put(url).send(data).end(function (err, res) {
-	        if (err) {
-	            deferred.reject("error");
-	        } else {
-	            deferred.resolve(res.body);
-	        }
-	    });
-	    return deferred.promise;
-	}
-
-	function HTTP_DELETE(url, data) {
-	    console.log('delete', url);
-	    var deferred = _q2.default.defer();
-	    _superagent2.default.del(url).send(data).end(function (err, res) {
-	        if (err) {
-	            deferred.reject("error");
-	        } else {
-	            deferred.resolve(res.body);
-	        }
-	    });
-	    return deferred.promise;
-	}
-
-	//** LocalStrorage  & Member Info
-
-	var MEMBER_INFO = {};
-
-	//取会员登录时保存在LocalStorage中的值
-	function GET_MEMBER_LOGIN_INFO() {
-	    var who = window.localStorage.getItem(LOGIN_KEY);
-	    if (!who) throw "no member login";
-	    who = JSON.parse(who);
-	    return who;
-	}
-
-	function HAS_LOGIN() {
-	    var who = window.localStorage.getItem(LOGIN_KEY);
-	    if (!who) return false;else return true;
-	}
-
-	//取当前会员信息
-	function GET_MEMBER_INFO() {
-	    if (MEMBER_INFO && MEMBER_INFO.id) return MEMBER_INFO;else throw "no member info provided.";
-	}
-
-	function SET_MEMBER_INFO(value) {
-	    MEMBER_INFO = value;
-	}
-
-/***/ },
-/* 28 */,
-/* 29 */,
-/* 30 */,
-/* 31 */,
-/* 32 */,
-/* 33 */,
-/* 34 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = {
-	    ajaxRequireToken: true
-	};
 
 /***/ },
 /* 35 */
@@ -4165,7 +4172,7 @@ webpackJsonp([0],[
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] app\\components\\team.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(42)
+	__vue_template__ = __webpack_require__(47)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -4193,11 +4200,11 @@ webpackJsonp([0],[
 		value: true
 	});
 
-	var _api = __webpack_require__(27);
+	var _api = __webpack_require__(13);
 
 	var _utils = __webpack_require__(7);
 
-	var _teamtree = __webpack_require__(190);
+	var _teamtree = __webpack_require__(42);
 
 	var _teamtree2 = _interopRequireDefault(_teamtree);
 
@@ -4266,22 +4273,192 @@ webpackJsonp([0],[
 
 /***/ },
 /* 42 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "\n<div class=\"rmain\">\n\t<div class=\"teamC\">\n\t\t<h1><b>我的团队</b></h1>\n\t\t<div class=\"sad\">\n\t\t\t<a href=\"javascript:;\" :class=\"{'on':tab == 1}\" @click=\"tab = 1\">我的团队</a>\n\t\t\t<a href=\"javascript:;\" :class=\"{'on':tab == 2}\" @click=\"tab = 2\">申请升级</a>\n\t\t</div>\n\t\t<ul class=\"u1\" v-show=\"tab == 1\">\n\t\t\t<h2>\n\t\t\t<span>团队总人数：<b>{{$parent.teamScope}}人</b></span>\n\t\t\t<span>直推人数：<b>{{rootChildrenCount}}人</b></span>\n\t\t\t<!--<span>有效会员人数：<b>0人</b></span>\n\t\t\t<span>无效会员人数：<b>0人</b></span>-->\n\t\t\t<!--span>团队总挂单金额：<b>0.00元</b></span-->\n\t\t\t<!--span>团队已完成打款金额：<b>0.00元</b></span-->\n\t\t\t</h2>\n\n\t\t\t<table>\n\t\t\t\t<thead>\n\t\t\t\t\t<tr>\n\t\t\t\t\t\t<th>编号</th>\n\t\t\t\t\t\t<th>会员手机</th>\n\t\t\t\t\t\t<th>会员昵称</th>\n\t\t\t\t\t\t<th>注册时间</th>\n\t\t\t\t\t\t<th>下级人数</th>\n\t\t\t\t\t\t<th>状态</th>\n\t\t\t\t\t\t<th>操作</th>\n\t\t\t\t\t</tr>\n\t\t\t\t</thead>\n\t\t\t\t<tbody>\n\t\t\t\t\t<tr v-if=\"currentModel.id\">\n\t\t\t\t\t\t<td>DMD{{currentModel.id}}18636967</td>\n\t\t\t\t\t\t<td>{{currentModel.mobile}}</td>\n\t\t\t\t\t\t<td :style=\"{color: currentModel.ok == 1?'#0f0':'#F1AF36'}\">{{currentModel.nickname}}</td>\n\t\t\t\t\t\t<td>{{currentModel.reg_time|datetime}}</td>\n\t\t\t\t\t\t<td>{{childrenCount}}</td>\n\t\t\t\t\t\t<td :style=\"{color: currentModel.state == 1 ? '#01CCCC':'f00'}\">\n\t\t\t\t\t\t\t{{currentModel.state == 1 ? \"正常\":\"冻结\"}}\n\t\t\t\t\t\t</td>\n\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t<a href=\"/?act=team&id=<?php echo $val['id']; ?>\" class=\"see\">查看</a>\n\n\t\t\t\t\t\t</td>\n\t\t\t\t\t</tr>\n\t\t\t\t</tbody>\n\t\t\t</table>\n\n\t\t\t<ul style=\"padding: 8px 0 0 35px;\">\n\t\t\t\t<item class=\"item\" :model=\"treeData\" :from=\"whoid\">\n\t\t\t\t</item>\n\t\t\t</ul>\n\n\t\t</ul>\n\n\t\t<ul class=\"u2\" v-show=\"tab == 2\">\n\t\t\t<li>推荐1位，晋升M1（一级会员），可获1代收益</li>\n\t\t\t<li>推荐2位，晋升M2（二级会员），可获2代收益</li>\n\t\t\t<li>推荐5位，晋升M3（三级会员），可获3代收益</li>\n\t\t\t<li>推荐15位，团队100人，晋升M4（四级会员），可获4代收益</li>\n\t\t\t<li>推荐15位，团队100人，晋升高级经理，可获无限代收益</li>\n\t\t\t<li>\n\t\t\t\t<a href=\"javascript:;\" class=\"btn\" id=\"team_apply_btn\">申请升级</a></li>\n\t\t\t<li class=\"imgli\">\n\t\t\t\t<br><img src=\"/images/team.png\"></li>\n\t\t</ul>\n\t</div>\n\n\t\n\n</div>\n";
+	var __vue_script__, __vue_template__
+	__webpack_require__(43)
+	__vue_script__ = __webpack_require__(45)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] app\\components\\teamtree.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(46)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "./teamtree.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
 
 /***/ },
 /* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(44);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(26)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./teamtree.vue", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./teamtree.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 44 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(25)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.item {\n}\n\n.item div {\n    color: white;\n    font-size: 16px;\n}\n\n.item-self{\n    color: #efefef;\n    height: 45px;\n    line-height: 45px;\n}\n\n.item-name{color:#ddd; padding:0 8px;}\n\n.item-plus-minus{margin:0 5px;color:#fff;cursor: pointer;}\n\n.item-children{ padding-left: 3em; line-height: 1.5em;  list-style-type: dot; margin-top: 2px !important;}\n\n.bold { font-weight: bold; }\n\n.bold > span {color:#fff;}\n.item{}\n.item > ul{}\n\n.female,.male{display:inline-block;width:32px;height:32px;}\n.male{background: url('/images/icons/male.png')}\n.female{background: url('/images/icons/female.png')}\n\n.item-detail{color:#FEC107}\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 45 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _vue = __webpack_require__(1);
+
+	var _vue2 = _interopRequireDefault(_vue);
+
+	var _api = __webpack_require__(13);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _vue2.default.component('item', {
+	    template: '#item-template',
+	    props: {
+	        model: Object,
+	        from: Number
+	    },
+	    data: function data() {
+	        return {
+	            open: true
+	        };
+	    },
+	    computed: {
+	        isFolder: function isFolder() {
+	            return this.model.children && this.model.children.length;
+	        }
+	    },
+	    methods: {
+	        itemClick: function itemClick(model, e) {
+	            e.stopPropagation();
+
+	            console.log('item click');
+	            console.log(model.id);
+
+	            if (model.children) return;else {
+
+	                _vue2.default.set(model, 'children', []);
+
+	                _api.API.TeamTree(model.id).then(function (data) {
+	                    if (data.isSuccess) {
+	                        if (data.data.length > 0) {
+	                            var children = data.data.map(function (d) {
+	                                return {
+	                                    name: d.truename,
+	                                    id: d.id,
+	                                    sex: d.sex,
+	                                    mobile: d.username,
+	                                    nickname: d.nickname,
+	                                    ok: d.ok
+	                                };
+	                            });
+
+	                            model.children = children;
+	                            this.open = true;
+	                        }
+	                    } else {
+	                        alert2(data.error.message);
+	                    }
+	                });
+	            }
+	        },
+	        toggle: function toggle() {
+	            console.log('toggle');
+	            if (this.isFolder) {
+	                this.open = !this.open;
+	            }
+	        },
+	        changeType: function changeType() {
+	            console.log('change type');
+	            if (!this.isFolder) {
+	                _vue2.default.set(this.model, 'children', []);
+	                this.addChild();
+	                this.open = true;
+	            }
+	        },
+	        addChild: function addChild() {
+	            this.model.children.push({
+	                name: 'new stuff'
+	            });
+	        },
+	        viewDetail: function viewDetail(model, e) {
+	            e.stopPropagation();
+	            console.log(model);
+	            this.$dispatch('on-detail-click', model);
+	        }
+	    }
+	});
+
+/***/ },
+/* 46 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<li>\n    <div :class=\"{bold: isFolder}\" class=\"item-self\"  @click=\"toggle\">\n        <i class=\"{{model.sex == 1 ? 'female':'male'}}\"></i>\n        <span class=\"item-name\">{{model.name}} - {{model.mobile}}</span>\n        <span class=\"item-plus-minus\" v-if=\"isFolder\">[{{open ? ' - ' : ' + '}}]</span>\n        <span class=\"item-plus-minus\" v-else>[ ? ]</span>\n        <a href=\"javascript:;\" class=\"item-detail\" @click=\"viewDetail(model,$event)\">详细</a>\n    </div>\n    <ul class=\"item-children\" v-show=\"open\" v-if=\"isFolder\">\n        <item class=\"item\" v-for=\"model in model.children\" :model=\"model\" @click=\"itemClick(model, $event)\">\n        </item>\n    </ul>\n</li>\n";
+
+/***/ },
+/* 47 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"rmain\">\n\t<div class=\"teamC\">\n\t\t<h1><b>我的团队</b></h1>\n\t\t<div class=\"sad\">\n\t\t\t<a href=\"javascript:;\" :class=\"{'on':tab == 1}\" @click=\"tab = 1\">我的团队</a>\n\t\t\t<a href=\"javascript:;\" :class=\"{'on':tab == 2}\" @click=\"tab = 2\">申请升级</a>\n\t\t</div>\n\t\t<ul class=\"u1\" v-show=\"tab == 1\">\n\t\t\t<h2>\n\t\t\t<span>团队总人数：<b>{{$parent.teamScope}}人</b></span>\n\t\t\t<span>直推人数：<b>{{rootChildrenCount}}人</b></span>\n\t\t\t<!--<span>有效会员人数：<b>0人</b></span>\n\t\t\t<span>无效会员人数：<b>0人</b></span>-->\n\t\t\t<!--span>团队总挂单金额：<b>0.00元</b></span-->\n\t\t\t<!--span>团队已完成打款金额：<b>0.00元</b></span-->\n\t\t\t</h2>\n\n\t\t\t<table>\n\t\t\t\t<thead>\n\t\t\t\t\t<tr>\n\t\t\t\t\t\t<th>编号</th>\n\t\t\t\t\t\t<th>会员手机</th>\n\t\t\t\t\t\t<th>会员昵称</th>\n\t\t\t\t\t\t<th>注册时间</th>\n\t\t\t\t\t\t<th>下级人数</th>\n\t\t\t\t\t\t<th>状态</th>\n\t\t\t\t\t\t<th>操作</th>\n\t\t\t\t\t</tr>\n\t\t\t\t</thead>\n\t\t\t\t<tbody>\n\t\t\t\t\t<tr v-if=\"currentModel.id\">\n\t\t\t\t\t\t<td>DMD{{currentModel.id}}18636967</td>\n\t\t\t\t\t\t<td>{{currentModel.mobile}}</td>\n\t\t\t\t\t\t<td :style=\"{color: currentModel.ok == 1?'#0f0':'#F1AF36'}\">{{currentModel.nickname}}</td>\n\t\t\t\t\t\t<td>{{currentModel.reg_time|datetime}}</td>\n\t\t\t\t\t\t<td>{{childrenCount}}</td>\n\t\t\t\t\t\t<td :style=\"{color: currentModel.state == 1 ? '#01CCCC':'f00'}\">\n\t\t\t\t\t\t\t{{currentModel.state == 1 ? \"正常\":\"冻结\"}}\n\t\t\t\t\t\t</td>\n\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t<a href=\"/?act=team&id=<?php echo $val['id']; ?>\" class=\"see\">查看</a>\n\n\t\t\t\t\t\t</td>\n\t\t\t\t\t</tr>\n\t\t\t\t</tbody>\n\t\t\t</table>\n\n\t\t\t<ul style=\"padding: 8px 0 0 35px;\">\n\t\t\t\t<item class=\"item\" :model=\"treeData\" :from=\"whoid\">\n\t\t\t\t</item>\n\t\t\t</ul>\n\n\t\t</ul>\n\n\t\t<ul class=\"u2\" v-show=\"tab == 2\">\n\t\t\t<li>推荐1位，晋升M1（一级会员），可获1代收益</li>\n\t\t\t<li>推荐2位，晋升M2（二级会员），可获2代收益</li>\n\t\t\t<li>推荐5位，晋升M3（三级会员），可获3代收益</li>\n\t\t\t<li>推荐15位，团队100人，晋升M4（四级会员），可获4代收益</li>\n\t\t\t<li>推荐15位，团队100人，晋升高级经理，可获无限代收益</li>\n\t\t\t<li>\n\t\t\t\t<a href=\"javascript:;\" class=\"btn\" id=\"team_apply_btn\">申请升级</a></li>\n\t\t\t<li class=\"imgli\">\n\t\t\t\t<br><img src=\"/images/team.png\"></li>\n\t\t</ul>\n\t</div>\n\n\t\n\n</div>\n";
+
+/***/ },
+/* 48 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var __vue_script__, __vue_template__
-	__webpack_require__(44)
-	__vue_script__ = __webpack_require__(46)
+	__webpack_require__(49)
+	__vue_script__ = __webpack_require__(51)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] app\\components\\income.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(47)
+	__vue_template__ = __webpack_require__(52)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -4300,16 +4477,16 @@ webpackJsonp([0],[
 	})()}
 
 /***/ },
-/* 44 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(45);
+	var content = __webpack_require__(50);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(18)(content, {});
+	var update = __webpack_require__(26)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -4326,56 +4503,111 @@ webpackJsonp([0],[
 	}
 
 /***/ },
-/* 45 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(17)();
+	exports = module.exports = __webpack_require__(25)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.allzichan{text-align:center; position:relative; top:-23px; font-size:16px; color:#FEC107; }\r\n.allzichan i{margin-left:3%; font-size:16px; color:#fff; }\r\n#page{width:800px; margin:auto; margin-top:25px; padding-bottom:25px; text-align:center; }\r\n#page a{font-size:20px; color:#999; margin-left:50px; }\r\n#page a:hover{color:#fff; }\r\n", ""]);
+	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.allzichan{text-align:center; position:relative; top:-23px; font-size:16px; color:#FEC107; }\r\n.allzichan i{margin-left:3%; font-size:16px; color:#fff; }\r\n#page{width:800px; margin:auto; margin-top:25px; padding-bottom:25px; text-align:center; }\r\n#page a{font-size:20px; color:#999; margin-left:50px; }\r\n#page a:hover{color:#fff; }\r\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 46 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+		value: true
 	});
 
-	var _getters = __webpack_require__(20);
+	var _pagination = __webpack_require__(58);
+
+	var _pagination2 = _interopRequireDefault(_pagination);
+
+	var _api = __webpack_require__(13);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = {
-	    vuex: {
-	        getters: {
-	            getName: _getters.getName
-	        }
-	    }
+		data: function data() {
+			return {
+				tab: 0,
+				model0: [],
+				model1: [],
+				model2: [],
+				pageCfg: {
+					p0: 1,
+					p1: 1,
+					p2: 1,
+					t0: 0,
+					t1: 0,
+					t2: 0
+				}
+			};
+		},
+
+		components: { pagination: _pagination2.default },
+		route: {
+			data: function data(transition) {
+				this.load('money', this.pageCfg.p0, 0);
+				transition.next();
+			}
+		},
+		methods: {
+			load: function load(type, page, flag) {
+				var vm = this;
+				_api.API.IncomeRecords(type, page).then(function (data) {
+					if (data.isSuccess) {
+						var d = data.data;
+						vm.$set('model' + flag, d.rows);
+						vm.$set('pageCfg.p' + flag, page);
+						vm.$set('pageCfg.t' + flag, d.count);
+					} else {
+						alert2(data.error.message);
+					}
+				});
+			},
+			tabClick: function tabClick(type, i) {
+				this.tab = i;
+				this.load(type, this.pageCfg['p' + i], i);
+			}
+		},
+		events: {
+			'on-page-changed0': function onPageChanged0(page) {
+				this.load('money', page, 0);
+			},
+			'on-page-changed1': function onPageChanged1(page) {
+				this.load('interest', page, 1);
+			},
+			'on-page-changed2': function onPageChanged2(page) {
+				this.load('bonus', page, 2);
+			}
+		}
 	};
 
 /***/ },
-/* 47 */
+/* 52 */
 /***/ function(module, exports) {
 
-	module.exports = "\r\n<div class=\"rmain\">\r\n<div class=\"incomeC\">\r\n\t<h1><b>我的资产</b></h1>\r\n\t<h2 class=\"allzichan\">\r\n\t\t<i>账户总资产：</i>￥32484.00\r\n\t\t<i>账户冻结总资产：</i>￥31284.00\r\n\t\t<i>账户正在提现总资产：</i>￥0.00\r\n\t\t<i>账户可提现总资产：</i>￥1200.00\r\n\t</h2>\r\n\t<div class=\"sad\">\r\n\t\t<a href=\"javascript:;\" class=\"on\" data-i=\"1\">本 金</a>\r\n\t\t<a href=\"javascript:;\" data-i=\"2\">利 息</a>\r\n\t\t<a href=\"javascript:;\" data-i=\"3\">团队奖励</a>\r\n\t\t<span style=\"position:relative;top:90px;float:right;color:#ccc;\">提现说明：首先扣除可提团队奖，不够再扣利息，利息不够再扣可提本金。</span>\r\n\t</div>\r\n\t<ul class=\"u1\">\r\n\t\t<h2>\r\n\t\t\t<span>本金总额：<b>￥31000.00</b></span>\r\n\t\t\t<span>本金冻结总额：<b>￥31000.00</b></span>\r\n\t\t\t<span>本金可提现总额：<b>￥0.00</b></span>\r\n\t\t</h2>\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>说明</th>\r\n\t\t\t\t\t<th>时间</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>30000.00</td>\r\n\t\t\t\t\t<td>成功播种￥30000.00元，本金将在冻结8天后自动收入现金余额</td>\r\n\t\t\t\t\t<td>2016-06-11 21:50:59</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr style=\"background: rgb(58, 59, 63);\">\r\n\t\t\t\t\t<td>1000.00</td>\r\n\t\t\t\t\t<td>成功购买激活币￥1000.00元，本金将在冻结30天后自动收入现金余额</td>\r\n\t\t\t\t\t<td>2016-06-04 22:50:23</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t</tbody>\r\n\t\t</table>\r\n\t</ul>\r\n\t<ul class=\"u2\">\r\n\t\t<h2>\r\n\t\t\t<span>利息总额：<b>￥1200.00</b></span>\r\n\t\t\t<span>利息可提现总额：<b>￥1200.00</b></span>\r\n\t\t</h2>\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>说明</th>\r\n\t\t\t\t\t<th>时间</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>300.00</td>\r\n\t\t\t\t\t<td>2016-06-16，获得利息￥300元。</td>\r\n\t\t\t\t\t<td>2016-06-16 18:43:12</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>300.00</td>\r\n\t\t\t\t\t<td>2016-06-15，获得利息￥300元。</td>\r\n\t\t\t\t\t<td>2016-06-15 12:23:37</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>300.00</td>\r\n\t\t\t\t\t<td>2016-06-14，获得利息￥300元。</td>\r\n\t\t\t\t\t<td>2016-06-14 20:11:52</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>300.00</td>\r\n\t\t\t\t\t<td>2016-06-13，获得利息￥300元。</td>\r\n\t\t\t\t\t<td>2016-06-13 00:03:37</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>-2400.00</td>\r\n\t\t\t\t\t<td>成功提现￥2400.00元，从利息余额中扣除￥2400.00元</td>\r\n\t\t\t\t\t<td>2016-06-12 15:39:53</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>0.00</td>\r\n\t\t\t\t\t<td>成功提现￥3000.00元，从利息余额中扣除￥0元</td>\r\n\t\t\t\t\t<td>2016-06-12 10:00:54</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>300.00</td>\r\n\t\t\t\t\t<td>2016-06-12，获得利息￥300元。</td>\r\n\t\t\t\t\t<td>2016-06-12 00:01:51</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>2100.00</td>\r\n\t\t\t\t\t<td>成功播种￥30000.00元，获得￥2100元利息</td>\r\n\t\t\t\t\t<td>2016-06-11 21:50:59</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t</tbody>\r\n\t\t</table>\r\n\t</ul>\r\n\t<ul class=\"u3\">\r\n\t\t<h2>\r\n\t\t\t<span>团队奖励总额：<b>￥284.00</b></span>\r\n\t\t\t<span>团队奖励冻结总额：<b>￥284.00</b></span>\r\n\t\t\t<span>团队奖励可提总额：<b>￥0.00</b></span>\r\n\t\t</h2>\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>说明</th>\r\n\t\t\t\t\t<th>时间</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody id=\"bonus_tbody\">\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>-3000.00</td>\r\n\t\t\t\t\t<td>成功提现￥3000.00元，从奖金余额中扣除￥3000.00元</td>\r\n\t\t\t\t\t<td>2016-06-12 10:00:54</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>7.00</td>\r\n\t\t\t\t\t<td>您成功播种￥30000.00元，在5小时内完成700.00的打款，奖励您￥7元。奖金冻结8天后自动计入奖金余额。</td>\r\n\t\t\t\t\t<td>2016-06-11 15:52:00</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>55.00</td>\r\n\t\t\t\t\t<td>您成功播种￥30000.00元，在5小时内完成5500.00的打款，奖励您￥55元。奖金冻结8天后自动计入奖金余额。</td>\r\n\t\t\t\t\t<td>2016-06-11 15:48:09</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>90.00</td>\r\n\t\t\t\t\t<td>您成功播种￥30000.00元，在4小时内完成9000.00的打款，奖励您￥90元。奖金冻结8天后自动计入奖金余额。</td>\r\n\t\t\t\t\t<td>2016-06-11 15:36:31</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>5.00</td>\r\n\t\t\t\t\t<td>您成功播种￥30000.00元，在4小时内完成500.00的打款，奖励您￥5元。奖金冻结8天后自动计入奖金余额。</td>\r\n\t\t\t\t\t<td>2016-06-11 14:55:18</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>56.00</td>\r\n\t\t\t\t\t<td>您成功播种￥30000.00元，在4小时内完成5600.00的打款，奖励您￥56元。奖金冻结8天后自动计入奖金余额。</td>\r\n\t\t\t\t\t<td>2016-06-11 14:54:55</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>42.00</td>\r\n\t\t\t\t\t<td>您成功播种￥30000.00元，在4小时内完成4200.00的打款，奖励您￥42元。奖金冻结8天后自动计入奖金余额。</td>\r\n\t\t\t\t\t<td>2016-06-11 14:44:02</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>24.00</td>\r\n\t\t\t\t\t<td>您成功播种￥30000.00元，在4小时内完成2400.00的打款，奖励您￥24元。奖金冻结8天后自动计入奖金余额。</td>\r\n\t\t\t\t\t<td>2016-06-11 14:43:50</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>5.00</td>\r\n\t\t\t\t\t<td>您成功播种￥30000.00元，在4小时内完成500.00的打款，奖励您￥5元。奖金冻结8天后自动计入奖金余额。</td>\r\n\t\t\t\t\t<td>2016-06-11 14:41:03</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>3000.00</td>\r\n\t\t\t\t\t<td>您的第1级下属 皇者团队十咖喱 成功播种￥30000.00元，奖励您￥3000元。</td>\r\n\t\t\t\t\t<td>2016-06-11 13:10:50</td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t</tbody>\r\n\t\t</table>\r\n\r\n\t\t<div id=\"page\" page=\"2\">\r\n\t\t\t<a href=\"javascritp:;\" data-to=\"prov\">上一页</a>\r\n\t\t\t<a href=\"javascritp:;\" data-to=\"next\">下一页</a>\r\n\t\t</div>\r\n\r\n\t</ul>\r\n</div>\r\n\r\n</div>\r\n";
+	module.exports = "\r\n<div class=\"rmain\">\r\n<div class=\"incomeC\">\r\n\t<h1><b>我的资产</b></h1>\r\n\t<h2 class=\"allzichan\">\r\n\t\t<i>账户总资产：</i> {{$parent.total | currency '￥'}}\r\n\t\t<i>账户冻结总资产：</i>{{$parent.freeze | currency '￥'}}\r\n\t\t<i>账户正在提现总资产：</i>{{$parent.money_apply | currency '￥'}}\r\n\t\t<i>账户可提现总资产：</i>{{$parent.available | currency '￥'}}\r\n\t</h2>\r\n\r\n\t<div class=\"sad\">\r\n\t\t<a href=\"javascript:;\" :class=\"{'on' : tab == 0}\" @click=\"tabClick('money',0)\">本 金</a>\r\n\t\t<a href=\"javascript:;\" :class=\"{'on' : tab == 1}\" @click=\"tabClick('interest',1)\">利 息</a>\r\n\t\t<a href=\"javascript:;\" :class=\"{'on' : tab == 2}\" @click=\"tabClick('bonus',2)\">团队奖励</a>\r\n\r\n\t\t<span style=\"position:relative;top:90px;float:right;color:#ccc;\">提现说明：首先扣除可提团队奖，不够再扣利息，利息不够再扣可提本金。</span>\r\n\t</div>\r\n\r\n\t<ul class=\"u1\" v-show=\"tab == 0\">\r\n\r\n\t\t<h2>\r\n\t\t\t<span>本金总额：<b>{{$parent.capitalSum | currency '￥'}}</b></span>\r\n\t\t\t<span>本金冻结总额：<b>{{$parent.moneyFreeze | currency '￥'}}</b></span>\r\n\t\t\t<span>本金可提现总额：<b>{{$parent.member.money | }}</b></span>\r\n\t\t</h2>\r\n\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>说明</th>\r\n\t\t\t\t\t<th>时间</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody>\r\n\t\t\t\t<tr v-for=\"item in model0\">\r\n\t\t\t\t\t<td>{{item.money | currency '￥'}}</td>\r\n\t\t\t\t\t<td>{{item.intro}}</td>\r\n\t\t\t\t\t<td>{{item.the_time | datetime}}</td>\r\n\t\t\t\t</tr>\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\t\t<pagination :page=\"pageCfg.p0\" :total=\"pageCfg.t0\" event-name=\"on-page-changed0\"></pagination>\r\n\t</ul>\r\n\r\n\t<ul class=\"u2\" v-show=\"tab == 1\">\r\n\t\t<h2>\r\n\t\t\t<span>利息总额：<b>{{$parent.member.interest | currency '￥'}}</b></span>\r\n\t\t\t<span>利息可提现总额：<b>{{$parent.member.interest | currency '￥'}}</b></span>\r\n\t\t</h2>\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>说明</th>\r\n\t\t\t\t\t<th>时间</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody>\r\n\t\t\t\t<tr v-for=\"item in model1\">\r\n\t\t\t\t\t<td>{{item.money | currency '￥'}}</td>\r\n\t\t\t\t\t<td>{{item.intro}}</td>\r\n\t\t\t\t\t<td>{{item.the_time | datetime}}</td>\r\n\t\t\t\t</tr>\t\t\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\t\t<pagination :page=\"pageCfg.p1\" :total=\"pageCfg.t1\" event-name=\"on-page-changed1\"></pagination>\r\n\t</ul>\r\n\r\n\t<ul class=\"u3\" v-show=\"tab == 2\">\r\n\t\t<h2>\r\n\t\t\t<span>团队奖励总额：<b>{{$parent.bonusSum | currency '￥'}}</b></span>\r\n\t\t\t<span>团队奖励冻结总额：<b>{{$parent.bonusFreeze | currency '￥'}}</b></span>\r\n\t\t\t<span>团队奖励可提总额：<b>{{$parent.member.bonus | currency '￥'}}</b></span>\r\n\t\t</h2>\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>说明</th>\r\n\t\t\t\t\t<th>时间</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody id=\"bonus_tbody\">\r\n\t\t\t\t<tr v-for=\"item in model2\">\r\n\t\t\t\t\t<td>{{item.money | currency '￥'}}</td>\r\n\t\t\t\t\t<td>{{item.intro}}</td>\r\n\t\t\t\t\t<td>{{item.the_time | datetime}}</td>\r\n\t\t\t\t</tr>\t\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\t\t<pagination :page=\"pageCfg.p2\" :total=\"pageCfg.t2\" event-name=\"on-page-changed2\"></pagination>\r\n\t</ul>\r\n</div>\r\n\r\n</div>\r\n";
 
 /***/ },
-/* 48 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(49)
+	__vue_script__ = __webpack_require__(54)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] app\\components\\record.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(50)
+	__vue_template__ = __webpack_require__(55)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -4394,7 +4626,7 @@ webpackJsonp([0],[
 	})()}
 
 /***/ },
-/* 49 */
+/* 54 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -4405,22 +4637,22 @@ webpackJsonp([0],[
 	exports.default = {};
 
 /***/ },
-/* 50 */
+/* 55 */
 /***/ function(module, exports) {
 
 	module.exports = "\r\n<div class=\"rmain\">\r\n<div class=\"recordC\">\r\n\t<h1><b>交易记录</b></h1>\r\n\t<div class=\"sad\">\r\n\t\t<a href=\"javascript:;\" class=\"on\" data-i=\"1\">播种记录</a>\r\n\t\t<a href=\"javascript:;\" data-i=\"2\">收获记录</a>\r\n\t\t<a href=\"javascript:;\" data-i=\"3\">失败匹配记录</a>\r\n\t</div>\r\n\t<ul class=\"u1\">\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>编号</th>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>播种时间</th>\r\n\t\t\t\t\t<th>匹配人数</th>\r\n\t\t\t\t\t<th>完成时间</th>\r\n\t\t\t\t\t<th>状态</th>\r\n\t\t\t\t\t<th>操作</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>O100971465735712</td>\r\n\t\t\t\t\t<td>30000.00</td>\r\n\t\t\t\t\t<td>2016-06-12 20:48:32</td>\r\n\t\t\t\t\t<td>0人</td>\r\n\t\t\t\t\t<td>暂无</td>\r\n\t\t\t\t\t<td style=\"color:#FEC107;\">\r\n\t\t\t\t\t\t进行中...\t\t\t\t\t</td>\r\n\t\t\t\t\t<td><a href=\"/?act=offer&amp;op=offer2&amp;id=16435\" class=\"see\">查看</a></td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr style=\"background: rgb(58, 59, 63);\">\r\n\t\t\t\t\t<td>O100971465052090</td>\r\n\t\t\t\t\t<td>30000.00</td>\r\n\t\t\t\t\t<td>2016-06-04 22:54:50</td>\r\n\t\t\t\t\t<td>10人</td>\r\n\t\t\t\t\t<td>2016-06-11 21:50:59</td>\r\n\t\t\t\t\t<td style=\"color:#43C328;\">\r\n\t\t\t\t\t\t已完成\t\t\t\t\t</td>\r\n\t\t\t\t\t<td><a href=\"/?act=offer&amp;op=offer2&amp;id=11421\" class=\"see\">查看</a></td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>O100971465049826</td>\r\n\t\t\t\t\t<td>1000.00</td>\r\n\t\t\t\t\t<td>2016-06-04 22:17:06</td>\r\n\t\t\t\t\t<td>1人</td>\r\n\t\t\t\t\t<td>2016-06-04 22:50:23</td>\r\n\t\t\t\t\t<td style=\"color:#43C328;\">\r\n\t\t\t\t\t\t已完成\t\t\t\t\t</td>\r\n\t\t\t\t\t<td><a href=\"/?act=offer&amp;op=offer2&amp;id=11382\" class=\"see\">查看</a></td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t</tbody>\r\n\t\t</table>\r\n\t</ul>\r\n\t<ul class=\"u2\">\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>编号</th>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>收获时间</th>\r\n\t\t\t\t\t<th>匹配人数</th>\r\n\t\t\t\t\t<th>完成时间</th>\r\n\t\t\t\t\t<th>状态</th>\r\n\t\t\t\t\t<th>操作</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>A100971465696932</td>\r\n\t\t\t\t\t<td>2400.00</td>\r\n\t\t\t\t\t<td>2016-06-12 10:02:12</td>\r\n\t\t\t\t\t<td>1人</td>\r\n\t\t\t\t\t<td>2016-06-12 15:39:53</td>\r\n\t\t\t\t\t<td style=\"color:#43C328;\">\r\n\t\t\t\t\t\t已完成\t\t\t\t\t</td>\r\n\t\t\t\t\t<td><a href=\"/?act=apply&amp;op=apply2&amp;id=13259\" class=\"see\">查看</a></td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t\t<tr>\r\n\t\t\t\t\t<td>A100971465633645</td>\r\n\t\t\t\t\t<td>3000.00</td>\r\n\t\t\t\t\t<td>2016-06-11 16:27:25</td>\r\n\t\t\t\t\t<td>1人</td>\r\n\t\t\t\t\t<td>2016-06-12 10:00:54</td>\r\n\t\t\t\t\t<td style=\"color:#43C328;\">\r\n\t\t\t\t\t\t已完成\t\t\t\t\t</td>\r\n\t\t\t\t\t<td><a href=\"/?act=apply&amp;op=apply2&amp;id=12746\" class=\"see\">查看</a></td>\r\n\t\t\t\t</tr>\r\n\t\t\t\t\t\t</tbody>\r\n\t\t</table>\r\n\t</ul>\r\n\t<ul class=\"u3\">\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>类型</th>\r\n\t\t\t\t\t<th>编号</th>\r\n\t\t\t\t\t<th>匹配金额</th>\r\n\t\t\t\t\t<th>匹配时间</th>\r\n\t\t\t\t\t<th>对方姓名</th>\r\n\t\t\t\t\t<th>对方手机</th>\r\n\t\t\t\t\t<th>主单金额</th>\r\n\t\t\t\t\t<th>主单下单时间</th>\r\n\t\t\t\t\t<th>解除匹配时间</th>\r\n\t\t\t\t\t<th>原因</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody>\r\n\t\t\t\t\t\t</tbody>\r\n\t\t</table>\r\n\t</ul>\r\n</div>\r\n</div>\r\n";
 
 /***/ },
-/* 51 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(52)
+	__vue_script__ = __webpack_require__(57)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] app\\components\\news.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(56)
+	__vue_template__ = __webpack_require__(61)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -4439,7 +4671,7 @@ webpackJsonp([0],[
 	})()}
 
 /***/ },
-/* 52 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4448,9 +4680,9 @@ webpackJsonp([0],[
 		value: true
 	});
 
-	var _api = __webpack_require__(27);
+	var _api = __webpack_require__(13);
 
-	var _pagination = __webpack_require__(53);
+	var _pagination = __webpack_require__(58);
 
 	var _pagination2 = _interopRequireDefault(_pagination);
 
@@ -4467,31 +4699,42 @@ webpackJsonp([0],[
 
 		route: {
 			data: function data(transition) {
-				var page = transition.to.query.page || this.page;
+				this.load(this.page);
+				transition.next();
+			}
+		},
+		methods: {
+			load: function load(page) {
+				var vm = this;
 				_api.API.News(page).then(function (data) {
 					var d = data.data;
-					var count = d.count;
-					var rows = d.rows;
-					transition.next({ "model": rows, 'page': page, 'total': count });
+					vm.$set('model', d.rows);
+					vm.$set('page', page);
+					vm.$set('total', d.count);
 				}).catch(function (err) {
 					console.log(err);
 				});
+			}
+		},
+		events: {
+			'on-page-changed': function onPageChanged(page) {
+				this.load(page);
 			}
 		},
 		components: { pagination: _pagination2.default }
 	};
 
 /***/ },
-/* 53 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(54)
+	__vue_script__ = __webpack_require__(59)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] app\\components\\_pagination.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(55)
+	__vue_template__ = __webpack_require__(60)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -4510,7 +4753,7 @@ webpackJsonp([0],[
 	})()}
 
 /***/ },
-/* 54 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4522,6 +4765,10 @@ webpackJsonp([0],[
 	var _router = __webpack_require__(3);
 
 	var _router2 = _interopRequireDefault(_router);
+
+	var _config = __webpack_require__(20);
+
+	var _config2 = _interopRequireDefault(_config);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -4549,62 +4796,62 @@ webpackJsonp([0],[
 	                return parseInt(val);
 	            }
 	        },
-	        urlname: {
+	        eventName: {
 	            type: String,
-	            required: true
+	            default: 'on-page-changed'
 	        }
 	    },
 	    computed: {
 	        pages: function pages() {
 	            var t = this.total;
-	            var s = 10;
+	            var s = _config2.default.pageSize;
 	            return t % s == 0 ? t / s : Math.floor(t / s) + 1;
 	        }
 	    },
 	    methods: {
 	        first: function first() {
-	            if (this.page == 1) return;else _router2.default.go({ name: this.urlname, query: { page: 1 } });
+	            if (this.page == 1) return;else this.$dispatch(this.eventName, this.page);
 	        },
 	        last: function last() {
-	            if (this.pages == this.page) return;else _router2.default.go({ name: this.urlname, query: { page: this.pages } });
+	            if (this.pages == this.page) return;else this.$dispatch(this.eventName, this.pages);
 	        },
 	        pre: function pre() {
 	            if (this.page == 1) return;else this.page--;
-	            _router2.default.go({ name: this.urlname, query: { page: this.page } });
+	            this.$dispatch(this.eventName, this.page);
 	        },
 	        next: function next() {
 	            if (this.pages == this.page) return;else this.page++;
-	            _router2.default.go({ name: this.urlname, query: { page: this.page } });
+	            this.$dispatch(this.eventName, this.page);
 	        },
 	        skip: function skip() {
-	            _router2.default.go({ name: this.urlname, query: { page: this.page } });
+	            this.$dispatch(this.eventName, this.page);
 	        }
 	    }
 	};
 
 /***/ },
-/* 55 */
+/* 60 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<div id=\"pager\" v-if=\"total\">\n    <ul>\n        <li>共 {{total}} 条</li>\n        <li>{{page}} / {{pages}} 页</li>\n        <li><a href=\"javascript:void(0);\" @click=\"first\" title=\"第一页\">第一页</a></li>\n        <li><a href=\"javascript:void(0);\" @click=\"pre\" title=\"上一页\">上一页</a></li>\n        <li><a href=\"javascript:void(0);\" @click=\"next\" title=\"下一页\">下一页</a></li>\n        <li><a href=\"javascript:void(0);\" @click=\"last\" title=\"最后一页\">最后一页</a></li>\n        <li>\n            跳转到\n            <select class=\"topage\" @change=\"skip\" v-model=\"page\">\n                <option v-for=\"item in pages\" value=\"{{item+1}}\">第{{item+1}}页</option>\n            </select>\n        </li>\n    </ul>\n</div>\n";
 
 /***/ },
-/* 56 */
+/* 61 */
 /***/ function(module, exports) {
 
-	module.exports = "\r\n<div class=\"rmain\">\r\n<div class=\"news_listC\">\r\n\t<h1><b>新闻公告</b></h1>\r\n\t<ul>\r\n\t\t<h2><span>标 题</span><b>时间</b></h2>\r\n\t\t<li v-for=\"item in model\" class=\"row-{{$index%2}}\">\r\n\t\t\t<a v-link=\"{name:'newssingle',params:{id:item.id}}\" href=\"\">\r\n\t\t\t\t◎ {{item.title}}\r\n\t\t\t</a>\r\n\t\t\t<time>{{item.the_time|datetime}}</time>\r\n\t\t</li>\r\n\t</ul>\r\n</div>\r\n<pagination urlname=\"news\" :page=\"page\" :total=\"total\"></pagination>\r\n\r\n</div>\r\n";
+	module.exports = "\r\n<div class=\"rmain\">\r\n<div class=\"news_listC\">\r\n\t<h1><b>新闻公告</b></h1>\r\n\t<ul>\r\n\t\t<h2><span>标 题</span><b>时间</b></h2>\r\n\t\t<li v-for=\"item in model\" class=\"row-{{$index%2}}\">\r\n\t\t\t<a v-link=\"{name:'newssingle',params:{id:item.id}}\" href=\"\">\r\n\t\t\t\t◎ {{item.title}}\r\n\t\t\t</a>\r\n\t\t\t<time>{{item.the_time|datetime}}</time>\r\n\t\t</li>\r\n\t</ul>\r\n</div>\r\n<pagination :page=\"page\" :total=\"total\"></pagination>\r\n\r\n</div>\r\n";
 
 /***/ },
-/* 57 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(58)
+	__vue_script__ = __webpack_require__(63)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] app\\components\\newssingle.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(60)
+	__vue_template__ = __webpack_require__(65)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -4623,7 +4870,7 @@ webpackJsonp([0],[
 	})()}
 
 /***/ },
-/* 58 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4632,9 +4879,9 @@ webpackJsonp([0],[
 		value: true
 	});
 
-	var _api = __webpack_require__(27);
+	var _api = __webpack_require__(13);
 
-	var _jsHtmlencode = __webpack_require__(59);
+	var _jsHtmlencode = __webpack_require__(64);
 
 	exports.default = {
 		data: function data() {
@@ -4655,23 +4902,23 @@ webpackJsonp([0],[
 	};
 
 /***/ },
-/* 59 */,
-/* 60 */
+/* 64 */,
+/* 65 */
 /***/ function(module, exports) {
 
 	module.exports = "\n    <div class=\"rmain\">\n\t<div class=\"news_detailC\">\n\t<h1><b>新闻公告</b></h1>\n\t<div class=\"detailC\">\n\t\t<h3>{{model.title}}</h3>\n\t\t<h4>\n\t\t\t<span>来源：</span><b>{{model.the_from}}</b>\n\t\t\t<span>时间：</span><b>{{model.the_time|datetime}}</b>\n\t\t\t<span>阅读次数：</span><b>{{model.vcount}}</b>\n\t\t</h4>\n\t\t<div class=\"cententC\">\n\t\t\t{{{model.content}}}\n\t\t</div>\n\t\n</div>\n</div>\n</div>\n";
 
 /***/ },
-/* 61 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(62)
+	__vue_script__ = __webpack_require__(67)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] app\\components\\messages.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(63)
+	__vue_template__ = __webpack_require__(68)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -4690,7 +4937,7 @@ webpackJsonp([0],[
 	})()}
 
 /***/ },
-/* 62 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4699,9 +4946,9 @@ webpackJsonp([0],[
 		value: true
 	});
 
-	var _api = __webpack_require__(27);
+	var _api = __webpack_require__(13);
 
-	var _pagination = __webpack_require__(53);
+	var _pagination = __webpack_require__(58);
 
 	var _pagination2 = _interopRequireDefault(_pagination);
 
@@ -4718,42 +4965,54 @@ webpackJsonp([0],[
 
 		route: {
 			data: function data(transition) {
-				var page = transition.to.query.page || this.page;
-				_api.API.Messages(page).then(function (data) {
+				this.load(this.page);
+				transition.next();
+			}
+		},
+		methods: {
+			load: function load(page) {
+				var vm = this;
+				_api.API.News(page).then(function (data) {
 					var d = data.data;
+
 					var count = d.count;
 					var rows = d.rows;
-					if (rows) {
-						rows.forEach(function (item, key) {
-							if (item.state == 0) item.state = "w";else item.state = "ed";
-						});
-					}
-					transition.next({ "model": rows, 'page': page, 'total': count });
+					rows.forEach(function (item, key) {
+						if (item.state == 0) item.state = "w";else item.state = "ed";
+					});
+					vm.$set('model', rows);
+					vm.$set('page', page);
+					vm.$set('total', count);
 				}).catch(function (err) {
 					console.log(err);
 				});
+			}
+		},
+		events: {
+			'on-page-changed': function onPageChanged(page) {
+				this.load(page);
 			}
 		},
 		components: { pagination: _pagination2.default }
 	};
 
 /***/ },
-/* 63 */
+/* 68 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\t<div class=\"rmain\">\n\t\t<div class=\"news_listC\">\n\t\t\t<h1><b>消息通知</b></h1>\n\t\t\t<ul>\n\t\t\t\t<h2><span>标 题</span><b>时间</b></h2>\n\t\t\t\t<li v-for=\"item in model\" class=\"row-{{$index%2}}\">\n\t\t\t\t\t\t<a v-link=\"{name:'messagesingle',params:{id:item.id}}\" href=\"\">\n\t\t\t\t\t\t<i class=\"{{item.state}}\"></i>{{item.title}}</a>\n\t\t\t\t\t\t<time>{{item.the_time|datetime}}</time>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</div>\n\t\t<pagination urlname=\"messages\" :page=\"page\" :total=\"total\"></pagination>\n\t</div>\n</div>\n";
+	module.exports = "\n\t<div class=\"rmain\">\n\t\t<div class=\"news_listC\">\n\t\t\t<h1><b>消息通知</b></h1>\n\t\t\t<ul>\n\t\t\t\t<h2><span>标 题</span><b>时间</b></h2>\n\t\t\t\t<li v-for=\"item in model\" class=\"row-{{$index%2}}\">\n\t\t\t\t\t\t<a v-link=\"{name:'messagesingle',params:{id:item.id}}\" href=\"\">\n\t\t\t\t\t\t<i class=\"{{item.state}}\"></i>{{item.title}}</a>\n\t\t\t\t\t\t<time>{{item.the_time|datetime}}</time>\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</div>\n\t\t<pagination :page=\"page\" :total=\"total\"></pagination>\n\t</div>\n</div>\n";
 
 /***/ },
-/* 64 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(65)
+	__vue_script__ = __webpack_require__(70)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] app\\components\\messagesingle.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(66)
+	__vue_template__ = __webpack_require__(71)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -4772,7 +5031,7 @@ webpackJsonp([0],[
 	})()}
 
 /***/ },
-/* 65 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4781,7 +5040,7 @@ webpackJsonp([0],[
 		value: true
 	});
 
-	var _api = __webpack_require__(27);
+	var _api = __webpack_require__(13);
 
 	exports.default = {
 		data: function data() {
@@ -4801,22 +5060,22 @@ webpackJsonp([0],[
 	};
 
 /***/ },
-/* 66 */
+/* 71 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<div class=\"rmain\">\n    <div class=\"news_detailC\">\n        <h1><b>消息通知</b></h1>\n        <div class=\"detailC\">\n            <h3>{{model.title}}</h3>\n            <h4>\n                <span>来自：</span><b>平台官方客服</b>\n                <span>时间：</span><b>{{model.the_time|datetime}}</b>\n            </h4>\n            <div style=\"margin:20px 0;text-align:center;\" v-if=\"{{model.img}}\">\n                <img class=\"show_big_img\" style=\"width:auto;max-height:250px;\" v-src=\"images/message/{{model.img}}\">\n            </div>\n            <div class=\"cententC\">\n                {{model.content}}\n            </div>\n    </div>\n    </div>\n</div>\n";
 
 /***/ },
-/* 67 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(68)
+	__vue_script__ = __webpack_require__(73)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] app\\components\\leavemsg.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(69)
+	__vue_template__ = __webpack_require__(74)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -4835,7 +5094,7 @@ webpackJsonp([0],[
 	})()}
 
 /***/ },
-/* 68 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4844,9 +5103,9 @@ webpackJsonp([0],[
 		value: true
 	});
 
-	var _constants = __webpack_require__(26);
+	var _constants = __webpack_require__(34);
 
-	var _api = __webpack_require__(27);
+	var _api = __webpack_require__(13);
 
 	exports.default = {
 		data: function data() {
@@ -4886,22 +5145,22 @@ webpackJsonp([0],[
 	};
 
 /***/ },
-/* 69 */
+/* 74 */
 /***/ function(module, exports) {
 
 	module.exports = "\r\n<div class=\"rmain\">\r\n<div class=\"leavemsgC\">\r\n\t<h1><b>在线留言</b></h1>\r\n\t<div class=\"sad\">\r\n\t\t<a href=\"javascript:void(0);\" :class=\"{'on': flag}\" @click=\"flag=true\">在线留言</a>\r\n\t\t<a href=\"javascript:void(0);\" :class=\"{'on': !flag}\" @click=\"flag=false\">留言反馈</a>\r\n\t</div>\r\n\t<ul class=\"u1\" v-show=\"flag\">\r\n\t\t<div class=\"inpwp\">\r\n\t\t\t<form role=\"form\">\r\n\t\t\t\t<li>\r\n\t\t\t\t\t<span>留言标题：</span>\r\n\t\t\t\t\t<em><input type=\"text\" class=\"text til\" v-model=\"model.title\" name=\"title\" required=\"true\" maxlength=\"32\"></em>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li>\r\n\t\t\t\t\t<span>问题类型：</span>\r\n\t\t\t\t\t<em>\r\n\t\t\t\t\t\t<select name=\"msgtype\" v-model=\"model.msgtype\" class=\"text selC\">\t\r\n\t\t\t\t\t\t\t<option v-for=\"item in MsgTypes\" value=\"{{item.value}}\">{{item.text}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</em>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li>\r\n\t\t\t\t\t<span>上传图片：</span>\r\n\t\t\t\t\t<em>\r\n\t\t\t\t\t\t<a href=\"javascript:;\" class=\"fila\">选择图片\r\n\t\t\t\t\t\t\t<input type=\"file\" name=\"imgfile\" id=\"uploadimgfile\">\r\n\t\t\t\t\t\t</a>\r\n\t\t\t\t\t\t<b class=\"imgb\">\r\n\t\t\t\t\t\t\t<img class=\"show_big_img\" src=\"/images/bgblack.png\" id=\"showimg\" style=\"width:auto;max-height:40px;position:relative;top:2px;left:25px;\">\r\n\t\t\t\t\t\t</b>\r\n\t\t\t\t\t</em>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li class=\"ctd\">\r\n\t\t\t\t\t<span>留言内容：</span>\r\n\t\t\t\t\t<em><textarea class=\"ctt\" v-model=\"model.content\" name=\"content\" required=\"true\" maxlength=\"360\"></textarea></em>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li>\r\n\t\t\t\t\t<span></span>\r\n\t\t\t\t\t<em><input type=\"button\" @click=\"submit\" class=\"btn\" value=\"提交留言\"></em>\r\n\t\t\t\t</li>\r\n\t\t\t</form>\r\n\t\t</div>\r\n\t</ul>\r\n\t<ul class=\"u2\" v-show=!flag>\r\n\t\t<li class=\"mymsg\" v-for=\"item in replyModel\">\r\n\t\t\t<h4><img class=\"lgim\" v-bind:src=getSrc>\r\n\t\t\t{{item.old.title}}<i>{{item.the_time|datetime}}</i></h4>\r\n\t\t\t<div class=\"nrd\">\r\n\t\t\t\t{{item.old.content}}\r\n\t\t\t\t<hr style=\"width:100%;margin-top:10px;margin-bottom:10px;border-bottom:1px dashed #43C328;\">\r\n\t\t\t\t<div v-if=\"item.new\">\r\n\t\t\t\t\t<h4>\r\n\t\t\t\t\t\t<img class=\"lgim\" src=\"/images/logo2.png\"> \r\n\t\t\t\t\t\t\t多米多客服\r\n\t\t\t\t\t\t<i>{{item.new.the_time|datetime}}</i>\r\n\t\t\t\t\t</h4>\r\n\t\t\t\t\t<span style=\"color:#949CB3\">{{item.new.content}}</span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"!item.new\">\r\n\t\t\t\t\t<h4>\r\n\t\t\t\t\t\t<img class=\"lgim\" src=\"/images/logo2.png\"> \r\n\t\t\t\t\t\t\t多米多客服\r\n\t\t\t\t\t</h4>\r\n\t\t\t\t\t<span style=\"color:#949CB3\">没有回复哦</span>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</li>\r\n\t</ul>\r\n</div>\r\n\r\n</div>\r\n";
 
 /***/ },
-/* 70 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(71)
+	__vue_script__ = __webpack_require__(76)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] app\\components\\share.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(81)
+	__vue_template__ = __webpack_require__(86)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -4920,7 +5179,7 @@ webpackJsonp([0],[
 	})()}
 
 /***/ },
-/* 71 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4929,9 +5188,9 @@ webpackJsonp([0],[
 		value: true
 	});
 
-	var _api = __webpack_require__(27);
+	var _api = __webpack_require__(13);
 
-	var _clipboard = __webpack_require__(72);
+	var _clipboard = __webpack_require__(77);
 
 	var _clipboard2 = _interopRequireDefault(_clipboard);
 
@@ -4960,22 +5219,22 @@ webpackJsonp([0],[
 	};
 
 /***/ },
-/* 72 */,
-/* 73 */,
-/* 74 */,
-/* 75 */,
-/* 76 */,
 /* 77 */,
 /* 78 */,
 /* 79 */,
 /* 80 */,
-/* 81 */
+/* 81 */,
+/* 82 */,
+/* 83 */,
+/* 84 */,
+/* 85 */,
+/* 86 */
 /***/ function(module, exports) {
 
 	module.exports = "\r\n<div class=\"rmain\">\r\n  <div class=\"shareC\">\r\n  \t<h1><b>分享注册</b></h1>\r\n  \t<ul>\r\n  \t\t<li>\r\n\t\t\t <div id=\"qrcode\" style=\"width:300px;height:300px;margin:auto;padding:20px 5px 0 5px;background:#fff;\">\r\n\t\t\t\t <img v-bind:src=qrcodeUrl style=\"width:256px;height:256px;\"/>\r\n\t\t\t </div>\r\n\t\t\t</li>\r\n  \t\t<li>\r\n  \t\t\t<em id=\"link\" class=\"copye\">{{regUrl}}</em>\r\n  \t\t\t<br><br><br>\r\n  \t\t\t<a href=\"javascript:void(0);\" id=\"copy_link\" class=\"btn copy_link\" data-clipboard-target=\"#link\" aria-label=\"复制成功！\">[点击复制]</a>\r\n  \t\t</li>\r\n  \t\t<li></li>\r\n  \t</ul>\r\n  </div>\r\n</div>\r\n";
 
 /***/ },
-/* 82 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4988,7 +5247,7 @@ webpackJsonp([0],[
 
 	var _vue2 = _interopRequireDefault(_vue);
 
-	var _vuex = __webpack_require__(83);
+	var _vuex = __webpack_require__(88);
 
 	var _vuex2 = _interopRequireDefault(_vuex);
 
@@ -5020,21 +5279,17 @@ webpackJsonp([0],[
 	});
 
 /***/ },
-/* 83 */,
-/* 84 */
+/* 88 */,
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
 
 	var _vue = __webpack_require__(1);
 
 	var _vue2 = _interopRequireDefault(_vue);
 
-	var _moment = __webpack_require__(85);
+	var _moment = __webpack_require__(90);
 
 	var _moment2 = _interopRequireDefault(_moment);
 
@@ -5048,14 +5303,7 @@ webpackJsonp([0],[
 	    return input + '级会员';
 	});
 
-	exports.default = "";
-
 /***/ },
-/* 85 */,
-/* 86 */,
-/* 87 */,
-/* 88 */,
-/* 89 */,
 /* 90 */,
 /* 91 */,
 /* 92 */,
@@ -5154,252 +5402,30 @@ webpackJsonp([0],[
 /* 185 */,
 /* 186 */,
 /* 187 */,
-/* 188 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _vue = __webpack_require__(1);
-
-	var _vue2 = _interopRequireDefault(_vue);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	_vue2.default.component('treeview', _vue2.default.extend({
-	    template: '<div class="treeview {{class}}"><div class="node-data" v-for="(index, node) in model"><div class="node" :class="{\'active\': isSelected(index)}" @click.prevent="select(index, node[valuename])"><span class="icon node-parent-toggled" v-show="areValidNodes(node[children]) && isOpened(index)"><svg viewBox="0 0 35 35"><g transform="translate(0,-1017.3621)"><path class="back" d="m 2.1411424,1026.4693 0,23.4146 27.0189286,0 0,-23.4146 -13.937805,0 0,-2.7898 -9.2657958,0 0,2.7898 z"/><path class="front" d="m 1,1051.3621 7,-19 2,0 1,-2 6,0 -1,2 19,0 -4.472399,18.9369 z"/><path class="light" d="m 29.696699,1047.0363 -0.820749,3.0631 -6,0 0.757614,-3"/></g></svg> </span><span class="icon node-parent" v-show="areValidNodes(node[children]) && !isOpened(index)"><svg width="14" height="14" viewBox="0 0 35 35"><g transform="translate(0,-1017.3621)"><path class="fill" d="m 1,1026.1835 0,25.1786 33,0 0,-25.1786 -18.857143,0 0,-3 -10.017857,0 0,3 z"/><path class="light" d="m 32,1046.1625 0,3 -6,0 0,-3 6,0"/></g></svg> </span><span class="icon node" v-if="!areValidNodes(node[children])"><svg width="8" height="8" viewBox="0 0 35 35"><g transform="translate(0,-1017.3622)"><circle cx="17.488264" cy="1034.874" r="16.003242"/></g></svg></span><label>{{{node[labelname]}}}</label></div><div v-if="areValidNodes(node[children])" class="children" v-show="isOpened(index)"><div class="margin"></div><div class="nodes"><treeview :id="id" :value.sync="value" :labelname="labelname" :valuename="valuename" :children="children" :model="node[children]" :parent.once="index" class="inner"></treeview></div></div></div></div>',
-	    props: {
-	        /**
-	         * Unique identifier for treeview.
-	         * @since 1.0.0
-	         * @var string
-	         */
-	        id: {
-	            Type: String,
-	            default: 'tv_' + Math.ceil(Math.random() * 100000)
-	        },
-	        /**
-	         * Value of the selected node in the tree.
-	         * @since 1.0.0
-	         * @var mixed
-	         */
-	        value: [String, Number],
-	        /**
-	         * Initial tree composition.
-	         * @since 1.0.0
-	         * @since 1.0.2 Renamed to model.
-	         * @var array
-	         */
-	        model: {
-	            Type: Array,
-	            default: function _default() {
-	                return [];
-	            }
-	        },
-	        /**
-	         * Additional CSS class to apply to component.
-	         * @since 1.0.0
-	         * @var string
-	         */
-	        class: {
-	            Type: String,
-	            default: ''
-	        },
-	        /**
-	         * Name of the child nodes property.
-	         * @since 1.0.0
-	         * @var string
-	         */
-	        children: {
-	            Type: String,
-	            default: 'nodes'
-	        },
-	        /**
-	         * Name of the property holding the node name.
-	         * @since 1.0.0
-	         * @var string
-	         */
-	        labelname: {
-	            Type: String,
-	            default: 'label'
-	        },
-	        /**
-	         * Name of the property holding the node value.
-	         * @since 1.0.0
-	         * @var string
-	         */
-	        valuename: {
-	            Type: String,
-	            default: 'value'
-	        },
-	        node: {
-	            Type: Object,
-	            default: 'node'
-	        },
-	        /**
-	         * Parent node model index.
-	         * @since 1.0.2
-	         * @var int
-	         */
-	        parent: {
-	            Type: Number,
-	            default: undefined
-	        }
-	    },
-	    methods: {
-	        /**
-	         * Selects a node from tree view.
-	         * @since 1.0.0
-	         * @since 1.0.1 Node is passed to event.
-	         *
-	         * @param int   index Tree index selected.
-	         * @param mixed value Value selected.
-	         */
-	        select: function select(index, value) {
-	            // Unselect from current level, children and parents
-	            this.toggleOpen(index);
-	            this.$set('value', value);
-	            // Call to event.
-	            this.$dispatch('treeview_click', {
-	                label: this.model[index][this.labelname],
-	                value: this.model[index][this.valuename],
-	                model: this.model[index]
-	                // ,
-	                // children: this.model[index][this.children]
-	            });
-	        },
-	        /**
-	         * Toggles open / close node.
-	         * @since 1.0.0
-	         *
-	         * @param int index Index to open
-	         */
-	        toggleOpen: function toggleOpen(index) {
-	            // Return if no children
-	            if (!this.areValidNodes(this.model[index][this.children])) return;
-	            // Init
-	            if (this.model[index].isOpened == undefined) this.$set('model[' + index + '].isOpened', this.hasSelectedChild(index));
-	            // General
-	            this.$set('model[' + index + '].isOpened', !this.model[index].isOpened);
-	        },
-	        /**
-	         * Returns flag indicating if nodes are valid or not.
-	         * @since 1.0.0
-	         * @since 1.0.2 Renamed
-	         *
-	         * @param array nodes Nodes to validate.
-	         */
-	        areValidNodes: function areValidNodes(nodes) {
-	            return nodes != undefined && Object.prototype.toString.call(nodes) === '[object Array]' && nodes.length > 0;
-	        },
-	        /**
-	         * Returns flag indicating if tree view has a node selected.
-	         * @since 1.0.2
-	         *
-	         * @return bool
-	         */
-	        hasSelected: function hasSelected() {
-	            // Check children
-	            for (var i in this.model) {
-	                if (this.isSelected(i) || this.hasSelectedChild(i)) return true;
-	            }
-	            return false;
-	        },
-	        /**
-	         * Returns flag indicating if node at specified index has a child selcted or not.
-	         * @since 1.0.2
-	         *
-	         * @param int index Index to check
-	         *
-	         * @return bool
-	         */
-	        hasSelectedChild: function hasSelectedChild(index) {
-	            for (var i in this.$children) {
-	                if (this.$children[i].parent == index && this.$children[i].hasSelected()) return true;
-	            }
-	            return false;
-	        },
-	        /**
-	         * Returns flag indicating if node at specified index is selected or not.
-	         * @since 1.0.2
-	         *
-	         * @param int index Index to check
-	         *
-	         * @return bool
-	         */
-	        isSelected: function isSelected(index) {
-	            return this.value && this.model[index][this.valuename] == this.value;
-	        },
-
-	        /**
-	         * Returns flag indicating if node is opened or not.
-	         * @since 1.0.2
-	         *
-	         * @param int index Index to check
-	         *
-	         * @return bool
-	         */
-	        isOpened: function isOpened(index) {
-	            return this.model[index].isOpened != undefined && this.model[index].isOpened || this.hasSelectedChild(index);
-	        }
-	    }
-	})); /**
-	      * Tree view.
-	      * Vue Component.
-	      *
-	      * @author Alejandro Mostajo <http://about.me/amostajo>
-	      * @copyright 10Quality <http://www.10quality.com>
-	      * @license MIT
-	      * @version 1.0.2
-	      */
-
-/***/ },
+/* 188 */,
 /* 189 */,
-/* 190 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__webpack_require__(191)
-	__vue_script__ = __webpack_require__(193)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app\\components\\teamtree.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(194)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "./teamtree.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 191 */
+/* 190 */,
+/* 191 */,
+/* 192 */,
+/* 193 */,
+/* 194 */,
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(192);
+	var content = __webpack_require__(196);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(18)(content, {});
+	var update = __webpack_require__(26)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./teamtree.vue", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./teamtree.vue");
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./offer.vue", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./offer.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -5409,119 +5435,18 @@ webpackJsonp([0],[
 	}
 
 /***/ },
-/* 192 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(17)();
+	exports = module.exports = __webpack_require__(25)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.item {\n}\n\n.item div {\n    color: white;\n    font-size: 16px;\n}\n\n.item-self{\n    color: #efefef;\n    height: 45px;\n    line-height: 45px;\n}\n\n.item-name{color:#ddd; padding:0 8px;}\n\n.item-plus-minus{margin:0 5px;color:#fff;cursor: pointer;}\n\n.item-children{ padding-left: 3em; line-height: 1.5em;  list-style-type: dot; margin-top: 2px !important;}\n\n.bold { font-weight: bold; }\n\n.bold > span {color:#fff;}\n.item{}\n.item > ul{}\n\n.female,.male{display:inline-block;width:32px;height:32px;}\n.male{background: url('/images/icons/male.png')}\n.female{background: url('/images/icons/female.png')}\n\n.item-detail{color:#FEC107}\n\n", ""]);
+	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.tips {\n    width: 92%;\n    margin: auto;\n    margin-bottom: 5px;\n    text-align: left;\n    font-size: 18px;\n    color: #FCC006;\n}\n\n.agree_label {\n    font-size: 18px;\n    color: #fff;\n}\n\n.agree_label .agree {\n    width: 20px;\n    height: 20px;\n}\n\n.agree_label .agree:checked {\n    -webkit-appearance: none;\n    background: #49A2DC url(/images/admin/checkbox_ed.png) no-repeat center center;\n    background-size: 100%;\n}\n", ""]);
 
 	// exports
 
-
-/***/ },
-/* 193 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _vue = __webpack_require__(1);
-
-	var _vue2 = _interopRequireDefault(_vue);
-
-	var _api = __webpack_require__(27);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _vue2.default.component('item', {
-	    template: '#item-template',
-	    props: {
-	        model: Object,
-	        from: Number
-	    },
-	    data: function data() {
-	        return {
-	            open: true
-	        };
-	    },
-	    computed: {
-	        isFolder: function isFolder() {
-	            return this.model.children && this.model.children.length;
-	        }
-	    },
-	    methods: {
-	        itemClick: function itemClick(model, e) {
-	            e.stopPropagation();
-
-	            console.log('item click');
-	            console.log(model.id);
-
-	            if (model.children) return;else {
-
-	                _vue2.default.set(model, 'children', []);
-
-	                _api.API.TeamTree(model.id).then(function (data) {
-	                    if (data.isSuccess) {
-	                        if (data.data.length > 0) {
-	                            var children = data.data.map(function (d) {
-	                                return {
-	                                    name: d.truename,
-	                                    id: d.id,
-	                                    sex: d.sex,
-	                                    mobile: d.username,
-	                                    nickname: d.nickname,
-	                                    ok: d.ok
-	                                };
-	                            });
-
-	                            model.children = children;
-	                            this.open = true;
-	                        }
-	                    } else {
-	                        alert2(data.error.message);
-	                    }
-	                });
-	            }
-	        },
-	        toggle: function toggle() {
-	            console.log('toggle');
-	            if (this.isFolder) {
-	                this.open = !this.open;
-	            }
-	        },
-	        changeType: function changeType() {
-	            console.log('change type');
-	            if (!this.isFolder) {
-	                _vue2.default.set(this.model, 'children', []);
-	                this.addChild();
-	                this.open = true;
-	            }
-	        },
-	        addChild: function addChild() {
-	            this.model.children.push({
-	                name: 'new stuff'
-	            });
-	        },
-	        viewDetail: function viewDetail(model, e) {
-	            e.stopPropagation();
-	            console.log(model);
-	            this.$dispatch('on-detail-click', model);
-	        }
-	    }
-	});
-
-/***/ },
-/* 194 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<li>\n    <div :class=\"{bold: isFolder}\" class=\"item-self\"  @click=\"toggle\">\n        <i class=\"{{model.sex == 1 ? 'female':'male'}}\"></i>\n        <span class=\"item-name\">{{model.name}} - {{model.mobile}}</span>\n        <span class=\"item-plus-minus\" v-if=\"isFolder\">[{{open ? ' - ' : ' + '}}]</span>\n        <span class=\"item-plus-minus\" v-else>[ ? ]</span>\n        <a href=\"javascript:;\" class=\"item-detail\" @click=\"viewDetail(model,$event)\">详细</a>\n    </div>\n    <ul class=\"item-children\" v-show=\"open\" v-if=\"isFolder\">\n        <item class=\"item\" v-for=\"model in model.children\" :model=\"model\" @click=\"itemClick(model, $event)\">\n        </item>\n    </ul>\n</li>\n";
 
 /***/ }
 ]);

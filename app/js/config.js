@@ -1,3 +1,4 @@
 export default {
-    ajaxRequireToken: true
+    ajaxRequireToken: true,
+    pageSize : 12
 }

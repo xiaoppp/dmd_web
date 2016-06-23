@@ -20,7 +20,8 @@
 <script>
 
     import router from '../js/router.config'
-
+    import config from '../js/config'
+    
     export default {
         props: {
             total: {
@@ -31,7 +32,7 @@
                     return val > -1;
                 },
                 coerce: function (val) {
-                    return parseInt(val); // cast the value to string
+                    return parseInt(val) // cast the value to string
                 }
             },
             page:  {
@@ -39,45 +40,45 @@
                 required: true,
                 default : 1,
                 validator: function(val){
-                    return val > 0;
+                    return val > 0
                 },
                 coerce: function (val) {
-                    return parseInt(val); // cast the value to string
+                    return parseInt(val) // cast the value to string
                 }
             },
-            urlname: {
+            eventName: {
                 type: String,
-                required: true
+                default: 'on-page-changed'
             },
         },
         computed:{
             pages(){
-                var t = this.total;
-                var s = 10;
-                return t % s == 0? t / s: Math.floor(t / s) + 1;
+                var t = this.total
+                var s = config.pageSize
+                return t % s == 0 ? t / s: Math.floor(t / s) + 1
             }
         },
         methods: {
             first(){
-                if(this.page == 1) return;
-                else router.go({name:this.urlname, query:{page: 1}});
+                if(this.page == 1) return
+                else this.$dispatch(this.eventName, this.page)
             },
             last(){
-                if(this.pages == this.page) return;
-                else router.go({name:this.urlname,query:{page:this.pages}});
+                if(this.pages == this.page) return
+                else this.$dispatch(this.eventName, this.pages)
             },
             pre(){
-                if(this.page == 1) return;
-                else this.page--;
-                router.go({name:this.urlname, query:{page: this.page}});
+                if(this.page == 1) return
+                else this.page--
+                this.$dispatch(this.eventName, this.page)
             },
             next(){
-                if(this.pages == this.page) return;
-                else this.page++;
-                router.go({name:this.urlname, query:{page: this.page}});
+                if(this.pages == this.page) return
+                else this.page++
+                this.$dispatch(this.eventName, this.page)
             },
             skip(){
-                router.go({name:this.urlname, query:{page: this.page}});
+                this.$dispatch(this.eventName, this.page)
             }
         }
     }
