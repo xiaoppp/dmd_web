@@ -4,7 +4,7 @@
 	<h1><b>新闻公告</b></h1>
 	<ul>
 		<h2><span>标 题</span><b>时间</b></h2>
-		<li v-for="item in model" class="row-{{$index%2}}">
+		<li v-for="item in model" class="row-{{$index % 2}}">
 			<a v-link="{name:'newssingle',params:{id:item.id}}" href="">
 				◎ {{item.title}}
 			</a>
@@ -13,7 +13,6 @@
 	</ul>
 </div>
 <pagination :page="page" :total="total"></pagination>
-
 </div>
 </template>
 

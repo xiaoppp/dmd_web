@@ -8,7 +8,7 @@
             <ul v-if="first">
                 <li>
                     <a href="javascript:;" class="money on" @click="select(0)">
-                        <span>{{config2[0]}}</span>
+                        <span>{{$parent.config.key2[0]}}</span>
                         首次购买激活币
                     </a>
                 </li>
@@ -16,18 +16,18 @@
 
             <ul v-if="!first">
                 <li>
-                    <a href="javascript:;" class="money"  :class="{'on': model.i == 0}"  @click="select(0)"><span>{{config2[0]}}</span></a>
+                    <a href="javascript:;" class="money"  :class="{'on': model.i == 0}"  @click="select(0)"><span>{{$parent.config.key2[0]}}</span></a>
                 </li>
 
                 <li>
-                    <a href="javascript:;" class="money" :class="{'on': model.i == 1}"  @click="select(1)"><span>{{config2[1]}}</span></a>
-                    <a href="javascript:;" class="money" :class="{'on': model.i == 2}"   @click="select(2)"><span>{{config2[2]}}</span></a>
+                    <a href="javascript:;" class="money" :class="{'on': model.i == 1}"  @click="select(1)"><span>{{$parent.config.key2[1]}}</span></a>
+                    <a href="javascript:;" class="money" :class="{'on': model.i == 2}"   @click="select(2)"><span>{{$parent.config.key2[2]}}</span></a>
                 </li>
 
                 <li>
-                    <a href="javascript:;" class="money" :class="{'on': model.i == 3}"   @click="select(3)"><span>{{config2[3]}}</span></a>
-                    <a href="javascript:;" class="money" :class="{'on': model.i == 4}"   @click="select(4)"><span>{{config2[4]}}</span></a>
-                    <a href="javascript:;" class="money" :class="{'on': model.i == 5}"   @click="select(5)"><span>{{config2[5]}}</span></a>
+                    <a href="javascript:;" class="money" :class="{'on': model.i == 3}"   @click="select(3)"><span>{{$parent.config.key2[3]}}</span></a>
+                    <a href="javascript:;" class="money" :class="{'on': model.i == 4}"   @click="select(4)"><span>{{$parent.config.key2[4]}}</span></a>
+                    <a href="javascript:;" class="money" :class="{'on': model.i == 5}"   @click="select(5)"><span>{{$parent.config.key2[5]}}</span></a>
                 </li>
             </ul>
 
@@ -56,26 +56,31 @@
         data(){
             return {
                 first: false,
-                min2Offer : 1000,
                 model : {
                     money : 0,
                     agree : false,
                     i     : 0
-                },
-                config2 : {
-                    0 : 1000,
-                    1 : 3000,
-                    2 : 5000,
-                    3 : 10000,
-                    4 : 30000,
-                    5 : 50000
                 }
+            }
+        },
+        route:{
+            data(transition){
+                let vm = this
+                API.IsNewMember().then(function(data){
+                    if(data.isSuccess){
+                        transition.next({'first': data.data})
+                    } else {
+                        alert2(data.error.message)
+                    }
+                }).catch(function(err){
+                    console.log(err)
+                })
             }
         },
         methods:{
             submit(){
                 let vm = this
-                if(!vm.model.agree)alert2('请先阅读平台提示！')
+                if(!vm.model.agree) alert2('请先阅读平台提示！')
                 else {
                     API.Offer(vm.model.money).then(function(data){
                         if(data.isSuccess){
@@ -91,7 +96,7 @@
             select(i){
                 let vm = this
                 vm.model.i = i
-                vm.model.money = vm.config2[i]
+                vm.model.money = vm.$parent.config.key2[i]
             }
         }
     }

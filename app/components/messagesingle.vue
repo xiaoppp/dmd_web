@@ -20,20 +20,27 @@
 </template>
 
 <script>
-    import {API} from '../js/api';
+    import {API} from '../js/api'
+    import {alert2} from '../js/utils'
 
     export default {
 		data(){
-			return {model:{}};
+			return {
+                model:{}
+            }
 		},
 		route:{
 			data:function(transition){
-				var id = transition.to.params.id;
-				API.MessageSingle(id).then(function(data){
-                    var d = data.data;
-					transition.next({'model': d});
-					console.log(d);
-				});
+				var id = transition.to.params.id
+				API.MessageSingle(id).then(function(data) {
+                    if(data.isSuccess){
+                        if(!data.data)  alert2('没有数据')
+                        else
+                            transition.next({'model': data.data})
+                    } else {
+                        alert2(data.error.message)
+                    }
+				})
 			}
 		}
     }

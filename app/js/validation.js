@@ -78,7 +78,7 @@ Member : {
         required:{rule:true,message:"请输入原始安全密码"}
     },
 
-    pay_pw4:{
+    pay_pwd4:{
         required:{rule:true,message:"请输入新的安全密码"}
     },
 
@@ -94,7 +94,7 @@ Member : {
         required:{rule:true,message:"请输入手机验证码"}
     },
 
-    pay_pw5:{
+    pay_pwd5:{
         required:{rule:true,message:"请输入新的安全密码"}
     },
 

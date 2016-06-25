@@ -67,7 +67,7 @@
 /* 登录/注册 end */
 
 /* 新闻/消息 start */
-.news_listC{width:100%; }
+.news_listC{width:100%;padding-bottom: 20px }
 .news_listC h1{line-height:100px; }
 .news_listC h1 b{margin-left:40px; font-size:24px; color:#fff; }
 .news_listC ul{width:100%; }
@@ -84,12 +84,15 @@
 .news_listC ul li.row-1{ background: rgb(49, 50, 55); }
 .news_listC ul li.row-0{ background: rgb(58, 59, 63); }
 
-#pager{width:660px; margin:auto; margin-top:30px; padding-left:40px; text-align:center; background:#3A3B3F; border-radius:26px; }
+table tbody > tr.row-0{ background: rgb(58, 59, 63);}
+table tbody > tr.row-1{ background: rgb(49, 50, 55);}
+
+#pager{width:660px; margin:auto; margin-top:30px; padding-left:40px; text-align:center; background:#3A3B3F; border-radius:26px; margin-bottom:20px;}
 #pager ul li{height:50px; line-height:50px; }
 #pager ul li a{color:#878E98; }
 #pager ul li select{background:#3A3B3F; color:#878E98; border:1px solid #54555A; outline:none; }
 
-.news_detailC{width:100%; }
+.news_detailC{width:100%;padding-bottom: 20px  }
 .news_detailC h1{line-height:100px; }
 .news_detailC h1 b{margin-left:40px; font-size:24px; color:#fff; }
 .news_detailC .detailC{width:100%; background:#1D1E22; min-height:530px; }
@@ -102,7 +105,7 @@
 /* 新闻/消息 end */
 
 /* 个人资料 start */
-.personalC{width:100%; }
+.personalC{width:100%; padding-bottom: 20px }
 .personalC h1{line-height:100px; }
 .personalC h1 b{margin-left:40px; font-size:24px; color:#fff; }
 .personalC .sad{width:100%; overflow:hidden; margin-top:5px; }
@@ -117,7 +120,7 @@
 /* 个人资料 end */
 
 /* 在线留言 start */
-.leavemsgC{width:100%; }
+.leavemsgC{width:100%;padding-bottom: 20px  }
 .leavemsgC h1{line-height:100px; }
 .leavemsgC h1 b{margin-left:40px; font-size:24px; color:#fff; }
 .leavemsgC .sad{width:100%; overflow:hidden; margin-top:5px; }
@@ -145,7 +148,7 @@
 /* 在线留言 end */
 
 /* 我的团队 start */
-.teamC{width:100%; }
+.teamC{width:100%; padding-bottom: 20px }
 .teamC h1{line-height:100px; }
 .teamC h1 b{margin-left:40px; font-size:24px; color:#fff; }
 .teamC .sad{width:100%; overflow:hidden; margin-top:5px; }
@@ -169,7 +172,7 @@
 /* 我的团队 end */
 
 /* 资金明细 start */
-.incomeC{width:100%; }
+.incomeC{width:100%; padding-bottom: 20px }
 .incomeC h1{line-height:100px; }
 .incomeC h1 b{margin-left:40px; font-size:24px; color:#fff; }
 .incomeC .sad{width:100%; margin-top:5px; }
@@ -189,14 +192,13 @@
 /* 资金明细 end */
 
 /* 交易记录 start */
-.recordC{width:100%; }
+.recordC{width:100%; padding-bottom: 20px }
 .recordC h1{line-height:100px; }
 .recordC h1 b{margin-left:40px; font-size:24px; color:#fff; }
 .recordC .sad{width:100%; overflow:hidden; margin-top:5px; }
 .recordC .sad a{padding:6px 20px; margin-left:3%; font-size:16px; color:#43C328; border:1px solid #43C328; border-radius:4px; }
 .recordC .sad a.on{background:#43C328; color:#fff; }
-.recordC ul{display:none; width:100%; margin-top:30px; }
-.recordC ul.u1{display:block; }
+.recordC ul{ width:100%; margin-top:30px; }
 .recordC ul table thead{background:#1D1E22; }
 .recordC ul table thead tr{height:50px; }
 .recordC ul table thead tr th{font-size:16px; color:#FEC107; }
@@ -207,7 +209,7 @@
 /* 交易记录 end */
 
 /* 分享注册 start */
-.shareC{width:100%; }
+.shareC{width:100%; padding-bottom: 20px }
 .shareC h1{line-height:100px; }
 .shareC h1 b{margin-left:40px; font-size:24px; color:#fff; }
 .shareC ul{width:100%; margin-top:30px; }
@@ -217,7 +219,7 @@
 /* 分享注册 end */
 
 /* 我要播种 start */
-.offerC{width:100%; }
+.offerC{width:100%;padding-bottom: 20px  }
 .offerC h1{line-height:100px; }
 .offerC h1 b{margin-left:40px; font-size:24px; color:#fff; }
 .offerC h2{font-size:26px; color:#FCC006; text-align:center; margin-top:10px; overflow:hidden; }
@@ -233,7 +235,7 @@
 /* 我要播种 end */
 
 /* 我要收获 start */
-.applyC{width:100%; }
+.applyC{width:100%;padding-bottom: 20px  }
 .applyC h1{line-height:100px; }
 .applyC h1 b{margin-left:40px; font-size:24px; color:#fff; }
 .applyC h2{font-size:26px; color:#FCC006; text-align:center; margin-top:10px; overflow:hidden; }
@@ -245,7 +247,7 @@
 /* 我要收获 end */
 
 /* 播种记录 start */
-.offer_logC{width:100%; }
+.offer_logC{width:100%; padding-bottom: 20px }
 .offer_logC h1{line-height:100px; }
 .offer_logC h1 b{margin-left:40px; font-size:24px; color:#fff; }
 .offer_logC h2{font-size:26px; color:#FCC006; text-align:center; margin-top:10px; overflow:hidden; }
@@ -285,7 +287,7 @@
 /* 播种记录 end */
 
 /* 收获记录 start */
-.apply_logC{width:100%; }
+.apply_logC{width:100%; padding-bottom: 20px }
 .apply_logC h1{line-height:100px; }
 .apply_logC h1 b{margin-left:40px; font-size:24px; color:#fff; }
 .apply_logC h2{font-size:26px; color:#FCC006; text-align:center; margin-top:10px; overflow:hidden; }

@@ -10,9 +10,9 @@
 	</h2>
 
 	<div class="sad">
-		<a href="javascript:;" :class="{'on' : tab == 0}" @click="tabClick('money',0)">本 金</a>
-		<a href="javascript:;" :class="{'on' : tab == 1}" @click="tabClick('interest',1)">利 息</a>
-		<a href="javascript:;" :class="{'on' : tab == 2}" @click="tabClick('bonus',2)">团队奖励</a>
+		<a href="javascript:;" :class="{'on' : tab == 0}" @click="tabClick(0)">本 金</a>
+		<a href="javascript:;" :class="{'on' : tab == 1}" @click="tabClick(1)">利 息</a>
+		<a href="javascript:;" :class="{'on' : tab == 2}" @click="tabClick(2)">团队奖励</a>
 
 		<span style="position:relative;top:90px;float:right;color:#ccc;">提现说明：首先扣除可提团队奖，不够再扣利息，利息不够再扣可提本金。</span>
 	</div>
@@ -22,7 +22,7 @@
 		<h2>
 			<span>本金总额：<b>{{$parent.capitalSum | currency '￥'}}</b></span>
 			<span>本金冻结总额：<b>{{$parent.moneyFreeze | currency '￥'}}</b></span>
-			<span>本金可提现总额：<b>{{$parent.member.money | }}</b></span>
+			<span>本金可提现总额：<b>{{$parent.member.money | currency '￥'}}</b></span>
 		</h2>
 
 		<table>
@@ -34,7 +34,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="item in model0">
+				<tr v-for="item in model0" class="row-{{$index % 2}}">
 					<td>{{item.money | currency '￥'}}</td>
 					<td>{{item.intro}}</td>
 					<td>{{item.the_time | datetime}}</td>
@@ -58,7 +58,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="item in model1">
+				<tr v-for="item in model1" class="row-{{$index % 2}}">
 					<td>{{item.money | currency '￥'}}</td>
 					<td>{{item.intro}}</td>
 					<td>{{item.the_time | datetime}}</td>
@@ -83,7 +83,7 @@
 				</tr>
 			</thead>
 			<tbody id="bonus_tbody">
-				<tr v-for="item in model2">
+				<tr v-for="item in model2" class="row-{{$index % 2}}">
 					<td>{{item.money | currency '￥'}}</td>
 					<td>{{item.intro}}</td>
 					<td>{{item.the_time | datetime}}</td>
@@ -122,38 +122,44 @@
 		components:{pagination},
 		route:{
 			data(transition){
-				this.load('money', this.pageCfg.p0, 0)
+				this.load(this.pageCfg.p0, 0)
 				transition.next()
 			}
 		},
 		methods:{
-			load:function(type, page, flag){
+			load:function(page, n){
 				let vm = this
-				API.IncomeRecords(type,page).then(function(data){
+				let type = n == 0 ? 'money' : 
+				           n == 1 ? 'interest' : 
+						   n ==2 ? 'bonus' : ''
+
+				if(!type) return
+
+				API.IncomeRecords(type, page).then(function(data){
 					if(data.isSuccess){
 						let d = data.data
-						vm.$set('model'+ flag, d.rows)
-						vm.$set('pageCfg.p'+ flag, page)
-						vm.$set('pageCfg.t'+ flag, d.count)
+						vm.$set('model'+ n, d.rows)
+						vm.$set('pageCfg.p'+ n, page)
+						vm.$set('pageCfg.t'+ n, d.count)
 					}else{
 						alert2(data.error.message)
 					}
 				})
 			},
-			tabClick(type,i){
+			tabClick(i){
 				this.tab = i
-				this.load(type, this.pageCfg['p'+i], i)
+				this.load(this.pageCfg['p'+i], i)
 			}
 		},
 		events:{
 			'on-page-changed0':function(page){
-				this.load('money', page, 0)
+				this.load(page, 0)
 			},
 			'on-page-changed1':function(page){
-				this.load('interest', page, 1)
+				this.load(page, 1)
 			},
 			'on-page-changed2':function(page){
-				this.load('bonus', page, 2)
+				this.load(page, 2)
 			}
 		}
     }

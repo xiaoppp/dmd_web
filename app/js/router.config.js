@@ -1,21 +1,23 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import Vue from 'vue'
+import VueRouter from 'vue-router'
 
-import index from '../components/index.vue';
-import offer from '../components/offer.vue';
-import apply from '../components/apply.vue';
-import info from '../components/info.vue';
-import team from '../components/team.vue';
-import income from '../components/income.vue';
-import record from '../components/record.vue';
-import news from '../components/news.vue';
-import newssingle from '../components/newssingle.vue';
-import messages from '../components/messages.vue';
-import messagesingle from '../components/messagesingle.vue';
-import leavemsg from '../components/leavemsg.vue';
-import share from '../components/share.vue';
+import index from '../components/index.vue'
+import offer from '../components/offer.vue'
+import apply from '../components/apply.vue'
+import info from '../components/info.vue'
+import team from '../components/team.vue'
+import income from '../components/income.vue'
+import record from '../components/record.vue'
+import news from '../components/news.vue'
+import newssingle from '../components/newssingle.vue'
+import messages from '../components/messages.vue'
+import messagesingle from '../components/messagesingle.vue'
+import leavemsg from '../components/leavemsg.vue'
+import share from '../components/share.vue'
+import offerDetail from '../components/offer_detail.vue'
+import applyDetail from '../components/apply_detail.vue'
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
 const router = new VueRouter({
     history: false,
@@ -36,6 +38,10 @@ router.map({
         name:'apply',
         component: apply
     },
+    '/applydetail/:id': {
+        name : 'applydetail',
+        component : applyDetail
+    },
     '/info': {
         name:'info',
         component: info
@@ -51,6 +57,10 @@ router.map({
     '/record': {
         name:'record',
         component: record
+    },
+    '/offerdetail/:id':{
+        name : 'offerdetail',
+        component : offerDetail
     },
     '/news': {
         name:'news',
@@ -76,12 +86,12 @@ router.map({
         name:'share',
         component: share
     }
-});
+})
 
 router.redirect({
     '*': '/index'
-});
+})
 
-router.go({name:'index'});
+router.go({name:'index'})
 
-export default router;
+export default router

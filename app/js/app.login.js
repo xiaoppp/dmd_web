@@ -21,10 +21,10 @@ new Vue({
                     alert2("登录成功！").then(function(){
                         var url = window.location.protocol + "://" + window.location.host + '/';
                         console.log(url);
-                        window.location.href = url;
+                        window.location.href = '/index.html';
                     });
                 } else {
-                    var msg = '[' + data.error.code + ']  ' + data.error.message;
+                    var msg =  data.error.message;
                     alert2(msg);
                 }
             }).catch(function(err){

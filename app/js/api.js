@@ -1,9 +1,7 @@
 import request from 'superagent'
 import Q from 'q'
 import config from './config'
-
-const API_HOST = 'http://192.168.1.104:3000/api/'
-const LOGIN_KEY = "member.login.information"
+import router from './router.config'
 
 export const API = {
     News(page){
@@ -39,7 +37,7 @@ export const API = {
             if (data.isSuccess){
                 //data.data   { memberid, token}
                 //save the login info in localStorage
-                window.localStorage.setItem(LOGIN_KEY, JSON.stringify(data.data));
+                window.localStorage.setItem(config.loginkey, JSON.stringify(data.data));
                 config.ajaxRequireToken = true;
             }
             deferred.resolve(data);
@@ -51,7 +49,7 @@ export const API = {
     Logout(model){
         var deferred = Q.defer();
         HTTP_POST(_Combine('member/signout'),model).then(function(data){
-           window.localStorage.removeItem(LOGIN_KEY);
+           window.localStorage.removeItem(config.loginkey);
            deferred.resolve(data);
         }).catch(function(err){
             deferred.reject(err);
@@ -62,7 +60,7 @@ export const API = {
         var deferred = Q.defer();
         config.ajaxRequireToken = false;
         HTTP_POST(_Combine('member/signup'),model).then(function(data){
-           window.localStorage.setItem(LOGIN_KEY, data.data);
+           window.localStorage.setItem(config.loginkey, data.data);
            config.ajaxRequireToken = true;
            deferred.resolve(data);
         }).catch(function(err){
@@ -107,8 +105,28 @@ export const API = {
         return HTTP_GET(_Combine('member/children/amount/',id));
     },
     IncomeRecords(type,page){
+        //type  =  money or  interest or bonus
         let who = GET_MEMBER_INFO()
         return HTTP_GET(_Combine('income/',type,'/',who.id,'/',page))
+    },
+    DealRecords(type,page){
+        // type = offers or applys or unmatches
+        let who = GET_MEMBER_INFO()
+        return HTTP_GET(_Combine(type,'/', who.id))
+    },
+    IsNewMember(){
+        let who = GET_MEMBER_INFO()
+        return HTTP_GET(_Combine('member/check/new/',who.id))
+    },
+    OfferDetail(id){
+        let who = GET_MEMBER_INFO()
+        let model = {offerid : id, memberid: who.id}
+        return HTTP_POST(_Combine('offer/detail'),model)
+    },
+    ApplyDetail(id){
+        let who = GET_MEMBER_INFO()
+        let model = {applyid : id, memberid : who.id}
+        return HTTP_POST(_Combine('apply/detail'),model)
     }
 }
 
@@ -118,7 +136,7 @@ function _Combine(...parts){
     let len = parts.length;
     if(len === 0) throw 'no parts provided';
     else {
-        let raw = API_HOST;
+        let raw = config.host;
         for(let i=0; i < len; i++){
             raw += parts[i];
         }
@@ -198,20 +216,23 @@ export function HTTP_DELETE(url,data) {
     return deferred.promise;
 }
 
-//** LocalStrorage  & Member Info
+//** LocalStrorage  & Member Info  auth
 
 var MEMBER_INFO = {};
 
 //取会员登录时保存在LocalStorage中的值
 export function GET_MEMBER_LOGIN_INFO() {
-    var who = window.localStorage.getItem(LOGIN_KEY);
-    if(!who) throw "no member login";
-    who = JSON.parse(who);
-    return who;
+    var who = window.localStorage.getItem(config.loginkey);
+    if(!who) {
+        window.location.href = '/login.html'
+    }else{
+        who = JSON.parse(who);
+        return who;
+    }
 }
 
 export function HAS_LOGIN() {
-    var who = window.localStorage.getItem(LOGIN_KEY);
+    var who = window.localStorage.getItem(config.loginkey);
     if(!who) return false;
     else return true;
 }

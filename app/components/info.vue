@@ -88,18 +88,18 @@
                         </li>
                         <li>
                             <span>新密码：</span>
-                            <em><input type="password" class="text" v-model="pwdModel.pwd" v-validate:old_pwd="validationRules.pwd"></em>
+                            <em><input type="password" class="text" v-model="pwdModel.pwd" v-validate:pwd="validationRules.pwd"></em>
                             <validation-errors :field="$validation1.pwd"></validation-errors>
                         </li>
                         <li>
                             <span>确认密码：</span>
-                            <em><input type="password" class="text" v-model="pwdModel.repwd" v-validate:old_pwd="validationRules.repwd"></em>
+                            <em><input type="password" class="text" v-model="pwdModel.repwd" v-validate:repwd="validationRules.repwd"></em>
                             <validation-errors :field="$validation1.repwd"></validation-errors>
                         </li>
                         <li>
                             <span>安全密码：</span>
-                            <em><input type="password" class="text" v-model="pwdModel.pay_pwd3" v-validate:old_pwd="validationRules.pay_pwd3"></em>
-                            c
+                            <em><input type="password" class="text" v-model="pwdModel.pay_pwd3" v-validate:pay_pwd3="validationRules.pay_pwd3"></em>
+                            <validation-errors :field="$validation1.pay_pwd3"></validation-errors>
                         </li>
                         <li>
                             <span>&nbsp;</span>
@@ -173,14 +173,14 @@
                 <li>
                     <span>手机验证码：</span>
                     <em>
-		                  <input type="text" v-model="payPwdModel2.mobile_checkcode" v-validate:captcha="validationRules.mobile_checkcode" class="text" style="width:150px;">
+		                  <input type="text" v-model="payPwdModel2.mobile_checkcode" v-validate:mobile_checkcode="validationRules.mobile_checkcode" class="text" style="width:150px;">
   				            <input type="button" class="sbtn" data-type="forget" id="send_mobile_checkcode" value="发送验证码" style="border:0;outline:none;width:150px;height:45px;background:#FFC30D;color:#fff;">
   			            </em>
                           <validation-errors :field="$validation3.mobile_checkcode"></validation-errors>
                 </li>
                 <li>
                     <span>新安全密码：</span>
-                    <em><input type="text" class="text" v-model="payPwdModel2.pay_pwd5" v-validate:captcha="validationRules.pay_pwd5"></em>
+                    <em><input type="text" class="text" v-model="payPwdModel2.pay_pwd5" v-validate:pay_pwd5="validationRules.pay_pwd5"></em>
                     <validation-errors :field="$validation3.pay_pwd5"></validation-errors>
                 </li>
                 <li>
@@ -202,18 +202,18 @@
     </div>
   </template>
 <script>
-    import Vue from 'vue';
+    import Vue from 'vue'
 
-    import VueValidator from 'vue-validator';
+    import VueValidator from 'vue-validator'
 
-    import {Banks} from '../js/constants';
+    import {Banks} from '../js/constants'
     
-    import {GET_MEMBER_INFO,API} from '../js/api';
-    import {alert2} from '../js/utils';
-    import {ValidatorRules} from  '../js/validation';
-    import validationErrors from '../components/_validation_errors.vue';
+    import {GET_MEMBER_INFO,API,SET_MEMBER_INFO} from '../js/api'
+    import {alert2} from '../js/utils'
+    import {ValidatorRules} from  '../js/validation'
+    import validationErrors from '../components/_validation_errors.vue'
 
-    Vue.use(VueValidator);
+    Vue.use(VueValidator)
 
     export default {
 
@@ -231,8 +231,8 @@
         },
         route:{
             data(transition){
-                var who = GET_MEMBER_INFO();
-                console.log(who);
+                var who = GET_MEMBER_INFO()
+                console.log(who)
 
                 let m = {
                     id : who.id,
@@ -243,14 +243,15 @@
                     bank_num : who.bank_num,
                     bank_addr : who.bank_addr,
                     mobile : who.mobile,
-                    username : who.username
-                };
+                    username : who.username,
+                    truename : who.truename
+                }
                 
                 API.ParentMember(who.parent_id).then(function(data){
                     if(data.isSuccess){
-                        transition.next({'parent':data.data,'model':m});
+                        transition.next({'parent':data.data,'model':m})
                     } else {
-                        alert2(data.error.message);
+                        alert2(data.error.message)
                     }
                 });               
             }
@@ -260,26 +261,27 @@
                 console.log(this.model);
                 API.EditMemberInfo(this.model).then(function(data){
                     if(data.isSuccess){
-                        alert2('修改资料成功！');
+                        alert2('修改资料成功！')
+                        SET_MEMBER_INFO(data.data)
                     } else {
-                        alert2(data.error.message);
+                        alert2(data.error.message)
                     }
-                    console.log(data);
+                    console.log(data)
                 }).catch(function(err){
-                    console.log(err);
+                    console.log(err)
                 });
             },
             changePwd(){
-                console.log(this.pwdModel);
-                alert2('change pwd');
+                console.log(this.pwdModel)
+                alert2('change pwd')
             },
             changePayPwd(){
-                console.log(this.payPwdModel);
-                alert2('change pay pwd');
+                console.log(this.payPwdModel)
+                alert2('change pay pwd')
             },
             changePayPwd2(){
-                console.log(this.payPwdModel2);
-                alert2('change pay pwd 2');
+                console.log(this.payPwdModel2)
+                alert2('change pay pwd 2')
             }
         },
         components:{validationErrors}

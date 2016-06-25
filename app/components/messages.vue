@@ -37,7 +37,7 @@ export default {
 	methods:{
 		load(page){
 			let vm = this
-			API.News(page).then(function(data){
+			API.Messages(page).then(function(data){
 				var d = data.data
 
 				var count = d.count

@@ -18,3 +18,11 @@ export const Banks = [
     {value:'ceb',text:'中国光大银行'},
     {value:'other',text:'其它银行（写在分行前）'}
 ]
+
+export const States = [
+    "已取消",
+    "等待配对",
+    "配对成功，待打款",
+    "打款成功，待收款",
+    "订单已完成"
+]

@@ -10,7 +10,10 @@ module.exports = {
         index: path.resolve(APP_PATH, 'index.js'),
         login: path.resolve(APP_PATH, 'app.login.js'),
         register: path.resolve(APP_PATH, 'app.register.js'),
-        vendor1: ['superagent', 'q', 'vue','vuex','vue-validator','moment','js-htmlencode','qrcodejs','clipboard']
+        error : path.resolve(APP_PATH, 'app.error.js'),
+        vendor1: [  'superagent', 'q', 'vue','vuex',
+                    'vue-validator','moment','js-htmlencode',
+                    'qrcodejs','clipboard']
     },
     output: {
         path: BUILD_PATH,
@@ -32,6 +35,9 @@ module.exports = {
         }, {
             test: /\.vue$/,
             loader: 'vue'
+        },{
+            test:/\.(png|gif|bmp|jpg)$/,
+            loader: 'null'
         }]
     },
     plugins: [

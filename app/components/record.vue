@@ -3,11 +3,11 @@
 <div class="recordC">
 	<h1><b>交易记录</b></h1>
 	<div class="sad">
-		<a href="javascript:;" class="on" data-i="1">播种记录</a>
-		<a href="javascript:;" data-i="2">收获记录</a>
-		<a href="javascript:;" data-i="3">失败匹配记录</a>
+		<a href="javascript:void(0);" :class="{'on': tab == 0}" @click="tabClick(0)">播种记录</a>
+		<a href="javascript:void(0);" :class="{'on': tab == 1}"  @click="tabClick(1)">收获记录</a>
+		<a href="javascript:void(0);" :class="{'on': tab == 2}" @click="tabClick(2)">失败匹配记录</a>
 	</div>
-	<ul class="u1">
+	<ul class="u1" v-show="tab == 0">
 		<table>
 			<thead>
 				<tr>
@@ -21,40 +21,20 @@
 				</tr>
 			</thead>
 			<tbody>
-							<tr>
-					<td>O100971465735712</td>
-					<td>30000.00</td>
-					<td>2016-06-12 20:48:32</td>
-					<td>0人</td>
-					<td>暂无</td>
-					<td style="color:#FEC107;">
-						进行中...					</td>
-					<td><a href="/?act=offer&amp;op=offer2&amp;id=16435" class="see">查看</a></td>
+				<tr v-for="item in model0" class="row-{{$index % 2}}">
+					<td>{{item.offer.code}}</td>
+					<td>{{item.offer.money | currency '￥'}}</td>
+					<td>{{item.offer.the_time | datetime}}</td>
+					<td>{{item.pct}}人</td>
+					<td>{{item.offer.end_time | datetime }}</td>
+					<td :style="{color : item.offer.state == 100 ? '#43C328' : '#FEC107'}">{{item.offer.state == 100 ? '已完成':'进行中...'}}</td>
+					<td><a v-link="{name:'offerdetail',params:{id:item.offer.id}}" href="" class="see">查看</a></td>
 				</tr>
-							<tr style="background: rgb(58, 59, 63);">
-					<td>O100971465052090</td>
-					<td>30000.00</td>
-					<td>2016-06-04 22:54:50</td>
-					<td>10人</td>
-					<td>2016-06-11 21:50:59</td>
-					<td style="color:#43C328;">
-						已完成					</td>
-					<td><a href="/?act=offer&amp;op=offer2&amp;id=11421" class="see">查看</a></td>
-				</tr>
-							<tr>
-					<td>O100971465049826</td>
-					<td>1000.00</td>
-					<td>2016-06-04 22:17:06</td>
-					<td>1人</td>
-					<td>2016-06-04 22:50:23</td>
-					<td style="color:#43C328;">
-						已完成					</td>
-					<td><a href="/?act=offer&amp;op=offer2&amp;id=11382" class="see">查看</a></td>
-				</tr>
-						</tbody>
+			</tbody>
 		</table>
+		<!--<pagination :page="pageCfg.p0" :total="pageCfg.t0" event-name="on-page-changed0"></pagination>-->
 	</ul>
-	<ul class="u2">
+	<ul class="u2" v-show="tab == 1">
 		<table>
 			<thead>
 				<tr>
@@ -68,30 +48,21 @@
 				</tr>
 			</thead>
 			<tbody>
-							<tr>
-					<td>A100971465696932</td>
-					<td>2400.00</td>
-					<td>2016-06-12 10:02:12</td>
-					<td>1人</td>
-					<td>2016-06-12 15:39:53</td>
-					<td style="color:#43C328;">
-						已完成					</td>
-					<td><a href="/?act=apply&amp;op=apply2&amp;id=13259" class="see">查看</a></td>
+				<tr v-for="item in model1" class="row-{{$index % 2}}">
+					<td>{{item.apply.code}}</td>
+					<td>{{item.apply.money | currency '￥'}}</td>
+					<td>{{item.apply.the_time | datetime}}</td>
+					<td>{{item.pct}}人</td>
+					<td>{{item.apply.end_time | datetime }}</td>
+					<td :style="{color : item.apply.state == 100 ? '#43C328' : '#FEC107'}">{{item.apply.state == 100 ? '已完成':'进行中...'}}</td>
+					<td><a href="javascript:void(0);" v-link="{name:'applydetail', params:{ id: item.apply.id}}" class="see">查看</a></td>
 				</tr>
-							<tr>
-					<td>A100971465633645</td>
-					<td>3000.00</td>
-					<td>2016-06-11 16:27:25</td>
-					<td>1人</td>
-					<td>2016-06-12 10:00:54</td>
-					<td style="color:#43C328;">
-						已完成					</td>
-					<td><a href="/?act=apply&amp;op=apply2&amp;id=12746" class="see">查看</a></td>
-				</tr>
-						</tbody>
+			</tbody>
 		</table>
+		<!--<pagination :page="pageCfg.p1" :total="pageCfg.t1" event-name="on-page-changed1"></pagination>-->
 	</ul>
-	<ul class="u3">
+
+	<ul class="u3" v-show="tab == 2">
 		<table>
 			<thead>
 				<tr>
@@ -108,12 +79,98 @@
 				</tr>
 			</thead>
 			<tbody>
-						</tbody>
+				<tr v-for="item in model2" class="row-{{$index % 2}}">
+					<td>{{M.id == item_om_id ? '播种' : '收获'}}</td>
+					<td>{{item.code}}</td>
+					<td>{{item.money | currency '￥'}}</td>
+					<td>{{item.the_time | datetime}}</td>
+					<td>{{M.id == item.om_id ? item.am.truename : item.om.truename}}</td>
+					<td>{{M.id == item.om_id ? item.am.mobile : item.om.mobile}}</td>
+					<td>{{item.order_money | currency '￥'}}</td>
+					<td>{{item.order_the_time | datetime}}</td>
+					<td>{{item.unmatch_time | datetime}}</td>
+					<td>{{item.intro}}</td>
+				</tr>
+			</tbody>
 		</table>
+		<!--<pagination :page="pageCfg.p2" :total="pageCfg.t2" event-name="on-page-changed2"></pagination>-->
 	</ul>
 </div>
 </div>
 </template>
+
 <script>
-export default {}
+
+import pagination from './_pagination.vue'
+import {API,GET_MEMBER_INFO} from '../js/api'
+
+export default {
+
+	data(){
+		return {
+			tab : 0,
+			model0 : [],
+			model1 : [],
+			model2 : [],
+			pageCfg  : {
+				p0 : 1,
+				p1 : 1, 
+				p2 : 1,
+				t0 : 0,
+				t1 : 0,
+				t2 : 0
+			}
+		}
+	},
+	computed:{
+		M(){
+			let who = GET_MEMBER_INFO()
+			return who
+		}
+	},
+	components:{ pagination },
+		route:{
+			data(transition){
+				this.load(this.pageCfg.p0, 0)
+				transition.next()
+			}
+		},
+		methods:{
+			load:function(page, n){
+				let vm = this
+				let type = n == 0 ? 'offers':
+						   n == 1 ? 'applys':
+						   n == 2 ? 'pairs/failed' : ''
+
+				if(!type) return
+
+				API.DealRecords(type, page).then(function(data){
+					if(data.isSuccess){
+						let d = data.data
+						vm.$set('model'+ n, d)
+						// vm.$set('pageCfg.p'+ n, page)
+						// vm.$set('pageCfg.t'+ n, d.count)
+					} else {
+						alert2(data.error.message)
+					}
+				})
+			},
+			tabClick(i){
+				this.tab = i
+				this.load(this.pageCfg['p'+i], i)
+			}
+		},
+		events:{
+			'on-page-changed0':function(page){
+				this.load(page, 0)
+			},
+			'on-page-changed1':function(page){
+				this.load(page, 1)
+			},
+			'on-page-changed2':function(page){
+				this.load(page, 2)
+			}
+		}
+
+}
 </script>

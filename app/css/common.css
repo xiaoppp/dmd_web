@@ -29,9 +29,9 @@ body{background:#26272C; }
 /* 顶部开始 start */
 .topC{width:100%; height:90px; background:#33363F; clear:both; }
 .topC .logoa{float:left; margin-left:20px; line-height:90px; }
-.topC .logoa img{height:60px; }
+.topC .logoa img{height:60px;  margin: 15px 0; }
 .topC .rt{float:right; line-height:90px; margin-right:30px; font-size:16px; color:#fff; }
-.topC .imga img{width:60px; height:60px; border-radius:31px; }
+.topC .imga img{width:60px; height:60px; border-radius:31px;    margin: 15px 0; }
 .topC .dengji{padding-left:24px; background:url(../images/dengji.png) no-repeat left center; }
 .topC .tuichu{padding-left:24px; background:url(../images/tuichu.png) no-repeat left center; }
 /* 顶部开始 end */

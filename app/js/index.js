@@ -1,30 +1,27 @@
-import Vue from 'vue';
+import Vue from 'vue'
 
-import router from './router.config';
+import router from './router.config'
 
-import Store from './store';
-import './filters';
+import Store from './store'
+import './filters'
 import './constants'
-import { API,GET_MEMBER_INFO,SET_MEMBER_INFO,GET_MEMBER_LOGIN_INFO } from './api';
-import {alert2} from './utils';
+import { API,GET_MEMBER_INFO,SET_MEMBER_INFO,GET_MEMBER_LOGIN_INFO } from './api'
+import {alert2} from './utils'
 
 const App = Vue.extend({
         data(){
             return {
                 member:{},
-                config6:{},
-                config24:{},
-                config3:{},
                 bonusFreeze:0,
                 moneyFreeze:0,
+                config:{},
                 offer:{},
+                apply:{},
                 offerPairs: 0,
                 applyPairs: 0,
                 showNews: false,
                 teamScope : 0,
             }
-        },
-        props: {
         },
         methods: {
             gBelieveSrc(n){
@@ -32,6 +29,12 @@ const App = Vue.extend({
                 if(b == undefined) return 'images/xin02.png'
                 var i = n < b ? 1 : 2
                 return "images/xin0"+ i +".png"
+            },
+            aboutIncome(offer){
+                let offer0 = offer || this.offer 
+                if(offer && offer.fst)
+                    return offer.money * this.config.key6 * this.config.key24
+                else return 0
             }
         },
         computed:{
@@ -58,19 +61,37 @@ const App = Vue.extend({
 			    return 	this.member.money + this.member.interest +
 			       	    this.member.bonus - this.money_apply
             },
+            M(){
+                let who = GET_MEMBER_INFO()
+                return who
+            }
         },
         created() {
 
-            let vm = this;
+            let vm = this
 
             API.IndexData().then(function(data){
-                if(data.isSuccess){
+                if(data.isSuccess) {
                     let d = data.data
+                    
                     SET_MEMBER_INFO(d.member)
                     vm.member = GET_MEMBER_INFO()
-                    vm.config6 = d.config6
-                    vm.config24 = d.config24
-                    vm.config3 = d.config3
+
+                    d.config.forEach(({id,val},i)=>{
+                        let t = val
+                        if(/-/.test(t)){
+                            t = t.split('-')
+                            t.forEach((v,i) => {
+                                if(/\./.test(v)) t[i] = parseFloat(v)
+                                else t[i] = parseInt(v)
+                            })
+                        } else {
+                            if(/\./.test(t)) t = parseFloat(t)
+                            else t = parseInt(t)
+                        }
+                        vm.config['key'+ id] = t
+                    })
+
                     vm.money_apply = d.money_apply || 10
                     vm.moneyFreeze = d.moneyFreeze
                     vm.bonusFreeze = d.bonusFreeze
@@ -80,11 +101,12 @@ const App = Vue.extend({
                     vm.apply = d.apply
 
                     console.log(data.data)
+                    
                 } else {
                     alert2(data.error.message)
                     console.log(data.error.message)
                 }
-            });
+            })
 
             let who = GET_MEMBER_LOGIN_INFO()
 
