@@ -12,139 +12,39 @@ webpackJsonp([1],[
 
 	var _router2 = _interopRequireDefault(_router);
 
-	var _store = __webpack_require__(91);
-
-	var _store2 = _interopRequireDefault(_store);
-
 	__webpack_require__(93);
 
 	__webpack_require__(32);
+
+	var _data = __webpack_require__(198);
+
+	var $D = _interopRequireWildcard(_data);
 
 	var _api = __webpack_require__(17);
 
 	var _utils = __webpack_require__(3);
 
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var App = _vue2.default.extend({
 	    data: function data() {
-	        return {
-	            member: {},
-	            bonusFreeze: 0,
-	            moneyFreeze: 0,
-	            config: {},
-	            offer: {},
-	            apply: {},
-	            offerPairs: 0,
-	            applyPairs: 0,
-	            showNews: false,
-	            teamScope: 0
-	        };
+	        return { nickname: 'temp', level: 3, believe: 1 };
 	    },
 
 	    methods: {
 	        gBelieveSrc: function gBelieveSrc(n) {
-	            var b = this.member.believe;
-	            if (b == undefined) return 'images/xin02.png';
+	            var b = this.believe;
+	            if (!b) return 'images/xin02.png';
 	            var i = n < b ? 1 : 2;
 	            return "images/xin0" + i + ".png";
-	        },
-	        aboutIncome: function aboutIncome(offer) {
-	            var offer0 = offer || this.offer;
-	            if (offer && offer.fst) return offer.money * this.config.key6 * this.config.key24;else return 0;
 	        }
 	    },
-	    computed: {
-	        //本金总额
-
-	        capitalSum: function capitalSum() {
-	            return this.member.money + this.moneyFreeze;
-	        },
-
-	        //奖金总额
-	        bonusSum: function bonusSum() {
-	            return this.member.bonus + this.bonusFreeze;
-	        },
-
-	        //账户总资产
-	        total: function total() {
-	            return this.member.money + this.member.interest + this.member.bonus + this.moneyFreeze + this.bonusFreeze;
-	        },
-
-	        //账户冻结资产
-	        freeze: function freeze() {
-	            return this.moneyFreeze + this.bonusFreeze;
-	        },
-
-	        //账户可提现总资产
-	        available: function available() {
-	            return this.member.money + this.member.interest + this.member.bonus - this.money_apply;
-	        },
-	        M: function M() {
-	            var who = (0, _api.GET_MEMBER_INFO)();
-	            return who;
-	        }
-	    },
-	    created: function created() {
-
-	        var vm = this;
-
-	        _api.API.IndexData().then(function (data) {
-	            if (data.isSuccess) {
-	                var d = data.data;
-
-	                (0, _api.SET_MEMBER_INFO)(d.member);
-	                vm.member = (0, _api.GET_MEMBER_INFO)();
-
-	                d.config.forEach(function (_ref, i) {
-	                    var id = _ref.id;
-	                    var val = _ref.val;
-
-	                    var t = val;
-	                    if (/-/.test(t)) {
-	                        t = t.split('-');
-	                        t.forEach(function (v, i) {
-	                            if (/\./.test(v)) t[i] = parseFloat(v);else t[i] = parseInt(v);
-	                        });
-	                    } else {
-	                        if (/\./.test(t)) t = parseFloat(t);else t = parseInt(t);
-	                    }
-	                    vm.config['key' + id] = t;
-	                });
-
-	                vm.money_apply = d.money_apply || 10;
-	                vm.moneyFreeze = d.moneyFreeze;
-	                vm.bonusFreeze = d.bonusFreeze;
-	                vm.offer = d.offer;
-	                vm.offerPairs = d.offerPairs;
-	                vm.showNews = d.showNews;
-	                vm.apply = d.apply;
-
-	                console.log(data.data);
-	            } else {
-	                (0, _utils.alert2)(data.error.message);
-	                console.log(data.error.message);
-	            }
-	        });
-
-	        var who = (0, _api.GET_MEMBER_LOGIN_INFO)();
-
-	        _api.API.TeamScope(who.memberid).then(function (data) {
-	            if (data.isSuccess) {
-	                var d = data.data;
-	                vm.teamScope = d;
-	                console.log(d);
-	            } else {
-	                (0, _utils.alert2)(data.error.message);
-	            }
-	        });
-	    },
-
-	    components: {},
-	    store: _store2.default
+	    components: {}
 	});
 
-	// start app
+	//start router.
 	_router2.default.start(App, '#app');
 
 /***/ },
@@ -283,6 +183,10 @@ webpackJsonp([1],[
 
 	var _apply_detail2 = _interopRequireDefault(_apply_detail);
 
+	var _blank = __webpack_require__(214);
+
+	var _blank2 = _interopRequireDefault(_blank);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	_vue2.default.use(_vueRouter2.default);
@@ -353,14 +257,15 @@ webpackJsonp([1],[
 	    '/share': {
 	        name: 'share',
 	        component: _share2.default
+	    },
+	    'blank': {
+	        name: 'blank',
+	        component: _blank2.default
 	    }
 	});
 
-	router.redirect({
-	    '*': '/index'
-	});
-
-	router.go({ name: 'index' });
+	router.redirect({ '*': '/index' });
+	router.go({ name: 'blank' });
 
 	exports.default = router;
 
@@ -3122,28 +3027,29 @@ webpackJsonp([1],[
 
 	var _utils = __webpack_require__(3);
 
+	var _data = __webpack_require__(198);
+
+	var D = _interopRequireWildcard(_data);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = {
-		computed: {
-			offer: function offer() {
-				return this.$parent.offer;
-			},
-			apply: function apply() {
-				return this.$parent.apply;
-			},
-			dmd: function dmd() {
-				return 0;
-			}
+		data: function data() {
+			return {
+				M: D.Member
+			};
 		},
+
 		methods: {
 			goApply: function goApply() {
 				var o = this.apply;
-				if (!o) return;else _router2.default.go({ name: "apply", query: { id: o.id } });
+				if (!o) return;else _router2.default.go({ name: "apply", params: { id: o.id } });
 			},
 			goOffer: function goOffer() {
 				var o = this.offer;
-				if (!o) return;else _router2.default.go({ name: "offer", query: { id: o.id } });
+				if (!o) return;else _router2.default.go({ name: "offer", params: { id: o.id } });
 			}
 		}
 	};
@@ -3152,7 +3058,7 @@ webpackJsonp([1],[
 /* 10 */
 /***/ function(module, exports) {
 
-	module.exports = "\r\n<div class=\"rmain\" style=\"background:#26272C;\">\r\n\r\n\t<div class=\"nifo\">\r\n\t\t<ul>\r\n\t\t\t<li><b>DMD币</b><span>{{dmd | currency '￥'}}</span></li>\r\n\t\t\t<li><b>本金总额</b><span>{{$parent.capitalSum | currency '￥'}}</span></li>\r\n\t\t\t<li><b>利息总额</b><span>{{$parent.member.interest | currency '￥'}}</span></li>\r\n\t\t\t<li><b>奖金总额</b><span>{{$parent.bonusSum | currency '￥'}}</span></li>\r\n\t\t</ul>\r\n\t</div>\r\n\r\n\t<div class=\"anniu\">\r\n\t\t<a href=\"\" v-link=\"{name:'offer'}\"><img src=\"/images/btn_bozhong.png\"></a>\r\n\t\t<a href=\"\" v-link=\"{name:'apply'}\"><img src=\"/images/btn_shouhuo.png\"></a>\r\n\t</div>\r\n\r\n\t<div class=\"bzsh\">\r\n\t\t<a href=\"javascript:void(0);\" @click=\"goOffer\" class=\"bs bz\" title=\"查看详情\">\r\n\t\t<i>{{offer?\"正在\":\"等待\"}}播种</i>\r\n\t\t\t<ul v-if=\"offer\">\r\n\t\t\t\t<li><span>金额：</span><b class=\"rd\">{{offer.money|currency '￥'}}</b></li>\r\n\t\t\t\t<li><span>匹配人数：</span><b>{{$parent.offerPairs}}人</b></li>\r\n\t\t\t\t<li><span>发起时间：</span><b>{{offer.the_time|datetime}}</b></li>\r\n\t\t\t\t<li><span>预计收益：</span><b>{{$parent.aboutIncome()}}</b></li>\r\n\t\t\t\t<li><span>状态：</span><b class=\"rd\">{{offer.state == 100 ? \"订单完成\" : \"进行中...\"}}</b></li>\r\n\t\t\t</ul>\r\n\t\t</a>\r\n\t\t<a href=\"javascript:void(0);\" @click=\"goApply\" class=\"bs sh\" title=\"查看详情\">\r\n\t\t<i class=\"i\">{{apply ? \"正在\" : \"等待\"}}收获</i>\r\n\t\t\t<ul v-if=\"apply\">\r\n\t\t\t\t<li><span>金额：</span><b class=\"rd\">{{apply.money}}</b></li>\r\n\t\t\t\t<li><span>匹配人数：</span><b>{{$parent.applyPairs}}人</b></li>\r\n\t\t\t\t<li><span>发起时间：</span><b>{{apply.the_time|datetime}}</b></li>\r\n\t\t\t\t<li><span>状态：</span><b class=\"rd\">{{apply.state == 100 ? \"订单完成\" : \"进行中...\"}}</b></li>\r\n\t\t\t</ul>\r\n\t\t</a>\r\n\t</div>\r\n</div>\r\n";
+	module.exports = "\r\n<div class=\"rmain\" style=\"background:#26272C;\">\r\n\r\n\t<div class=\"nifo\">\r\n\t\t<ul>\r\n\t\t\t<li><b>DMD币</b><span>{{ 0 | currency '￥'}}</span></li>\r\n\t\t\t<li><b>本金总额</b><span>{{M.capital.sum | currency '￥'}}</span></li>\r\n\t\t\t<li><b>利息总额</b><span>{{M.interest | currency '￥'}}</span></li>\r\n\t\t\t<li><b>奖金总额</b><span>{{M.capital.bonus | currency '￥'}}</span></li>\r\n\t\t</ul>\r\n\t</div>\r\n\r\n\t<div class=\"anniu\">\r\n\t\t<a href=\"\" v-link=\"{name:'offer'}\"><img src=\"/images/btn_bozhong.png\"></a>\r\n\t\t<a href=\"\" v-link=\"{name:'apply'}\"><img src=\"/images/btn_shouhuo.png\"></a>\r\n\t</div>\r\n\r\n\t<div class=\"bzsh\">\r\n\t\t<a href=\"javascript:void(0);\" @click=\"goOffer\" class=\"bs bz\" title=\"查看详情\">\r\n\t\t<i>{{M.lastOffer ? \"正在\":\"等待\"}}播种</i>\r\n\t\t\t<ul v-if=\"M.lastOffer\">\r\n\t\t\t\t<li><span>金额：</span><b class=\"rd\">{{M.lastOffer.money | currency '￥'}}</b></li>\r\n\t\t\t\t<li><span>匹配人数：</span><b>{{M.lastOffer.pairs}}人</b></li>\r\n\t\t\t\t<li><span>发起时间：</span><b>{{M.lastOffer.the_time | datetime}}</b></li>\r\n\t\t\t\t<li><span>预计收益：</span><b>{{M.capital.about}}</b></li>\r\n\t\t\t\t<li><span>状态：</span><b class=\"rd\">{{M.lastOffer.state == 100 ? \"订单完成\" : \"进行中...\"}}</b></li>\r\n\t\t\t</ul>\r\n\t\t</a>\r\n\t\t<a href=\"javascript:void(0);\" @click=\"goApply\" class=\"bs sh\" title=\"查看详情\">\r\n\t\t<i class=\"i\">{{M.lastApply ? \"正在\" : \"等待\"}}收获</i>\r\n\t\t\t<ul v-if=\"apply\">\r\n\t\t\t\t<li><span>金额：</span><b class=\"rd\">{{M.lastApply.money | currency '￥'}}</b></li>\r\n\t\t\t\t<li><span>匹配人数：</span><b>{{M.lastApply.pairs}}人</b></li>\r\n\t\t\t\t<li><span>发起时间：</span><b>{{M.lastApply.the_time | datetime}}</b></li>\r\n\t\t\t\t<li><span>状态：</span><b class=\"rd\">{{M.lastApply.state == 100 ? \"订单完成\" : \"进行中...\"}}</b></li>\r\n\t\t\t</ul>\r\n\t\t</a>\r\n\t\t<!--<div style=\"color:#fff;\">{{M | json}}</div>-->\r\n\t</div>\r\n</div>\r\n";
 
 /***/ },
 /* 11 */
@@ -3218,7 +3124,7 @@ webpackJsonp([1],[
 
 
 	// module
-	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.tips {\n    width: 92%;\n    margin: auto;\n    margin-bottom: 5px;\n    text-align: left;\n    font-size: 18px;\n    color: #FCC006;\n}\n\n.agree_label {\n    font-size: 18px;\n    color: #fff;\n}\n\n.agree_label .agree {\n    width: 20px;\n    height: 20px;\n}\n\n.agree_label .agree:checked {\n    -webkit-appearance: none;\n    background: #49A2DC url(/images/admin/checkbox_ed.png) no-repeat center center;\n    background-size: 100%;\n}\n", ""]);
+	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.tips {\n    width: 92%;\n    margin: auto;\n    margin-bottom: 5px;\n    text-align: left;\n    font-size: 18px;\n    color: #FCC006;\n}\n\n.agree_label {\n    font-size: 18px;\n    color: #fff;\n}\n\n.agree_label .agree {\n    width: 20px;\n    height: 20px;\n}\n\n.agree_label .agree:checked {\n    -webkit-appearance: none;\n    background: #49A2DC url(/images/admin/checkbox_ed.png) no-repeat center center;\n    background-size: 100%;\n}\n", ""]);
 
 	// exports
 
@@ -3515,6 +3421,12 @@ webpackJsonp([1],[
 
 	var _api = __webpack_require__(17);
 
+	var _data = __webpack_require__(198);
+
+	var $D = _interopRequireWildcard(_data);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 	exports.default = {
 	    data: function data() {
 	        return {
@@ -3523,7 +3435,8 @@ webpackJsonp([1],[
 	                money: 0,
 	                agree: false,
 	                i: 0
-	            }
+	            },
+	            config: $D.Config
 	        };
 	    },
 
@@ -3559,7 +3472,7 @@ webpackJsonp([1],[
 	        select: function select(i) {
 	            var vm = this;
 	            vm.model.i = i;
-	            vm.model.money = vm.$parent.config.key2[i];
+	            vm.model.money = vm.config.key2[i];
 	        }
 	    }
 	};
@@ -3580,8 +3493,6 @@ webpackJsonp([1],[
 	exports.HTTP_DELETE = HTTP_DELETE;
 	exports.GET_MEMBER_LOGIN_INFO = GET_MEMBER_LOGIN_INFO;
 	exports.HAS_LOGIN = HAS_LOGIN;
-	exports.GET_MEMBER_INFO = GET_MEMBER_INFO;
-	exports.SET_MEMBER_INFO = SET_MEMBER_INFO;
 
 	var _superagent = __webpack_require__(18);
 
@@ -3704,26 +3615,26 @@ webpackJsonp([1],[
 	    },
 	    IncomeRecords: function IncomeRecords(type, page) {
 	        //type  =  money or  interest or bonus
-	        var who = GET_MEMBER_INFO();
-	        return HTTP_GET(_Combine('income/', type, '/', who.id, '/', page));
+	        var who = GET_MEMBER_LOGIN_INFO();
+	        return HTTP_GET(_Combine('income/', type, '/', who.memberid, '/', page));
 	    },
 	    DealRecords: function DealRecords(type, page) {
-	        // type = offers or applys or unmatches
-	        var who = GET_MEMBER_INFO();
-	        return HTTP_GET(_Combine(type, '/', who.id));
+	        // type = offers or applys or pairs/failed
+	        var who = GET_MEMBER_LOGIN_INFO();
+	        return HTTP_GET(_Combine(type, '/', who.memberid));
 	    },
 	    IsNewMember: function IsNewMember() {
-	        var who = GET_MEMBER_INFO();
-	        return HTTP_GET(_Combine('member/check/new/', who.id));
+	        var who = GET_MEMBER_LOGIN_INFO();
+	        return HTTP_GET(_Combine('member/check/new/', who.memberid));
 	    },
 	    OfferDetail: function OfferDetail(id) {
-	        var who = GET_MEMBER_INFO();
-	        var model = { offerid: id, memberid: who.id };
+	        var who = GET_MEMBER_LOGIN_INFO();
+	        var model = { offerid: id, memberid: who.memberid };
 	        return HTTP_POST(_Combine('offer/detail'), model);
 	    },
 	    ApplyDetail: function ApplyDetail(id) {
-	        var who = GET_MEMBER_INFO();
-	        var model = { applyid: id, memberid: who.id };
+	        var who = GET_MEMBER_LOGIN_INFO();
+	        var model = { applyid: id, memberid: who.memberid };
 	        return HTTP_POST(_Combine('apply/detail'), model);
 	    }
 	};
@@ -3806,8 +3717,6 @@ webpackJsonp([1],[
 
 	//** LocalStrorage  & Member Info  auth
 
-	var MEMBER_INFO = {};
-
 	//取会员登录时保存在LocalStorage中的值
 	function GET_MEMBER_LOGIN_INFO() {
 	    var who = window.localStorage.getItem(_config2.default.loginkey);
@@ -3822,15 +3731,6 @@ webpackJsonp([1],[
 	function HAS_LOGIN() {
 	    var who = window.localStorage.getItem(_config2.default.loginkey);
 	    if (!who) return false;else return true;
-	}
-
-	//取当前会员信息
-	function GET_MEMBER_INFO() {
-	    if (MEMBER_INFO && MEMBER_INFO.id) return MEMBER_INFO;else throw "no member info provided.";
-	}
-
-	function SET_MEMBER_INFO(value) {
-	    MEMBER_INFO = value;
 	}
 
 /***/ },
@@ -3851,7 +3751,7 @@ webpackJsonp([1],[
 	exports.default = {
 	    ajaxRequireToken: true,
 	    pageSize: 12,
-	    host: 'http://192.168.1.103:3000/api/',
+	    host: 'http://192.168.1.101:3000/api/',
 	    loginkey: 'member.login.information'
 	};
 
@@ -3859,7 +3759,7 @@ webpackJsonp([1],[
 /* 25 */
 /***/ function(module, exports) {
 
-	module.exports = "\n  <div>\n  <div class=\"rmain\">\n      <div class=\"offerC\">\n          <h1><b>我要播种</b></h1>\n          <h2>请选择播种金额</h2>\n\n          <ul v-if=\"first\">\n              <li>\n                  <a href=\"javascript:;\" class=\"money on\" @click=\"select(0)\">\n                      <span>{{$parent.config.key2[0]}}</span>\n                      首次购买激活币\n                  </a>\n              </li>\n          </ul>\n\n          <ul v-if=\"!first\">\n              <li>\n                  <a href=\"javascript:;\" class=\"money\"  :class=\"{'on': model.i == 0}\"  @click=\"select(0)\"><span>{{$parent.config.key2[0]}}</span></a>\n              </li>\n\n              <li>\n                  <a href=\"javascript:;\" class=\"money\" :class=\"{'on': model.i == 1}\"  @click=\"select(1)\"><span>{{$parent.config.key2[1]}}</span></a>\n                  <a href=\"javascript:;\" class=\"money\" :class=\"{'on': model.i == 2}\"   @click=\"select(2)\"><span>{{$parent.config.key2[2]}}</span></a>\n              </li>\n\n              <li>\n                  <a href=\"javascript:;\" class=\"money\" :class=\"{'on': model.i == 3}\"   @click=\"select(3)\"><span>{{$parent.config.key2[3]}}</span></a>\n                  <a href=\"javascript:;\" class=\"money\" :class=\"{'on': model.i == 4}\"   @click=\"select(4)\"><span>{{$parent.config.key2[4]}}</span></a>\n                  <a href=\"javascript:;\" class=\"money\" :class=\"{'on': model.i == 5}\"   @click=\"select(5)\"><span>{{$parent.config.key2[5]}}</span></a>\n              </li>\n          </ul>\n\n          <ul>\n              <li class=\"sm\">\n                  <strong class=\"tips\">平台提示：</strong>\n                  本平台只提供大家一个信息交流的渠道，平台不收取任何费用，资金在会员中流转，闲钱互助，风险自控！请在自愿的前提下完成交易。\n                  <br/><br/>\n                  <br/>\n                  <label class=\"agree_label\"><input type=\"checkbox\" v-model=\"model.agree\" class=\"agree\">我已阅读并同意</label>\n              </li>\n              <li>\n                  <input type=\"button\" class=\"btn\" id=\"offer_help_btn\" @click=\"submit\">\n              </li>\n          </ul>\n      </div>\n  </div>\n</div>\n";
+	module.exports = "\n  <div>\n  <div class=\"rmain\">\n      <div class=\"offerC\">\n          <h1><b>我要播种</b></h1>\n          <h2>请选择播种金额</h2>\n\n          <ul v-if=\"first\">\n              <li>\n                  <a href=\"javascript:;\" class=\"money on\" @click=\"select(0)\">\n                      <span>{{config.key2[0]}}</span>\n                      首次购买激活币\n                  </a>\n              </li>\n          </ul>\n\n          <ul v-if=\"!first\">\n              <li>\n                  <a href=\"javascript:;\" class=\"money\"  :class=\"{'on': model.i == 0}\"  @click=\"select(0)\"><span>{{config.key2[0]}}</span></a>\n              </li>\n\n              <li>\n                  <a href=\"javascript:;\" class=\"money\" :class=\"{'on': model.i == 1}\"  @click=\"select(1)\"><span>{{config.key2[1]}}</span></a>\n                  <a href=\"javascript:;\" class=\"money\" :class=\"{'on': model.i == 2}\"   @click=\"select(2)\"><span>{{config.key2[2]}}</span></a>\n              </li>\n\n              <li>\n                  <a href=\"javascript:;\" class=\"money\" :class=\"{'on': model.i == 3}\"   @click=\"select(3)\"><span>{{config.key2[3]}}</span></a>\n                  <a href=\"javascript:;\" class=\"money\" :class=\"{'on': model.i == 4}\"   @click=\"select(4)\"><span>{{config.key2[4]}}</span></a>\n                  <a href=\"javascript:;\" class=\"money\" :class=\"{'on': model.i == 5}\"   @click=\"select(5)\"><span>{{config.key2[5]}}</span></a>\n              </li>\n          </ul>\n\n          <ul>\n              <li class=\"sm\">\n                  <strong class=\"tips\">平台提示：</strong>\n                  本平台只提供大家一个信息交流的渠道，平台不收取任何费用，资金在会员中流转，闲钱互助，风险自控！请在自愿的前提下完成交易。\n                  <br/><br/>\n                  <br/>\n                  <label class=\"agree_label\"><input type=\"checkbox\" v-model=\"model.agree\" class=\"agree\">我已阅读并同意</label>\n              </li>\n              <li>\n                  <input type=\"button\" class=\"btn\" id=\"offer_help_btn\" @click=\"submit\">\n              </li>\n          </ul>\n      </div>\n  </div>\n</div>\n";
 
 /***/ },
 /* 26 */
@@ -3903,10 +3803,18 @@ webpackJsonp([1],[
 
 	var _api = __webpack_require__(17);
 
+	var _data = __webpack_require__(198);
+
+	var D = _interopRequireWildcard(_data);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 	exports.default = {
 		data: function data() {
 			return {
-				model: 0
+				model: 0,
+				M: D.Member,
+				Cfg: D.Config
 			};
 		},
 
@@ -3914,10 +3822,10 @@ webpackJsonp([1],[
 			submit: function submit(evt) {
 				var vm = this;
 				var money = vm.model;
-				var min = vm.$parent.config.key3[0];
-				var time = vm.$parent.config.key3[1];
+				var min = vm.Cfg.key3[0];
+				var time = vm.Cfg.key3[1];
 
-				if (money > vm.available) (0, _utils.alert2)('你的可提现总额不足，无法提现。');else if (money < min) (0, _utils.alert2)('提现金额不可小于' + min + '元。');else if (money % time != 0) (0, _utils.alert2)('提现金额必须是' + time + '的倍数。');else {
+				if (money > vm.M.capital.available) (0, _utils.alert2)('你的可提现总额不足，无法提现。');else if (money < min) (0, _utils.alert2)('提现金额不可小于' + min + '元。');else if (money % time != 0) (0, _utils.alert2)('提现金额必须是' + time + '的倍数。');else {
 					_api.API.Apply(money).then(function (data) {
 						if (data.isSuccess) {
 							(0, _utils.alert2)('正在提现...');
@@ -3929,16 +3837,14 @@ webpackJsonp([1],[
 					});
 				}
 			}
-		},
-		computed: {}
-
+		}
 	};
 
 /***/ },
 /* 28 */
 /***/ function(module, exports) {
 
-	module.exports = "\r\n<div class=\"rmain\">\r\n  <div class=\"applyC\">\r\n  \t<h1><b>我要收获</b></h1>\r\n  \t<h2>请输入收获金额</h2>\r\n  \t<ul>\r\n  \t\t<li><input type=\"number\" class=\"text\" v-model=\"model\" step=\"{{$parent.config.key3[1]}}\" id=\"money\"></li>\r\n  \t\t<li class=\"sm\">\r\n\t\t\t  您的账户总额：{{$parent.total | currency '￥'}}元，\r\n\t\t\t  冻结总额：{{$parent.freeze | currency '￥'}}元，\r\n\t\t\t  正在提现总额：{{$parent.money_apply | currency '￥'}}元，\r\n\t\t\t  可提现总额：{{$parent.available | currency '￥'}}元。\r\n\t\t</li>\r\n  \t\t<li class=\"sm\">\r\n\t\t\t  收获金额最少{{$parent.config.key3[0] | currency '￥'}}元，\r\n\t\t\t  不能大于账户可用总余额，且必须是{{$parent.config.key3[1]}}的整倍数。\r\n\t\t</li>\r\n  \t\t<li><input type=\"button\" class=\"btn\" @click=\"submit\" id=\"apply_help_btn\"></li>\r\n  \t</ul>\r\n  </div>\r\n</div>\r\n";
+	module.exports = "\r\n<div class=\"rmain\">\r\n  <div class=\"applyC\">\r\n  \t<h1><b>我要收获</b></h1>\r\n  \t<h2>请输入收获金额</h2>\r\n  \t<ul>\r\n  \t\t<li><input type=\"number\" class=\"text\" v-model=\"model\" step=\"{{Cfg.key3[1]}}\" id=\"money\"></li>\r\n  \t\t<li class=\"sm\">\r\n\t\t\t  您的账户总额：{{M.capital.total | currency '￥'}}元，\r\n\t\t\t  冻结总额：{{M.capital.frozen | currency '￥'}}元，\r\n\t\t\t  正在提现总额：{{M.moneyApply | currency '￥'}}元，\r\n\t\t\t  可提现总额：{{M.capital.available | currency '￥'}}元。\r\n\t\t</li>\r\n  \t\t<li class=\"sm\">\r\n\t\t\t  收获金额最少{{Cfg.key3[0] | currency '￥'}}元，\r\n\t\t\t  不能大于账户可用总余额，且必须是{{Cfg.key3[1]}}的整倍数。\r\n\t\t</li>\r\n  \t\t<li><input type=\"button\" class=\"btn\" @click=\"submit\" id=\"apply_help_btn\"></li>\r\n  \t</ul>\r\n  </div>\r\n</div>\r\n";
 
 /***/ },
 /* 29 */
@@ -4608,7 +4514,7 @@ webpackJsonp([1],[
 
 
 	// module
-	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.allzichan{text-align:center; position:relative; top:-23px; font-size:16px; color:#FEC107; }\r\n.allzichan i{margin-left:3%; font-size:16px; color:#fff; }\r\n#page{width:800px; margin:auto; margin-top:25px; padding-bottom:25px; text-align:center; }\r\n#page a{font-size:20px; color:#999; margin-left:50px; }\r\n#page a:hover{color:#fff; }\r\n", ""]);
+	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.allzichan{text-align:center; position:relative; top:-23px; font-size:16px; color:#FEC107; }\r\n.allzichan i{margin-left:3%; font-size:16px; color:#fff; }\r\n#page{width:800px; margin:auto; margin-top:25px; padding-bottom:25px; text-align:center; }\r\n#page a{font-size:20px; color:#999; margin-left:50px; }\r\n#page a:hover{color:#fff; }\r\n", ""]);
 
 	// exports
 
@@ -4629,6 +4535,12 @@ webpackJsonp([1],[
 
 	var _api = __webpack_require__(17);
 
+	var _data = __webpack_require__(198);
+
+	var D = _interopRequireWildcard(_data);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = {
@@ -4645,7 +4557,8 @@ webpackJsonp([1],[
 					t0: 0,
 					t1: 0,
 					t2: 0
-				}
+				},
+				M: D.Member
 			};
 		},
 
@@ -4807,7 +4720,7 @@ webpackJsonp([1],[
 /* 53 */
 /***/ function(module, exports) {
 
-	module.exports = "\r\n<div class=\"rmain\">\r\n<div class=\"incomeC\">\r\n\t<h1><b>我的资产</b></h1>\r\n\t<h2 class=\"allzichan\">\r\n\t\t<i>账户总资产：</i> {{$parent.total | currency '￥'}}\r\n\t\t<i>账户冻结总资产：</i>{{$parent.freeze | currency '￥'}}\r\n\t\t<i>账户正在提现总资产：</i>{{$parent.money_apply | currency '￥'}}\r\n\t\t<i>账户可提现总资产：</i>{{$parent.available | currency '￥'}}\r\n\t</h2>\r\n\r\n\t<div class=\"sad\">\r\n\t\t<a href=\"javascript:;\" :class=\"{'on' : tab == 0}\" @click=\"tabClick(0)\">本 金</a>\r\n\t\t<a href=\"javascript:;\" :class=\"{'on' : tab == 1}\" @click=\"tabClick(1)\">利 息</a>\r\n\t\t<a href=\"javascript:;\" :class=\"{'on' : tab == 2}\" @click=\"tabClick(2)\">团队奖励</a>\r\n\r\n\t\t<span style=\"position:relative;top:90px;float:right;color:#ccc;\">提现说明：首先扣除可提团队奖，不够再扣利息，利息不够再扣可提本金。</span>\r\n\t</div>\r\n\r\n\t<ul class=\"u1\" v-show=\"tab == 0\">\r\n\r\n\t\t<h2>\r\n\t\t\t<span>本金总额：<b>{{$parent.capitalSum | currency '￥'}}</b></span>\r\n\t\t\t<span>本金冻结总额：<b>{{$parent.moneyFreeze | currency '￥'}}</b></span>\r\n\t\t\t<span>本金可提现总额：<b>{{$parent.member.money | currency '￥'}}</b></span>\r\n\t\t</h2>\r\n\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>说明</th>\r\n\t\t\t\t\t<th>时间</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody>\r\n\t\t\t\t<tr v-for=\"item in model0\" class=\"row-{{$index % 2}}\">\r\n\t\t\t\t\t<td>{{item.money | currency '￥'}}</td>\r\n\t\t\t\t\t<td>{{item.intro}}</td>\r\n\t\t\t\t\t<td>{{item.the_time | datetime}}</td>\r\n\t\t\t\t</tr>\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\t\t<pagination :page=\"pageCfg.p0\" :total=\"pageCfg.t0\" event-name=\"on-page-changed0\"></pagination>\r\n\t</ul>\r\n\r\n\t<ul class=\"u2\" v-show=\"tab == 1\">\r\n\t\t<h2>\r\n\t\t\t<span>利息总额：<b>{{$parent.member.interest | currency '￥'}}</b></span>\r\n\t\t\t<span>利息可提现总额：<b>{{$parent.member.interest | currency '￥'}}</b></span>\r\n\t\t</h2>\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>说明</th>\r\n\t\t\t\t\t<th>时间</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody>\r\n\t\t\t\t<tr v-for=\"item in model1\" class=\"row-{{$index % 2}}\">\r\n\t\t\t\t\t<td>{{item.money | currency '￥'}}</td>\r\n\t\t\t\t\t<td>{{item.intro}}</td>\r\n\t\t\t\t\t<td>{{item.the_time | datetime}}</td>\r\n\t\t\t\t</tr>\t\t\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\t\t<pagination :page=\"pageCfg.p1\" :total=\"pageCfg.t1\" event-name=\"on-page-changed1\"></pagination>\r\n\t</ul>\r\n\r\n\t<ul class=\"u3\" v-show=\"tab == 2\">\r\n\t\t<h2>\r\n\t\t\t<span>团队奖励总额：<b>{{$parent.bonusSum | currency '￥'}}</b></span>\r\n\t\t\t<span>团队奖励冻结总额：<b>{{$parent.bonusFreeze | currency '￥'}}</b></span>\r\n\t\t\t<span>团队奖励可提总额：<b>{{$parent.member.bonus | currency '￥'}}</b></span>\r\n\t\t</h2>\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>说明</th>\r\n\t\t\t\t\t<th>时间</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody id=\"bonus_tbody\">\r\n\t\t\t\t<tr v-for=\"item in model2\" class=\"row-{{$index % 2}}\">\r\n\t\t\t\t\t<td>{{item.money | currency '￥'}}</td>\r\n\t\t\t\t\t<td>{{item.intro}}</td>\r\n\t\t\t\t\t<td>{{item.the_time | datetime}}</td>\r\n\t\t\t\t</tr>\t\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\t\t<pagination :page=\"pageCfg.p2\" :total=\"pageCfg.t2\" event-name=\"on-page-changed2\"></pagination>\r\n\t</ul>\r\n</div>\r\n\r\n</div>\r\n";
+	module.exports = "\r\n<div class=\"rmain\">\r\n<div class=\"incomeC\">\r\n\t<h1><b>我的资产</b></h1>\r\n\t<h2 class=\"allzichan\">\r\n\t\t<i>账户总资产：</i> {{M.capital.total | currency '￥'}}\r\n\t\t<i>账户冻结总资产：</i>{{M.capital.frozen | currency '￥'}}\r\n\t\t<i>账户正在提现总资产：</i>{{M.moneyApply | currency '￥'}}\r\n\t\t<i>账户可提现总资产：</i>{{M.capital.available | currency '￥'}}\r\n\t</h2>\r\n\r\n\t<div class=\"sad\">\r\n\t\t<a href=\"javascript:;\" :class=\"{'on' : tab == 0}\" @click=\"tabClick(0)\">本 金</a>\r\n\t\t<a href=\"javascript:;\" :class=\"{'on' : tab == 1}\" @click=\"tabClick(1)\">利 息</a>\r\n\t\t<a href=\"javascript:;\" :class=\"{'on' : tab == 2}\" @click=\"tabClick(2)\">团队奖励</a>\r\n\r\n\t\t<span style=\"position:relative;top:90px;float:right;color:#ccc;\">提现说明：首先扣除可提团队奖，不够再扣利息，利息不够再扣可提本金。</span>\r\n\t</div>\r\n\r\n\t<ul class=\"u1\" v-show=\"tab == 0\">\r\n\r\n\t\t<h2>\r\n\t\t\t<span>本金总额：<b>{{M.capital.sum | currency '￥'}}</b></span>\r\n\t\t\t<span>本金冻结总额：<b>{{M.moneyFreeze | currency '￥'}}</b></span>\r\n\t\t\t<span>本金可提现总额：<b>{{M.money | currency '￥'}}</b></span>\r\n\t\t</h2>\r\n\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>说明</th>\r\n\t\t\t\t\t<th>时间</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody>\r\n\t\t\t\t<tr v-for=\"item in model0\" class=\"row-{{$index % 2}}\">\r\n\t\t\t\t\t<td>{{item.money | currency '￥'}}</td>\r\n\t\t\t\t\t<td>{{item.intro}}</td>\r\n\t\t\t\t\t<td>{{item.the_time | datetime}}</td>\r\n\t\t\t\t</tr>\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\t\t<pagination :page=\"pageCfg.p0\" :total=\"pageCfg.t0\" event-name=\"on-page-changed0\"></pagination>\r\n\t</ul>\r\n\r\n\t<ul class=\"u2\" v-show=\"tab == 1\">\r\n\t\t<h2>\r\n\t\t\t<span>利息总额：<b>{{M.interest | currency '￥'}}</b></span>\r\n\t\t\t<span>利息可提现总额：<b>{{M.interest | currency '￥'}}</b></span>\r\n\t\t</h2>\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>说明</th>\r\n\t\t\t\t\t<th>时间</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody>\r\n\t\t\t\t<tr v-for=\"item in model1\" class=\"row-{{$index % 2}}\">\r\n\t\t\t\t\t<td>{{item.money | currency '￥'}}</td>\r\n\t\t\t\t\t<td>{{item.intro}}</td>\r\n\t\t\t\t\t<td>{{item.the_time | datetime}}</td>\r\n\t\t\t\t</tr>\t\t\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\t\t<pagination :page=\"pageCfg.p1\" :total=\"pageCfg.t1\" event-name=\"on-page-changed1\"></pagination>\r\n\t</ul>\r\n\r\n\t<ul class=\"u3\" v-show=\"tab == 2\">\r\n\t\t<h2>\r\n\t\t\t<span>团队奖励总额：<b>{{M.capital.sum | currency '￥'}}</b></span>\r\n\t\t\t<span>团队奖励冻结总额：<b>{{M.bonusFreeze | currency '￥'}}</b></span>\r\n\t\t\t<span>团队奖励可提总额：<b>{{M.bonus | currency '￥'}}</b></span>\r\n\t\t</h2>\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>说明</th>\r\n\t\t\t\t\t<th>时间</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody id=\"bonus_tbody\">\r\n\t\t\t\t<tr v-for=\"item in model2\" class=\"row-{{$index % 2}}\">\r\n\t\t\t\t\t<td>{{item.money | currency '￥'}}</td>\r\n\t\t\t\t\t<td>{{item.intro}}</td>\r\n\t\t\t\t\t<td>{{item.the_time | datetime}}</td>\r\n\t\t\t\t</tr>\t\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\t\t<pagination :page=\"pageCfg.p2\" :total=\"pageCfg.t2\" event-name=\"on-page-changed2\"></pagination>\r\n\t</ul>\r\n</div>\r\n\r\n</div>\r\n";
 
 /***/ },
 /* 54 */
@@ -4971,6 +4884,12 @@ webpackJsonp([1],[
 
 	var _pagination2 = _interopRequireDefault(_pagination);
 
+	var _data = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./js/data\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+	var D = _interopRequireWildcard(_data);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = {
@@ -4991,13 +4910,12 @@ webpackJsonp([1],[
 		methods: {
 			load: function load(page) {
 				var vm = this;
-				_api.API.News(page).then(function (data) {
-					var d = data.data;
+				D.NewsLogic.fetchMany(page).then(function (x) {
 					vm.$set('model', d.rows);
 					vm.$set('page', page);
 					vm.$set('total', d.count);
 				}).catch(function (err) {
-					console.log(err);
+					alert2(err.message);
 				});
 			}
 		},
@@ -5543,6 +5461,12 @@ webpackJsonp([1],[
 
 	var _utils = __webpack_require__(3);
 
+	var _data = __webpack_require__(198);
+
+	var D = _interopRequireWildcard(_data);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 	exports.default = {
 	    data: function data() {
 	        return {
@@ -5555,6 +5479,11 @@ webpackJsonp([1],[
 	    route: {
 	        data: function data(transition) {
 	            var id = transition.to.params.id;
+
+	            var one = D.Member.applys.find(function (x) {
+	                return x.id == id;
+	            });
+
 	            _api.API.ApplyDetail(id).then(function (data) {
 	                if (data.isSuccess) {
 	                    console.log(data.data);
@@ -5590,51 +5519,7 @@ webpackJsonp([1],[
 	module.exports = "\r\n<div>\r\n<div class=\"apply_logC\">\r\n\t<h1><b>收获记录</b></h1>\r\n\t<h2>\r\n        {{apply.state == 1 ? '等待匹配' : (apply.state == 100 ? '订单已完成' : '已匹配成功')}}\r\n    </h2>\r\n\t<ul>\r\n\t\t<div class=\"main\">\r\n\t\t\t<div class=\"hd\">\r\n\t\t\t\t<span>{{apply.state < 100 ? '正在收获' : '收获完成'}}</span>\r\n\t\t\t\t<li>\r\n                    <font>收获进度</font>\r\n                    <i :style=\"{left : (progress - 1) + '%'}\">\r\n                        {{progress}}\r\n                    </i>\r\n                    <em>\r\n                        <b :style=\"{width : progress + '%'}\"></b>\r\n                    </em>    \r\n                </li>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"tb\">\r\n\t\t\t\t<table>\r\n\t\t\t\t\t<tr class=\"tr1\">\r\n\t\t\t\t\t\t<td>金额</td>\r\n\t\t\t\t\t\t<td>发起时间</td>\r\n\t\t\t\t\t\t<td>状态</td>\r\n\t\t\t\t\t\t<td style=\"position:relative;\">\r\n                            匹配人数\r\n                            <i  v-if=\"apply.state == 1\"\r\n                                class=\"del_order\"\r\n                                data-type=\"apply\" \r\n                                style=\"position:absolute;top:-80px;right:10px;color:#ddd;cursor:pointer;\">\r\n                                删除\r\n                            </i>\r\n                        </td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t<tr class=\"tr2\">\r\n\t\t\t\t\t\t<td class=\"cccc\">{{apply.money | currency '￥'}}</td>\r\n\t\t\t\t\t\t<td>{{apply.the_time | datetime}}</td>\r\n\t\t\t\t\t\t<td class=\"ccc\">{{apply.state == 100 ? '已完成' : '进行中...'}}</td>\r\n\t\t\t\t\t\t<td class=\"ccc\">{{pairs.length}}</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t</table>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div v-for=\"item in pairs\" class=\"main lm\">\r\n\t\t\t<div class=\"tb\">\r\n\t\t\t\t<span class=\"ppz\">匹配者{{$index}}</span>\r\n\t\t\t\t<li class=\"bt\">\r\n\t\t\t\t\t<table>\r\n\t\t\t\t\t\t<tr class=\"tr1\">\r\n\t\t\t\t\t\t\t<td>金额</td>\r\n\t\t\t\t\t\t\t<td>状态</td>\r\n\t\t\t\t\t\t\t<td>匹配时间</td>\r\n\t\t\t\t\t\t\t<td>打款时间</td>\r\n\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t<tr class=\"tr2\">\r\n\t\t\t\t\t\t\t<td class=\"cccc\">{{item.money | currency '￥'}}</td>\r\n\t\t\t\t\t\t\t<td class=\"ccc\">{{item.state | orderstate}}</td>\r\n\t\t\t\t\t\t\t<td>{{item.the_time | datetime}}</td>\r\n\t\t\t\t\t\t\t<td>{{item.pay_time | datetime}}</td>\r\n\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t</table>\r\n\t\t\t\t</li>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"tb\">\r\n\t\t\t\t<table>\r\n\t\t\t\t\t<tr class=\"tr1\">\r\n\t\t\t\t\t\t<td>推荐人</td>\r\n\t\t\t\t\t\t<td>推荐人手机</td>\r\n\t\t\t\t\t\t<td>真实姓名</td>\r\n\t\t\t\t\t\t<td>会员手机</td>\r\n\t\t\t\t\t\t<td>支付宝</td>\r\n\t\t\t\t\t\t<td>微信号</td>\r\n\t\t\t\t\t\t<td>银行信息</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t<tr class=\"tr2\">\r\n\t\t\t\t\t\t<td>{{item.offerMemberParent.nickname}}</td>\r\n\t\t\t\t\t\t<td>{{item.offerMemberParent.mobile}}</td>\r\n\t\t\t\t\t\t<td>{{item.offerMember.truename}}</td>\r\n\t\t\t\t\t\t<td>{{item.offerMember.mobile}}</td>\r\n\t\t\t\t\t\t<td>{{item.offerMember.alipay}}</td>\r\n\t\t\t\t\t\t<td>{{item.offerMember.weixin}}</td>\r\n\t\t\t\t\t\t<td>\r\n\t\t\t\t\t\t\t<li>银行名称：{{item.offerMember.bank | bank}}</li>\r\n\t\t\t\t\t\t\t<li>开户分行：{{item.offerMember.bank_addr}}</li>\r\n\t\t\t\t\t\t\t<li>银行账号：{{item.offerMember.bank_num}}</li>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t</table>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"tb\">\r\n\t\t\t\t\t<dd class=\"s2\">打款剩余时间<img src=\"/images/time.jpg\">{{remainTime(item.the_time,1)}}</dd>\r\n\r\n\t\t\t\t\t<dd class=\"s3\" v-if=\"item.state == 3\">\r\n\t\t\t\t\t\t<em>收款剩余时间<img src=\"/images/time.jpg\"> {{remainTime(item.pay_time,0)}}</em>\r\n\t\t\t\t\t\t\r\n                        <span class=\"edd\">对方已打款</span>\r\n\t\t\t\t\t\t<img class=\"show_big_img\" :src=\"'images/payment/' + item.img\">\r\n\t\t\t\t\t\t<a href=\"javascript:;\" class=\"apply_confirm_btn btn\">确认收款</a>\r\n\r\n                        <span v-if=\"item.judge == 1\">\r\n                            <span style=\"color:lime;margin-left:15px;\">\r\n                                平台处理中......\r\n                            </span>\r\n                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\r\n                            <a href=\"javascript:;\" class=\"to_judge\" data-type=\"no\">撤销</a>\r\n                        </span>\r\n                        <span v-if=\"item.judge == 2\">\r\n                            <span style=\"color:red;\">投诉被驳回</span>\r\n                        </span>\r\n                        <span v-if=\"item.judge > 2\">\r\n                            <a href=\"javascript:;\" class=\"to_judge\" data-type=\"to\" title=\"对方打款凭证为假图，我未收到款，需要平台介入！\">我要投诉</a>\r\n                        </span>\r\n\r\n\t\t\t\t\t</dd>\r\n\t\t\t\t\t<dd class=\"s3\" v-if=\"item.state == 4\">\r\n\t\t\t\t\t\t<img class=\"show_big_img\" :src=\"'images/payment/' + item.img\">\r\n                        &nbsp;&nbsp;&nbsp;\r\n\t\t\t\t\t\t<span class=\"edd\">订单已完成</span>\r\n\t\t\t\t\t</dd>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</ul>\r\n</div>\r\n\r\n<div id=\"remark\">\r\n\t<div>\r\n\t\t<h5>请给XXX的打款诚信评分</h5>\r\n\t\t<ul>\r\n\r\n\t\t\t<img v-for=\"i in 5\" :class=\"{on: remark == i}\" src=\"/images/xing02.png\" @click=\"remark = i\">\r\n\t\t</ul>\r\n\t\t<a href=\"javascript:;\" class=\"btn\" oaid=\"0\">提 交</a>\r\n\t</div>\r\n</div>\r\n</div>\r\n";
 
 /***/ },
-/* 91 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _vue = __webpack_require__(1);
-
-	var _vue2 = _interopRequireDefault(_vue);
-
-	var _vuex = __webpack_require__(92);
-
-	var _vuex2 = _interopRequireDefault(_vuex);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	// 告诉 vue “使用” vuex
-	_vue2.default.use(_vuex2.default);
-
-	// 创建一个对象来保存应用启动时的初始状态
-	var state = {
-	  // TODO: 放置初始状态
-	  name: "GGG"
-	};
-
-	// 创建一个对象存储一系列我们接下来要写的 mutation 函数
-	var mutations = {
-	  // TODO: 放置我们的状态变更函数
-
-	  CHANGENAME: function CHANGENAME(state, amount) {
-	    state.name = state.name + "OK";
-	  }
-	};
-
-	// 整合初始状态和变更函数，我们就得到了我们所需的 store
-	// 至此，这个 store 就可以连接到我们的应用中
-	exports.default = new _vuex2.default.Store({
-	  state: state,
-	  mutations: mutations
-	});
-
-/***/ },
+/* 91 */,
 /* 92 */,
 /* 93 */
 /***/ function(module, exports, __webpack_require__) {
@@ -5681,6 +5566,598 @@ webpackJsonp([1],[
 	    }
 	    return '未知';
 	});
+
+/***/ },
+/* 94 */,
+/* 95 */,
+/* 96 */,
+/* 97 */,
+/* 98 */,
+/* 99 */,
+/* 100 */,
+/* 101 */,
+/* 102 */,
+/* 103 */,
+/* 104 */,
+/* 105 */,
+/* 106 */,
+/* 107 */,
+/* 108 */,
+/* 109 */,
+/* 110 */,
+/* 111 */,
+/* 112 */,
+/* 113 */,
+/* 114 */,
+/* 115 */,
+/* 116 */,
+/* 117 */,
+/* 118 */,
+/* 119 */,
+/* 120 */,
+/* 121 */,
+/* 122 */,
+/* 123 */,
+/* 124 */,
+/* 125 */,
+/* 126 */,
+/* 127 */,
+/* 128 */,
+/* 129 */,
+/* 130 */,
+/* 131 */,
+/* 132 */,
+/* 133 */,
+/* 134 */,
+/* 135 */,
+/* 136 */,
+/* 137 */,
+/* 138 */,
+/* 139 */,
+/* 140 */,
+/* 141 */,
+/* 142 */,
+/* 143 */,
+/* 144 */,
+/* 145 */,
+/* 146 */,
+/* 147 */,
+/* 148 */,
+/* 149 */,
+/* 150 */,
+/* 151 */,
+/* 152 */,
+/* 153 */,
+/* 154 */,
+/* 155 */,
+/* 156 */,
+/* 157 */,
+/* 158 */,
+/* 159 */,
+/* 160 */,
+/* 161 */,
+/* 162 */,
+/* 163 */,
+/* 164 */,
+/* 165 */,
+/* 166 */,
+/* 167 */,
+/* 168 */,
+/* 169 */,
+/* 170 */,
+/* 171 */,
+/* 172 */,
+/* 173 */,
+/* 174 */,
+/* 175 */,
+/* 176 */,
+/* 177 */,
+/* 178 */,
+/* 179 */,
+/* 180 */,
+/* 181 */,
+/* 182 */,
+/* 183 */,
+/* 184 */,
+/* 185 */,
+/* 186 */,
+/* 187 */,
+/* 188 */,
+/* 189 */,
+/* 190 */,
+/* 191 */,
+/* 192 */,
+/* 193 */,
+/* 194 */,
+/* 195 */,
+/* 196 */,
+/* 197 */,
+/* 198 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.FailedMatches = exports.Messages = exports.Incomes = exports.Team = exports.Offers = exports.Applys = exports.News = exports.Config = exports.Member = exports.ConfigLogic = exports.MemberLogic = exports.MessageLogic = exports.NewsLogic = exports.IncomeLogic = exports.TeamLogic = exports.FailedMatchLogic = exports.OfferLogic = exports.ApplyLogic = undefined;
+
+	var _api = __webpack_require__(17);
+
+	var _q = __webpack_require__(4);
+
+	var _q2 = _interopRequireDefault(_q);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	//data fetch
+
+	var ApplyLogic = exports.ApplyLogic = {
+	    fetchOne: function fetchOne(id) {
+	        var ajax = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+
+	        var deferred = _q2.default.defer();
+	        if (!ajax && Applys.init) {
+	            var one = Applys.data.find(function (x) {
+	                return x.id == id;
+	            });
+	            if (one) deferred.resolve(one);else ajax = 1;
+	        }
+	        if (ajax) {
+	            _api.API.ApplyDetail(id).then(function (d) {
+	                if (d.isSuccess) deferred.resolve(d.data);else deferred.reject(d.error);
+	            }).catch(function (err) {
+	                deferred.reject(err);
+	            });
+	        }
+	        return deferred.promise;
+	    },
+	    fetchMany: function fetchMany() {
+	        var deferred = _q2.default.defer();
+	        if (Applys.init) deferred.resolve(Applys);else {
+	            _api.API.DealRecords('applys', 1).then(function (d) {
+	                if (d.isSuccess) {
+	                    Applys.init = 1;
+	                    Applys.data = d.data;
+	                    deferred.resolve(Applys);
+	                } else deferred.reject(d.error);
+	            }).catch(function (err) {
+	                deferred.reject(err);
+	            });
+	        }
+	        return deferred.promise;
+	    }
+	};
+
+	var OfferLogic = exports.OfferLogic = {
+	    fetchOne: function fetchOne(id) {
+	        var ajax = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+
+	        var deferred = _q2.default.defer();
+	        if (!ajax && Offers.init) {
+	            var one = Offers.data.find(function (x) {
+	                return x.id == id;
+	            });
+	            if (one) deferred.resolve(one);else ajax = 1;
+	        }
+	        if (ajax) {
+	            _api.API.OfferDetail(id).then(function (d) {
+	                if (d.isSuccess) deferred.resolve(d.data);else deferred.reject(d.error);
+	            }).catch(function (err) {
+	                deferred.reject(err);
+	            });
+	        }
+	        return deferred.promise;
+	    },
+	    fetchMany: function fetchMany() {
+	        var deferred = _q2.default.defer();
+	        if (Offers.init) deferred.resolve(Offers);else {
+	            _api.API.DealRecords('offers', 1).then(function (d) {
+	                if (d.isSuccess) {
+	                    Offers.init = 1;
+	                    Offers.data = d.data;
+	                    deferred.resolve(Offers);
+	                } else deferred.reject(d.error);
+	            }).catch(function (err) {
+	                deferred.reject(err);
+	            });
+	        }
+	        return deferred.promise;
+	    }
+	};
+
+	var FailedMatchLogic = exports.FailedMatchLogic = {
+	    fetchMany: function fetchMany() {
+	        var deferred = _q2.default.defer();
+	        if (FailedMatches.init) deferred.resolve(FailedMatches);else {
+	            _api.API.DealRecords('pairs/failed', 1).then(function (d) {
+	                if (d.isSuccess) {
+	                    FailedMatches.init = 1;
+	                    FailedMatches.data = d.data;
+	                    deferred.resolve(FailedMatches);
+	                } else deferred.reject(d.error);
+	            }).catch(function (err) {
+	                deferred.reject(err);
+	            });
+	        }
+	        return deferred.promise;
+	    }
+	};
+
+	//on the way
+	var TeamLogic = exports.TeamLogic = {
+	    fetchOne: function fetchOne() {},
+	    fetchMany: function fetchMany() {}
+	};
+
+	var IncomeLogic = exports.IncomeLogic = {
+	    fetchMany: function fetchMany(type, page) {
+	        var deferred = _q2.default.defer();
+	        if (type == Incomes.type && page == Incomes.page && Incomes.init) deferred.resolve(Incomes);
+	        _api.API.IncomeRecords(type, page).then(function (d) {
+	            if (d.isSuccess) {
+	                Incomes.init = 1;
+	                Incomes.page = page;
+	                Incomes.type = type;
+	                Incomes.data = d.data;
+	                deferred.resolve(Incomes);
+	            } else {
+	                deferred.reject(d.error);
+	            }
+	        }).catch(function (err) {
+	            deferred.reject(err);
+	        });
+	        return deferred.promise;
+	    }
+	};
+
+	var NewsLogic = exports.NewsLogic = {
+	    fetchOne: function fetchOne(id) {
+	        var deferred = _q2.default.defer();
+	        var ajax = 0;
+	        if (News.init) {
+	            var one = News.data.find(function (x) {
+	                return x.id == id;
+	            });
+	            if (one) deferred.resolve(one);else ajax = 1;
+	        } else {
+	            ajax = 1;
+	        }
+	        if (ajax) {
+	            _api.API.NewsSingle(id).then(function (d) {
+	                if (d.isSuccess) deferred.resolve(d.data);else deferred.reject(d.error);
+	            }).catch(function (err) {
+	                deferred.reject(err);
+	            });
+	        }
+	        return deferred.promise;
+	    },
+	    fetchMany: function fetchMany(page) {
+	        var deferred = _q2.default.defer();
+	        if (page == News.page && News.init) deferred.resolve(News);else {
+	            _api.API.News(page).then(function (d) {
+	                if (d.isSuccess) {
+	                    News.page = page;
+	                    News.init = 1;
+	                    News.total = d.count;
+	                    News.data = d.rows;
+	                    deferred.resolve(News);
+	                } else deferred.reject(d.error);
+	            }).catch(function (err) {
+	                deferred.reject(err);
+	            });
+	        }
+	        return deferred.promise;
+	    }
+	};
+
+	var MessageLogic = exports.MessageLogic = {
+	    fetchOne: function fetchOne(id) {
+	        var deferred = _q2.default.defer();
+	        var ajax = 0;
+	        if (Messages.init) {
+	            var one = Messages.data.find(function (x) {
+	                return x.id == id;
+	            });
+	            if (one) deferred.resolve(one);else ajax = 1;
+	        } else {
+	            ajax = 1;
+	        }
+	        if (ajax) {
+	            _api.API.MessageSingle(id).then(function (d) {
+	                if (d.isSuccess) deferred.resolve(d.data);else deferred.reject(d.error);
+	            }).catch(function (err) {
+	                deferred.reject(err);
+	            });
+	        }
+	        return deferred.promise;
+	    },
+	    fetchMany: function fetchMany(page) {
+	        var deferred = _q2.default.defer();
+	        if (page == Messages.page && Messages.init) deferred.resolve(Messages);else {
+	            _api.API.Messages(page).then(function (d) {
+	                if (d.isSuccess) {
+	                    Messages.page = page;
+	                    Messages.init = 1;
+	                    Messages.total = d.count;
+	                    Messages.data = d.rows;
+	                    deferred.resolve(Messages);
+	                } else deferred.reject(d.error);
+	            }).catch(function (err) {
+	                deferred.reject(err);
+	            });
+	        }
+	        return deferred.promise;
+	    }
+	};
+
+	var MemberLogic = exports.MemberLogic = {
+	    sum: function sum() {
+	        if (!Member.init) return 0;
+	        return Member.money + Member.moneyFreeze;
+	    },
+	    bonus: function bonus() {
+	        if (!Member.init) return 0;
+	        return Member.bonus + Member.bonusFreeze;
+	    },
+	    total: function total() {
+	        if (!Member.init) return 0;
+	        return Member.money + Member.interest + Member.bonus + Member.moneyFreeze + Member.bonusFreeze;
+	    },
+	    frozen: function frozen() {
+	        if (!Member.init) return 0;
+	        return Member.moneyFreeze + Member.bonusFreeze;
+	    },
+	    available: function available() {
+	        if (!Member.init) return 0;
+	        return Member.money + Member.interest + Member.bonus - Member.moneyApply;
+	    },
+	    about: function about() {
+	        var offer = arguments[0] || Member.lastOffer.id;
+	        if (!Member.init || !Config.pretty || !offer) return 0;
+	        if (offer && offer.fst) return offer.money * Config.key6 * Config.key24;else return 0;
+	    },
+	    run: function run() {
+	        console.log('---run//member//');
+	        var self = this;
+	        if (!Member.init) return;
+	        var o = {
+	            sum: self.sum(),
+	            bonus: self.bonus(),
+	            total: self.total(),
+	            frozen: self.frozen(),
+	            available: self.available(),
+	            about: self.about()
+	        };
+	        Object.assign(Member.capital, o);
+	        Member.pretty = 1;
+	    },
+
+	    assign: function assign() {
+	        console.log('---assign//member//');
+
+	        for (var _len = arguments.length, d = Array(_len), _key = 0; _key < _len; _key++) {
+	            d[_key] = arguments[_key];
+	        }
+
+	        if (d.length < 1) return;
+	        d.forEach(function (x) {
+	            Object.assign(Member, x);
+	        });
+	        Member.init = 1;
+	    },
+	    fetch: function fetch() {
+	        var self = this;
+	        var deferred = _q2.default.defer();
+
+	        if (Member.init && Member.pretty) deferred.resolve(Member);else {
+	            _api.API.IndexData().then(function (data) {
+	                if (data.isSuccess) {
+
+	                    var _d = data.data;
+	                    console.log('---data//', _d);
+
+	                    //will be abort
+	                    (0, _api.SET_MEMBER_INFO)(_d.member);
+
+	                    ConfigLogic.assign(_d.config);
+	                    ConfigLogic.run();
+
+	                    console.log('---config//', Config);
+
+	                    MemberLogic.assign(_d.member, {
+	                        lastApply: _d.lastApply,
+	                        lastOffer: _d.lastOffer,
+	                        showNews: _d.showNews,
+	                        moneyApply: _d.moneyApply || 0,
+	                        bonusFreeze: _d.bonusFreeze || 0,
+	                        moneyFreeze: _d.moneyFreeze || 0
+	                    });
+
+	                    MemberLogic.run();
+
+	                    console.log('---member//', Member);
+
+	                    deferred.resolve(Member);
+	                } else {
+	                    alert2(data.error.message);
+	                    console.log(data.error.message);
+	                    deferred.reject(data.error);
+	                }
+	            });
+	        }
+
+	        return deferred.promise;
+	    }
+	};
+
+	var ConfigLogic = exports.ConfigLogic = {
+	    run: function run() {
+	        if (!Config.init) return;
+	        var cfg = Config.raw;
+	        cfg.forEach(function (_ref, i) {
+	            var id = _ref.id;
+	            var val = _ref.val;
+
+	            var t = val;
+	            if (/-/.test(t)) {
+	                t = t.split('-');
+	                t.forEach(function (v, i) {
+	                    if (/\./.test(v)) t[i] = parseFloat(v);else t[i] = parseInt(v);
+	                });
+	            } else {
+	                if (/\./.test(t)) t = parseFloat(t);else t = parseInt(t);
+	            }
+	            Config['key' + id] = t;
+	        });
+	        Config.pretty = 1;
+	    },
+	    assign: function assign(d) {
+	        Config.raw = d;
+	        Config.init = 1;
+	    }
+	};
+
+	//data store
+	var Member = exports.Member = {
+	    init: 0,
+	    pretty: 0,
+	    lastApply: {},
+	    lastOffer: {},
+	    capital: {}
+	};
+
+	var Config = exports.Config = {
+	    init: 0,
+	    pretty: 0,
+	    raw: []
+	};
+
+	var News = exports.News = {
+	    init: 0,
+	    pretty: 0,
+	    page: 1,
+	    total: 0,
+	    data: []
+	};
+
+	var Applys = exports.Applys = {
+	    init: 0,
+	    pretty: 0,
+	    data: []
+	};
+
+	var Offers = exports.Offers = {
+	    init: 0,
+	    pretty: 0,
+	    data: []
+	};
+
+	var Team = exports.Team = {
+	    init: 0,
+	    pretty: 0,
+	    data: [],
+	    tree: []
+	};
+
+	var Incomes = exports.Incomes = {
+	    init: 0,
+	    pretty: 0,
+	    type: 'money',
+	    page: 1,
+	    total: 0,
+	    data: []
+	};
+
+	var Messages = exports.Messages = {
+	    init: 0,
+	    pretty: 0,
+	    page: 1,
+	    total: 0,
+	    data: []
+	};
+
+	var FailedMatches = exports.FailedMatches = {
+	    init: 0,
+	    pretty: 0,
+	    data: []
+	};
+
+/***/ },
+/* 199 */,
+/* 200 */,
+/* 201 */,
+/* 202 */,
+/* 203 */,
+/* 204 */,
+/* 205 */,
+/* 206 */,
+/* 207 */,
+/* 208 */,
+/* 209 */,
+/* 210 */,
+/* 211 */,
+/* 212 */,
+/* 213 */,
+/* 214 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(215)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] app\\components\\blank.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(216)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "./blank.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 215 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _data = __webpack_require__(198);
+
+	var $D = _interopRequireWildcard(_data);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	exports.default = {
+	    route: {
+	        data: function data(transition) {
+	            $D.MemberLogic.fetch().then(function (d) {
+	                console.log('.................//', d);
+	                transition.redirect('/index');
+	            }).catch(function (err) {});
+	        }
+	    }
+	};
+
+/***/ },
+/* 216 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div style=\"text-align:center;color:#fff;padding:16px;\">\n    <h2>Loading...</h2>\n</div>\n";
 
 /***/ }
 ]);

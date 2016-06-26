@@ -8,7 +8,7 @@
             <ul v-if="first">
                 <li>
                     <a href="javascript:;" class="money on" @click="select(0)">
-                        <span>{{$parent.config.key2[0]}}</span>
+                        <span>{{config.key2[0]}}</span>
                         首次购买激活币
                     </a>
                 </li>
@@ -16,18 +16,18 @@
 
             <ul v-if="!first">
                 <li>
-                    <a href="javascript:;" class="money"  :class="{'on': model.i == 0}"  @click="select(0)"><span>{{$parent.config.key2[0]}}</span></a>
+                    <a href="javascript:;" class="money"  :class="{'on': model.i == 0}"  @click="select(0)"><span>{{config.key2[0]}}</span></a>
                 </li>
 
                 <li>
-                    <a href="javascript:;" class="money" :class="{'on': model.i == 1}"  @click="select(1)"><span>{{$parent.config.key2[1]}}</span></a>
-                    <a href="javascript:;" class="money" :class="{'on': model.i == 2}"   @click="select(2)"><span>{{$parent.config.key2[2]}}</span></a>
+                    <a href="javascript:;" class="money" :class="{'on': model.i == 1}"  @click="select(1)"><span>{{config.key2[1]}}</span></a>
+                    <a href="javascript:;" class="money" :class="{'on': model.i == 2}"   @click="select(2)"><span>{{config.key2[2]}}</span></a>
                 </li>
 
                 <li>
-                    <a href="javascript:;" class="money" :class="{'on': model.i == 3}"   @click="select(3)"><span>{{$parent.config.key2[3]}}</span></a>
-                    <a href="javascript:;" class="money" :class="{'on': model.i == 4}"   @click="select(4)"><span>{{$parent.config.key2[4]}}</span></a>
-                    <a href="javascript:;" class="money" :class="{'on': model.i == 5}"   @click="select(5)"><span>{{$parent.config.key2[5]}}</span></a>
+                    <a href="javascript:;" class="money" :class="{'on': model.i == 3}"   @click="select(3)"><span>{{config.key2[3]}}</span></a>
+                    <a href="javascript:;" class="money" :class="{'on': model.i == 4}"   @click="select(4)"><span>{{config.key2[4]}}</span></a>
+                    <a href="javascript:;" class="money" :class="{'on': model.i == 5}"   @click="select(5)"><span>{{config.key2[5]}}</span></a>
                 </li>
             </ul>
 
@@ -51,6 +51,7 @@
 
     import {alert2} from '../js/utils'
     import {API} from '../js/api'
+    import * as $D from '../js/data'
 
     export default {
         data(){
@@ -60,7 +61,8 @@
                     money : 0,
                     agree : false,
                     i     : 0
-                }
+                },
+                config : $D.Config
             }
         },
         route:{
@@ -96,7 +98,7 @@
             select(i){
                 let vm = this
                 vm.model.i = i
-                vm.model.money = vm.$parent.config.key2[i]
+                vm.model.money = vm.config.key2[i]
             }
         }
     }

@@ -16,6 +16,7 @@ import leavemsg from '../components/leavemsg.vue'
 import share from '../components/share.vue'
 import offerDetail from '../components/offer_detail.vue'
 import applyDetail from '../components/apply_detail.vue'
+import blank from '../components/blank.vue'
 
 Vue.use(VueRouter)
 
@@ -23,7 +24,7 @@ const router = new VueRouter({
     history: false,
     hashbang: true,
     root: "app/index.html"
-});
+})
 
 router.map({
     '/index': {
@@ -85,13 +86,14 @@ router.map({
     '/share': {
         name:'share',
         component: share
+    },
+    'blank':{
+        name : 'blank',
+        component : blank
     }
 })
 
-router.redirect({
-    '*': '/index'
-})
-
-router.go({name:'index'})
+router.redirect({'*': '/index'})
+router.go({name: 'blank'})
 
 export default router

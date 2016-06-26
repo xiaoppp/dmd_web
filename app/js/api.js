@@ -82,7 +82,7 @@ export const API = {
         return HTTP_POST(_Combine('member/edit/info'),model);
     },
     EditPwd(model){
-        return HTTP_POST(_Combine('member/reset'),model);
+        return HTTP_POST(_Combine('member/reset'), model);
     },
     EditPayPwd(model,mode){
         //mode //  0 通过原始安全密码,  1 通过手机验证码
@@ -98,7 +98,7 @@ export const API = {
     },
     Apply(money){
         let who = GET_MEMBER_LOGIN_INFO()
-        let model = { memberid:who.memberid, money:money }
+        let model = { memberid: who.memberid, money:money }
         return HTTP_POST(_Combine('apply/member'), model)
     },
     TeamScope(id){
@@ -106,26 +106,26 @@ export const API = {
     },
     IncomeRecords(type,page){
         //type  =  money or  interest or bonus
-        let who = GET_MEMBER_INFO()
-        return HTTP_GET(_Combine('income/',type,'/',who.id,'/',page))
+        let who = GET_MEMBER_LOGIN_INFO()
+        return HTTP_GET(_Combine('income/',type,'/',who.memberid,'/',page))
     },
     DealRecords(type,page){
-        // type = offers or applys or unmatches
-        let who = GET_MEMBER_INFO()
-        return HTTP_GET(_Combine(type,'/', who.id))
+        // type = offers or applys or pairs/failed
+        let who = GET_MEMBER_LOGIN_INFO()
+        return HTTP_GET(_Combine(type,'/', who.memberid))
     },
     IsNewMember(){
-        let who = GET_MEMBER_INFO()
-        return HTTP_GET(_Combine('member/check/new/',who.id))
+        let who = GET_MEMBER_LOGIN_INFO()
+        return HTTP_GET(_Combine('member/check/new/',who.memberid))
     },
     OfferDetail(id){
-        let who = GET_MEMBER_INFO()
-        let model = {offerid : id, memberid: who.id}
-        return HTTP_POST(_Combine('offer/detail'),model)
+        let who = GET_MEMBER_LOGIN_INFO()
+        let model = { offerid : id, memberid: who.memberid}
+        return HTTP_POST(_Combine('offer/detail'), model)
     },
     ApplyDetail(id){
-        let who = GET_MEMBER_INFO()
-        let model = {applyid : id, memberid : who.id}
+        let who = GET_MEMBER_LOGIN_INFO()
+        let model = { applyid : id, memberid : who.memberid}
         return HTTP_POST(_Combine('apply/detail'),model)
     }
 }
@@ -134,13 +134,13 @@ export const API = {
 
 function _Combine(...parts){
     let len = parts.length;
-    if(len === 0) throw 'no parts provided';
+    if(len === 0) throw 'no parts provided'
     else {
-        let raw = config.host;
+        let raw = config.host
         for(let i=0; i < len; i++){
-            raw += parts[i];
+            raw += parts[i]
         }
-        return raw;
+        return raw
     }
 }
 
@@ -151,99 +151,86 @@ function _HttpErrorHandle_(err) {
 //*** Abstract Tools
 
 export function HTTP_POST(url,data){
-    console.log('------------post',url);
-    var deferred = Q.defer();
+    console.log('------------post',url)
+    var deferred = Q.defer()
     request
         .post(url)
         .send(data)
         .end(function(err,res){
             if(err) {
-                deferred.reject(err);
+                deferred.reject(err)
             } else {
-                deferred.resolve(res.body);
+                deferred.resolve(res.body)
             }
         });
-    return deferred.promise;
+    return deferred.promise
 }
 
 export function HTTP_GET (url,data){
-    console.log('------------get',url);
-    var deferred = Q.defer();
+    console.log('------------get',url)
+    var deferred = Q.defer()
     request
         .get(url)
         .timeout(6000)
         .query(data)
         .end(function(err,res){
             if(err){
-                _HttpErrorHandle_(err);
-                deferred.reject("error");
+                _HttpErrorHandle_(err)
+                deferred.reject("error")
             } else {
-                deferred.resolve(res.body);
+                deferred.resolve(res.body)
             }
         });
-    return deferred.promise;
+    return deferred.promise
 }
 
 export function HTTP_PUT (url,data){
-    console.log('--------------put',url);
-    var deferred = Q.defer();
+    console.log('--------------put',url)
+    var deferred = Q.defer()
     request
         .put(url)
         .send(data)
         .end(function(err,res){
             if(err){
-                deferred.reject("error");
+                deferred.reject("error")
             } else {
-                deferred.resolve(res.body);
+                deferred.resolve(res.body)
             }
-        });
-    return deferred.promise;
+        })
+    return deferred.promise
 }
 
 export function HTTP_DELETE(url,data) {
-    console.log('delete',url);
-    var deferred = Q.defer();
+    console.log('delete',url)
+    var deferred = Q.defer()
     request
         .del(url)
         .send(data)
         .end(function(err,res){
             if(err) {
-                deferred.reject("error");
+                deferred.reject("error")
             } else {
-                deferred.resolve(res.body);
+                deferred.resolve(res.body)
             }
-        });
-    return deferred.promise;
+        })
+    return deferred.promise
 }
 
 //** LocalStrorage  & Member Info  auth
 
-var MEMBER_INFO = {};
-
 //取会员登录时保存在LocalStorage中的值
 export function GET_MEMBER_LOGIN_INFO() {
-    var who = window.localStorage.getItem(config.loginkey);
+    var who = window.localStorage.getItem(config.loginkey)
     if(!who) {
         window.location.href = '/login.html'
-    }else{
-        who = JSON.parse(who);
-        return who;
+    } else {
+        who = JSON.parse(who)
+        return who
     }
 }
 
 export function HAS_LOGIN() {
-    var who = window.localStorage.getItem(config.loginkey);
-    if(!who) return false;
-    else return true;
-}
-
-//取当前会员信息
-export function GET_MEMBER_INFO() {
-    if(MEMBER_INFO && MEMBER_INFO.id)
-        return MEMBER_INFO;
-    else throw "no member info provided.";
-}
-
-export function  SET_MEMBER_INFO(value) {
-    MEMBER_INFO = value;
+    var who = window.localStorage.getItem(config.loginkey)
+    if(!who) return false
+    else return true
 }

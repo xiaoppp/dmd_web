@@ -8,15 +8,15 @@
 </head>
 
 <body id="app">
-    <div class="topC">
-        <a href="/" class="logoa"><img src="images/logo.png"></a>
+   <div class="topC">
+        <a href="/" class="logoa"><img src="/images/logo.png"></a>
         <a class="rt tuichu" id="login_exit">退出</a>
         <span class="rt chengxin">诚信&nbsp;
             <img v-bind:src=gBelieveSrc(n)  v-for = "n in 5" style="margin:0 1px;">
         </span>
-        <span class="rt dengji">{{member.level|level}}</span>
-        <span class="rt">昵称：{{member.nickname}}</span>
-        <a href="#" v-link="{name:'index'}" class="rt imga"><img src="images/default1.jpg"></a>
+        <span class="rt dengji">{{level|level}}</span>
+        <span class="rt">昵称：{{nickname}}</span>
+        <a href="#" v-link="{name:'index'}" class="rt imga"><img src="/images/default1.jpg"></a>
     </div>
     <div class="imain">
         <div class="imi ilft">

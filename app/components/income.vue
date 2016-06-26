@@ -3,10 +3,10 @@
 <div class="incomeC">
 	<h1><b>我的资产</b></h1>
 	<h2 class="allzichan">
-		<i>账户总资产：</i> {{$parent.total | currency '￥'}}
-		<i>账户冻结总资产：</i>{{$parent.freeze | currency '￥'}}
-		<i>账户正在提现总资产：</i>{{$parent.money_apply | currency '￥'}}
-		<i>账户可提现总资产：</i>{{$parent.available | currency '￥'}}
+		<i>账户总资产：</i> {{M.capital.total | currency '￥'}}
+		<i>账户冻结总资产：</i>{{M.capital.frozen | currency '￥'}}
+		<i>账户正在提现总资产：</i>{{M.moneyApply | currency '￥'}}
+		<i>账户可提现总资产：</i>{{M.capital.available | currency '￥'}}
 	</h2>
 
 	<div class="sad">
@@ -20,9 +20,9 @@
 	<ul class="u1" v-show="tab == 0">
 
 		<h2>
-			<span>本金总额：<b>{{$parent.capitalSum | currency '￥'}}</b></span>
-			<span>本金冻结总额：<b>{{$parent.moneyFreeze | currency '￥'}}</b></span>
-			<span>本金可提现总额：<b>{{$parent.member.money | currency '￥'}}</b></span>
+			<span>本金总额：<b>{{M.capital.sum | currency '￥'}}</b></span>
+			<span>本金冻结总额：<b>{{M.moneyFreeze | currency '￥'}}</b></span>
+			<span>本金可提现总额：<b>{{M.money | currency '￥'}}</b></span>
 		</h2>
 
 		<table>
@@ -46,8 +46,8 @@
 
 	<ul class="u2" v-show="tab == 1">
 		<h2>
-			<span>利息总额：<b>{{$parent.member.interest | currency '￥'}}</b></span>
-			<span>利息可提现总额：<b>{{$parent.member.interest | currency '￥'}}</b></span>
+			<span>利息总额：<b>{{M.interest | currency '￥'}}</b></span>
+			<span>利息可提现总额：<b>{{M.interest | currency '￥'}}</b></span>
 		</h2>
 		<table>
 			<thead>
@@ -70,9 +70,9 @@
 
 	<ul class="u3" v-show="tab == 2">
 		<h2>
-			<span>团队奖励总额：<b>{{$parent.bonusSum | currency '￥'}}</b></span>
-			<span>团队奖励冻结总额：<b>{{$parent.bonusFreeze | currency '￥'}}</b></span>
-			<span>团队奖励可提总额：<b>{{$parent.member.bonus | currency '￥'}}</b></span>
+			<span>团队奖励总额：<b>{{M.capital.sum | currency '￥'}}</b></span>
+			<span>团队奖励冻结总额：<b>{{M.bonusFreeze | currency '￥'}}</b></span>
+			<span>团队奖励可提总额：<b>{{M.bonus | currency '￥'}}</b></span>
 		</h2>
 		<table>
 			<thead>
@@ -101,6 +101,7 @@
 
 	import pagination from './_pagination.vue'
 	import {API} from '../js/api'
+	import * as D from '../js/data'
 
     export default {
 		data(){
@@ -116,7 +117,8 @@
 					t0 :0,
 					t1 :0,
 					t2 :0
-				}
+				},
+				M : D.Member
 			}
 		},
 		components:{pagination},

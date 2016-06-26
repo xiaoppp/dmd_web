@@ -20,6 +20,7 @@
 
 import {API} from '../js/api'; 
 import pagination from './_pagination.vue';
+import * as D from './js/data'
 
 export default {
 	data(){
@@ -38,14 +39,13 @@ export default {
 	methods:{
 		load(page){
 			let vm = this
-			API.News(page).then(function(data){
-				var d = data.data
+			D.NewsLogic.fetchMany(page).then(x=>{
 				vm.$set('model',d.rows)
 				vm.$set('page',page)
 				vm.$set('total',d.count)
-			}).catch(function(err){
-				console.log(err)
-			});
+			}).catch(err=>{
+				alert2(err.message)
+			})
 		}
 	},
 	events:{

@@ -141,6 +141,7 @@
 <script>
 	import {API} from '../js/api'
 	import {alert2} from '../js/utils'
+	import * as D from '../js/data'
 
     export default {
         data(){
@@ -153,6 +154,13 @@
         route:{
             data(transition){
 				let id = transition.to.params.id
+
+				let one = D.Member.applys.find(x=>{
+					return x.id == id
+				})
+
+				//transition.next({'apply':d.apply,'pairs':d.pairs})
+
 				API.ApplyDetail(id).then(function(data){
 					if(data.isSuccess){
                 		console.log(data.data)
