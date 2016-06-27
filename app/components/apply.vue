@@ -33,7 +33,7 @@ export default {
 			model: 0,
 			M : D.Member,
 			Cfg : D.Config
-		};
+		}
     },
 	methods:{
 		submit(evt){
@@ -54,7 +54,7 @@ export default {
 					}
 				}).catch(function(err){
 					console.log(err)
-				});
+				})
 			}
 		}
 	}

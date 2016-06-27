@@ -38,17 +38,13 @@
 							<td :style="{color: currentModel.state == 1 ? '#01CCCC':'f00'}">
 								{{currentModel.state == 1 ? "正常":"冻结"}}
 							</td>
-							<td>
-								
-									<a href="/?act=team&id=<?php echo $val['id']; ?>" class="see">查看</a>
-
-							</td>
+							<td><a href="/?act=team&id=<?php echo $val['id']; ?>" class="see">查看</a></td>
 						</tr>
 					</tbody>
 				</table>
 
 				<ul style="padding: 8px 0 0 35px;">
-					<item class="item" :model="treeData" :from="whoid">
+					<item class="item" :model="treeData">
 					</item>
 				</ul>
 
@@ -60,58 +56,32 @@
 				<li>推荐5位，晋升M3（三级会员），可获3代收益</li>
 				<li>推荐15位，团队100人，晋升M4（四级会员），可获4代收益</li>
 				<li>推荐15位，团队100人，晋升高级经理，可获无限代收益</li>
-				<li>
-					<a href="javascript:;" class="btn" id="team_apply_btn">申请升级</a></li>
-				<li class="imgli">
-					<br><img src="/images/team.png"></li>
+				<li><a href="javascript:;" class="btn" id="team_apply_btn">申请升级</a></li>
+				<li class="imgli"><br><img src="/images/team.png"></li>
 			</ul>
 		</div>
-
-		
 
 	</div>
 </template>
 
 <script>
-	import {API,GET_MEMBER_INFO} from '../js/api';
+	import {API} from '../js/api';
 	import {alert2} from '../js/utils';
 	import item from './teamtree.vue';
+	import * as D from '../js/data'
+
 	export default {
 		route: {
 			data(transition) {
-
-				let who = GET_MEMBER_INFO();
-				let vm = this;
-
-				//transition.next({whoid:who.id});
-
-				API.TeamTree(who.id).then(function(data) {
-					if (data.isSuccess) {
-						const children = data.data.map(d => {
-							return {
-								name: d.truename,
-								id: d.id,
-								sex: d.sex,
-								mobile: d.username,
-								nickname: d.nickname,
-								ok : d.ok
-							}
-						})
-
-						let tree = {
-							name: who.truename,
-							id : who.id,
-							sex : who.sex,
-							mobile : who.username,
-							nickname: who.nickname,
-							ok : who.ok,
-							children: children
-						}
-						transition.next({treeData: tree})
-					} else {
-						alert2(data.error.message);
-					}
-				})
+				let vm = this
+				let who = D.Member
+				let model = {
+					truename: who.truename,
+					id : who.id,
+					sex : who.sex,
+					mobile : who.mobile,
+				}
+				transition.next({treeData: model})
 			}
 		},
 		events:{
@@ -136,7 +106,6 @@
 				treeData: {},
 				tab : 1,
 				currentModel : {},
-				whoid : 0
 			}
 		}
 	}

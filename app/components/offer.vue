@@ -51,7 +51,7 @@
 
     import {alert2} from '../js/utils'
     import {API} from '../js/api'
-    import * as $D from '../js/data'
+    import * as D from '../js/data'
 
     export default {
         data(){
@@ -62,13 +62,13 @@
                     agree : false,
                     i     : 0
                 },
-                config : $D.Config
+                config : Object.assign({}, D.Config)
             }
         },
         route:{
             data(transition){
                 let vm = this
-                API.IsNewMember().then(function(data){
+                API.IsNewMember().then(d=>{
                     if(data.isSuccess){
                         transition.next({'first': data.data})
                     } else {

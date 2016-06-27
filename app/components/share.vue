@@ -20,26 +20,27 @@
 </template>
 <script>
 
-import {GET_MEMBER_INFO} from '../js/api';
-import Clipboard from 'clipboard';
+import * as D from '../js/data'
+import Clipboard from 'clipboard'
+import {alert2} from '../js/utils'
 
 export default {
 	data(){
-		return {qrcodeUrl:"",regUrl:''}
+		return { qrcodeUrl:"", regUrl:''}
 	},
 	created:function(){
-		new Clipboard('#copy_link').on('success',function(){
-			alert("复制成功！");
-		}).on('error',function(){
-			alert("复制失败，请手动复制！");
-		});
+		new Clipboard('#copy_link').on('success', function(){
+			alert2("复制成功！")
+		}).on('error', function(){
+			alert2("复制失败，请手动复制！")
+		})
 	},
 	route:{
 		data:function(transition){
-			var base = "https://sp0.baidu.com/5aU_bSa9KgQFm2e88IuM_a/micxp1.duapp.com/qr.php";
-			var who = GET_MEMBER_INFO();
-			var value = window.location.protocol+"//"+window.location.host+'/register.html?refer='+ who.mobile;
-			transition.next({'regUrl':value,'qrcodeUrl': base+"?value="+encodeURIComponent(value)});
+			var base = "https://sp0.baidu.com/5aU_bSa9KgQFm2e88IuM_a/micxp1.duapp.com/qr.php"
+			var mobile = D.Member.mobile
+			var value = window.location.protocol+"//"+window.location.host+'/register.html?refer='+ mobile
+			transition.next({'regUrl':value,'qrcodeUrl': base+"?value="+encodeURIComponent(value)})
 		}
 	}
 }

@@ -102,12 +102,14 @@
 <script>
 
 import pagination from './_pagination.vue'
-import {API,GET_MEMBER_INFO} from '../js/api'
+import {API} from '../js/api'
+import * as D from '../js/data'
 
 export default {
 
 	data(){
 		return {
+			M : D.Member,
 			tab : 0,
 			model0 : [],
 			model1 : [],
@@ -122,12 +124,6 @@ export default {
 			}
 		}
 	},
-	computed:{
-		M(){
-			let who = GET_MEMBER_INFO()
-			return who
-		}
-	},
 	components:{ pagination },
 		route:{
 			data(transition){
@@ -138,21 +134,9 @@ export default {
 		methods:{
 			load:function(page, n){
 				let vm = this
-				let type = n == 0 ? 'offers':
-						   n == 1 ? 'applys':
-						   n == 2 ? 'pairs/failed' : ''
-
-				if(!type) return
-
-				API.DealRecords(type, page).then(function(data){
-					if(data.isSuccess){
-						let d = data.data
-						vm.$set('model'+ n, d)
-						// vm.$set('pageCfg.p'+ n, page)
-						// vm.$set('pageCfg.t'+ n, d.count)
-					} else {
-						alert2(data.error.message)
-					}
+				let logic  = n == 0 ?  D.OfferLogic :  n == 1 ? D.ApplyLogic : D.FailedMatchLogic 
+				logic.fetchMany().then(function(Store){
+					vm.$set('model'+ n, Store.data)
 				})
 			},
 			tabClick(i){

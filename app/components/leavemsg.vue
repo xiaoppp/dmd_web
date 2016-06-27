@@ -46,7 +46,7 @@
 	<ul class="u2" v-show=!flag>
 		<li class="mymsg" v-for="item in replyModel">
 			<h4><img class="lgim" v-bind:src=getSrc>
-			{{item.old.title}}<i>{{item.the_time|datetime}}</i></h4>
+			{{item.old.title}}<i>{{item.the_time | datetime}}</i></h4>
 			<div class="nrd">
 				{{item.old.content}}
 				<hr style="width:100%;margin-top:10px;margin-bottom:10px;border-bottom:1px dashed #43C328;">
@@ -54,7 +54,7 @@
 					<h4>
 						<img class="lgim" src="/images/logo2.png"> 
 							多米多客服
-						<i>{{item.new.the_time|datetime}}</i>
+						<i>{{item.new.the_time | datetime}}</i>
 					</h4>
 					<span style="color:#949CB3">{{item.new.content}}</span>
 				</div>
@@ -75,42 +75,43 @@
 
 <script>
 
-import {MsgTypes} from '../js/constants';
-import {API, GET_MEMBER_INFO} from '../js/api';
+import {MsgTypes} from '../js/constants'
+import {API} from '../js/api'
+import * as D from '../js/data'
+import {alert2} from '../js/utils'
 
 export default {
 	data(){
 		return {
 			MsgTypes,
-			model:{msgtype:'complaint'},
-			replyModel:[],
-			flag:true,
-			who:{}
+			model:{ msgtype: 'complaint'},
+			replyModel: [],
+			flag: true,
+			sex : D.Member.sex
 		}
 	},
 	computed:{
 		getSrc: function () {
-			return "/images/default"+ this.who.sex +".jpg";
+			return "/images/default"+ this.sex +".jpg";
     	}
 	},
 	route:{
 		data:function(transition){
 			API.MessageReplies().then(function(data){
-				console.log(data);
-				var d = data.data;
-				transition.next({'replyModel': d,'who': GET_MEMBER_INFO()});
+				transition.next({'replyModel': data.data})
 			}).catch(function(err){
-			});
+				console.log(err)
+			})
 		}
 	},
 	methods:{
 		submit(event){
 			API.PostMsg(this.model).then(function(data){
-				alert2("保存成功！");
-				console.log(data);
+				alert2("保存成功！")
+				console.log(data)
 			}).catch(function(err){
-				console.log(err);
-			});
+				console.log(err)
+			})
 		}
 	}
 }

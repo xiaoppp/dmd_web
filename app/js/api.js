@@ -1,95 +1,94 @@
 import request from 'superagent'
 import Q from 'q'
 import config from './config'
-import router from './router.config'
 
 export const API = {
     News(page){
-        return HTTP_GET(_Combine('news/page/', page));
+        return HTTP_GET(_Combine('news/page/', page))
     },
     NewsSingle(id){
-        return HTTP_GET(_Combine('news/',id));
+        return HTTP_GET(_Combine('news/',id))
     },
     Messages(page){
-        var who = GET_MEMBER_LOGIN_INFO();
-        return HTTP_GET(_Combine('messages/page/', who.memberid,'/', page));
+        var who = GET_MEMBER_LOGIN_INFO()
+        return HTTP_GET(_Combine('messages/page/', who.memberid,'/', page))
     },
     MessageSingle(id){
-        return HTTP_GET(_Combine('message/',id));
+        return HTTP_GET(_Combine('message/',id))
     },
     MessageReplies(){
-        var who = GET_MEMBER_LOGIN_INFO();
-        return HTTP_GET(_Combine('messages/reply/',who.memberid));
+        var who = GET_MEMBER_LOGIN_INFO()
+        return HTTP_GET(_Combine('messages/reply/',who.memberid))
     },
     PostMsg(model){
-        var who = GET_MEMBER_LOGIN_INFO();
-        model.member_id = who.memberid;
-        model.to_member_id = 0;
-        model.state = 0;
-        console.log(model);
-        return HTTP_POST(_Combine('message/action/leavemsg'), model);
+        var who = GET_MEMBER_LOGIN_INFO()
+        model.member_id = who.member_id
+        model.to_member_id = 0
+        model.state = 0
+        console.log(model)
+        return HTTP_POST(_Combine('message/action/leavemsg'), model)
     },
     Login(model){
-        console.log(model);
-        var deferred = Q.defer();
-        config.ajaxRequireToken = false;
+        console.log(model)
+        var deferred = Q.defer()
+        config.ajaxRequireToken = false
         HTTP_POST(_Combine('member/signin'), model,true).then(function(data){
             if (data.isSuccess){
                 //data.data   { memberid, token}
                 //save the login info in localStorage
-                window.localStorage.setItem(config.loginkey, JSON.stringify(data.data));
-                config.ajaxRequireToken = true;
+                window.localStorage.setItem(config.loginkey, JSON.stringify(data.data))
+                config.ajaxRequireToken = true
             }
-            deferred.resolve(data);
+            deferred.resolve(data)
         }).catch(function(err){
-            deferred.reject(err);
+            deferred.reject(err)
         });
-        return deferred.promise;
+        return deferred.promise
     },
     Logout(model){
-        var deferred = Q.defer();
+        var deferred = Q.defer()
         HTTP_POST(_Combine('member/signout'),model).then(function(data){
-           window.localStorage.removeItem(config.loginkey);
-           deferred.resolve(data);
+           window.localStorage.removeItem(config.loginkey)
+           deferred.resolve(data)
         }).catch(function(err){
-            deferred.reject(err);
+            deferred.reject(err)
         });
-        return deferred.promise;
+        return deferred.promise
     },
     Register(model){
-        var deferred = Q.defer();
-        config.ajaxRequireToken = false;
+        var deferred = Q.defer()
+        config.ajaxRequireToken = false
         HTTP_POST(_Combine('member/signup'),model).then(function(data){
-           window.localStorage.setItem(config.loginkey, data.data);
-           config.ajaxRequireToken = true;
-           deferred.resolve(data);
+           window.localStorage.setItem(config.loginkey, data.data)
+           config.ajaxRequireToken = true
+           deferred.resolve(data)
         }).catch(function(err){
-            deferred.reject(err);
+            deferred.reject(err)
         });
-        return deferred.promise;
+        return deferred.promise
     },
     Member(username){
-        return HTTP_GET(_Combine('member/',username));
+        return HTTP_GET(_Combine('member/',username))
     },
     ParentMember(id){
-        return HTTP_GET(_Combine('member/info/',id));
+        return HTTP_GET(_Combine('member/info/',id))
     },
     IndexData(){
-        var who = GET_MEMBER_LOGIN_INFO();
-         return HTTP_GET(_Combine('index/info/', who.memberid));
+        var who = GET_MEMBER_LOGIN_INFO()
+         return HTTP_GET(_Combine('index/info/', who.memberid))
     },
     EditMemberInfo(model){
-        return HTTP_POST(_Combine('member/edit/info'),model);
+        return HTTP_POST(_Combine('member/edit/info'),model)
     },
     EditPwd(model){
-        return HTTP_POST(_Combine('member/reset'), model);
+        return HTTP_POST(_Combine('member/reset'), model)
     },
     EditPayPwd(model,mode){
         //mode //  0 通过原始安全密码,  1 通过手机验证码
     },
     TeamTree(id){
         //member/children
-        return HTTP_GET(_Combine('member/children/',id));
+        return HTTP_GET(_Combine('member/children/',id))
     },
     Offer(money){
         let who = GET_MEMBER_LOGIN_INFO()
@@ -102,7 +101,7 @@ export const API = {
         return HTTP_POST(_Combine('apply/member'), model)
     },
     TeamScope(id){
-        return HTTP_GET(_Combine('member/children/amount/',id));
+        return HTTP_GET(_Combine('member/children/amount/',id))
     },
     IncomeRecords(type,page){
         //type  =  money or  interest or bonus
@@ -145,54 +144,62 @@ function _Combine(...parts){
 }
 
 function _HttpErrorHandle_(err) {
-    //if(err) window.location.href = '/error.html'
+    if(err) window.location.href = '/error.html?code=' + err.status
 }
 
 //*** Abstract Tools
 
 export function HTTP_POST(url,data){
     console.log('------------post',url)
-    var deferred = Q.defer()
+    let deferred = Q.defer()
+    let token = config.ajaxRequireToken ? GET_MEMBER_LOGIN_INFO().token : 'no-token'
     request
         .post(url)
         .send(data)
+        .set(config.tokenKey, token)
         .end(function(err,res){
             if(err) {
+                _HttpErrorHandle_(err)
                 deferred.reject(err)
             } else {
                 deferred.resolve(res.body)
             }
-        });
+        })
     return deferred.promise
 }
 
 export function HTTP_GET (url,data){
     console.log('------------get',url)
     var deferred = Q.defer()
+    let token = config.ajaxRequireToken ? GET_MEMBER_LOGIN_INFO().token : 'no-token'
     request
         .get(url)
         .timeout(6000)
+        .set(config.tokenKey,token)
         .query(data)
         .end(function(err,res){
             if(err){
                 _HttpErrorHandle_(err)
-                deferred.reject("error")
+                deferred.reject(err)
             } else {
                 deferred.resolve(res.body)
             }
-        });
+        })
     return deferred.promise
 }
 
 export function HTTP_PUT (url,data){
     console.log('--------------put',url)
     var deferred = Q.defer()
+    let token = config.ajaxRequireToken ? GET_MEMBER_LOGIN_INFO().token : 'no-token'
     request
         .put(url)
         .send(data)
+        .set(config.tokenKey,token)
         .end(function(err,res){
             if(err){
-                deferred.reject("error")
+                _HttpErrorHandle_(err)
+                deferred.reject(err)
             } else {
                 deferred.resolve(res.body)
             }
@@ -203,12 +210,15 @@ export function HTTP_PUT (url,data){
 export function HTTP_DELETE(url,data) {
     console.log('delete',url)
     var deferred = Q.defer()
+    let token = config.ajaxRequireToken ? GET_MEMBER_LOGIN_INFO().token : 'no-token'
     request
         .del(url)
+        .set(config.tokenKey,token)
         .send(data)
         .end(function(err,res){
             if(err) {
-                deferred.reject("error")
+                 _HttpErrorHandle_(err)
+                deferred.reject(err)
             } else {
                 deferred.resolve(res.body)
             }

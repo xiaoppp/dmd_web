@@ -1,4 +1,4 @@
-import {API,SET_MEMBER_INFO} from './api'
+import {API} from './api'
 import Q from 'q'
 
 //data fetch
@@ -8,7 +8,7 @@ export const ApplyLogic = {
         let deferred = Q.defer()
         if(!ajax && Applys.init){
             let one = Applys.data.find(x=>x.id == id)
-            if(one) deferred.resolve(one)
+            if(one) deferred.resolve(Object.assign({}, {apply:one, pairs:[]}))
             else ajax = 1
         }
         if(ajax){
@@ -45,7 +45,8 @@ export const OfferLogic = {
         let deferred = Q.defer()
         if(!ajax && Offers.init){
             let one = Offers.data.find(x=>x.id == id)
-            if(one) deferred.resolve(one)
+            console.log(one,Offers.data)
+            if(one) deferred.resolve(Object.assign({}, {offer: one, pairs : []}))
             else ajax = 1
         }
         if(ajax){
@@ -99,9 +100,50 @@ export const FailedMatchLogic = {
 
 //on the way
 export const TeamLogic = {
-    fetchOne(){
+    fetchOne(id){
+        let deferred = Q.defer()
+        let one = Team.data.find(x=>x.id == id)
+        if(one) deferred.resolve(one)
+        else  throw 'member is not found'
+        return deferred.promise
     },
-    fetchMany(){
+    fetchChildren(id){
+        console.log(id)
+        let deferred = Q.defer()
+        let one = Team.data.find(x=>x.id == id)
+        if(!one) throw 'member is not found'
+        else {
+            if(one.children) {
+                let children = Team.data.filter(x=>x.parent_id == id).map(x=>{
+                    return {
+                                id: x.id,
+                                sex: x.sex,
+                                truename: x.truename,
+                                mobile: x.mobile
+                            }
+                })
+                deferred.resolve(children)
+            } else {
+                API.TeamTree(id).then(function(data) {
+                    if (data.isSuccess) {
+                        let children = data.data.map(x=>{
+                            Team.data.push(x)
+                            return {
+                                id: x.id,
+                                sex: x.sex,
+                                truename: x.truename,
+                                mobile: x.mobile
+                            }
+                        })
+                        one.children = 1
+                        deferred.resolve(children)
+                    } else {
+                        deferred.reject(data.error)
+                    }
+                })
+            }
+        }
+        return deferred.promise
     }
 }
 
@@ -111,10 +153,11 @@ export const IncomeLogic = {
         if(type == Incomes.type && page == Incomes.page && Incomes.init) deferred.resolve(Incomes)
         API.IncomeRecords(type, page).then(d=>{
             if(d.isSuccess) {
-                Incomes.init = 1 
+                Incomes.init = 1
                 Incomes.page = page
                 Incomes.type = type
-                Incomes.data = d.data
+                Incomes.data = d.data.rows
+                Incomes.total = d.data.count
                 deferred.resolve(Incomes)
             } else {
                 deferred.reject(d.error)
@@ -132,7 +175,7 @@ export const NewsLogic = {
         let ajax = 0
         if(News.init){
             let one = News.data.find(x=>x.id == id)
-            if(one) deferred.resolve(one)
+            if(one) deferred.resolve(Object.assign({},one))
             else ajax = 1
         } else {
             ajax = 1
@@ -155,8 +198,8 @@ export const NewsLogic = {
                 if(d.isSuccess){
                     News.page = page
                     News.init = 1
-                    News.total = d.count
-                    News.data = d.rows
+                    News.total = d.data.count
+                    News.data = d.data.rows
                     deferred.resolve(News)
                 }
                 else deferred.reject(d.error)
@@ -174,7 +217,7 @@ export const MessageLogic = {
         let ajax = 0
         if(Messages.init){
             let one = Messages.data.find(x=>x.id == id)
-            if(one) deferred.resolve(one)
+            if(one) deferred.resolve(Object.assign({}, one))
             else ajax = 1
         } else {
             ajax = 1
@@ -197,8 +240,8 @@ export const MessageLogic = {
                 if(d.isSuccess){
                     Messages.page = page
                     Messages.init = 1
-                    Messages.total = d.count
-                    Messages.data = d.rows
+                    Messages.total = d.data.count
+                    Messages.data = d.data.rows
                     deferred.resolve(Messages)
                 }
                 else deferred.reject(d.error)
@@ -235,16 +278,16 @@ export const MemberLogic = {
                 Member.bonus - Member.moneyApply
     },
     about(){
-        let offer = arguments[0] || Member.lastOffer.id
+        let offer = arguments[0] || Member.lastOffer
         if(!Member.init || !Config.pretty || !offer) return 0
         if(offer && offer.fst)
             return offer.money * Config.key6 * Config.key24
         else return 0
     },
     run(){
+        if(!Member.init) return
         console.log('---run//member//');
         let self = this
-        if(!Member.init) return
         let o = {
             sum       :  self.sum(),
             bonus     :  self.bonus(),
@@ -276,9 +319,6 @@ export const MemberLogic = {
                     let d = data.data
                     console.log('---data//',d)
                     
-                    //will be abort
-                    SET_MEMBER_INFO(d.member)
-
                     ConfigLogic.assign(d.config)
                     ConfigLogic.run()
 
@@ -295,7 +335,7 @@ export const MemberLogic = {
 
                     MemberLogic.run()
 
-                    console.log('---member//', Member)
+                    Team.data.push(Member)
 
                     deferred.resolve(Member)
                     
@@ -376,7 +416,6 @@ export const Team = {
     init : 0,
     pretty : 0,
     data : [],
-    tree : []
 }
 
 export const Incomes = {

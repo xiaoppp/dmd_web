@@ -12,27 +12,28 @@ new Vue({
     },
     methods:{
         login: function(evt){
-            var model={
+            evt.preventDefault()
+            let model={
                 username: this.mobile,
-                pwd: this.pwd  
-            };
+                pwd: this.pwd
+            }
             API.Login(model).then(function(data){
                 if(data.isSuccess){
                     alert2("登录成功！").then(function(){
-                        var url = window.location.protocol + "://" + window.location.host + '/';
-                        console.log(url);
-                        window.location.href = '/index.html';
-                    });
+                        let url = window.location.protocol + "://" + window.location.host + '/'
+                        console.log(url)
+                        //window.location.href = '/index.html'
+                    })
                 } else {
-                    var msg =  data.error.message;
-                    alert2(msg);
+                    let msg =  data.error.message
+                    alert2(msg)
                 }
             }).catch(function(err){
-                console.log(err);
-            });
+                console.log(err)
+            })
         },
         retrievePWD: function(evt) {
-            alert("您是否正的忘记了密码呢？");     
+            alert("您是否正的忘记了密码呢？")
         }
     }
 });

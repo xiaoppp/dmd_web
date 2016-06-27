@@ -1,12 +1,12 @@
-import Vue from 'vue';
-import VueValidator from 'vue-validator';
+import Vue from 'vue'
+import VueValidator from 'vue-validator'
 
-import {API} from './api';
-import {alert2,queryValue} from './utils';
-import validationErrors from '../components/_validation_errors.vue';
-import {ValidatorRules} from './validation';
+import {API} from './api'
+import {alert2,queryValue} from './utils'
+import validationErrors from '../components/_validation_errors.vue'
+import {ValidatorRules} from './validation'
 
-Vue.use(VueValidator);
+Vue.use(VueValidator)
 
 new Vue({
     el:"#registerApp",
@@ -19,31 +19,31 @@ new Vue({
     },
     methods:{
         register: function(evt){
-            var model = {};
-            Object.assign(model, this.model);
-            console.log(model);
+            var model = {}
+            Object.assign(model, this.model)
+            console.log(model)
             API.Register(model).then(function(data){
                 if(data.isSuccess){
-                    alert2("注册成功！");
+                    alert2("注册成功！")
                 } else {
-                    var msg = '[' + data.error.code + ']  ' + data.error.message;
-                    alert2(msg);
+                    var msg =  data.error.message
+                    alert2(msg)
                 }
             }).catch(function(err){
-                console.log(err);
-            });
+                console.log(err)
+            })
         }
     },
     created:function(){
-        var refer=queryValue('refer');
-        var vm = this;
-        vm.model.refer = refer;
+        var refer=queryValue('refer')
+        var vm = this
+        vm.model.refer = refer
         API.Member(refer).then(function(data){
             if(data.isSuccess){
-                if(data.data) vm.model.refer_name = data.data.truename;
-                else alert2("没有找到推荐人");
+                if(data.data) vm.model.refer_name = data.data.truename
+                else alert2("没有找到推荐人")
             } else {
-                alert2(data.error.message);
+                alert2(data.error.message)
             }
         });
     },

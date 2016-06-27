@@ -118,7 +118,7 @@
 					t1 :0,
 					t2 :0
 				},
-				M : D.Member
+				M : Object.assign({}, D.Member)
 			}
 		},
 		components:{pagination},
@@ -131,21 +131,14 @@
 		methods:{
 			load:function(page, n){
 				let vm = this
-				let type = n == 0 ? 'money' : 
-				           n == 1 ? 'interest' : 
-						   n ==2 ? 'bonus' : ''
-
+				let type = n == 0 ? 'money' :  n == 1 ? 'interest' : n ==2 ? 'bonus' : ''
 				if(!type) return
-
-				API.IncomeRecords(type, page).then(function(data){
-					if(data.isSuccess){
-						let d = data.data
-						vm.$set('model'+ n, d.rows)
-						vm.$set('pageCfg.p'+ n, page)
-						vm.$set('pageCfg.t'+ n, d.count)
-					}else{
-						alert2(data.error.message)
-					}
+				D.IncomeLogic.fetchMany(type, page).then(x=>{
+					let copy = Object.assign({}, D.Incomes)
+					console.log(copy)
+					vm.$set('model'+ n, copy.data)
+					vm.$set('pageCfg.p'+ n, copy.page)
+					vm.$set('pageCfg.t'+ n, copy.total)
 				})
 			},
 			tabClick(i){

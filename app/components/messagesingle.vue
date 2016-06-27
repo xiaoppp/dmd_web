@@ -8,8 +8,8 @@
                     <span>来自：</span><b>平台官方客服</b>
                     <span>时间：</span><b>{{model.the_time|datetime}}</b>
                 </h4>
-                <div style="margin:20px 0;text-align:center;" v-if="{{model.img}}">
-                    <img class="show_big_img" style="width:auto;max-height:250px;" v-src="images/message/{{model.img}}">
+                <div style="margin:20px 0;text-align:center;" v-if="model.img">
+                    <img class="show_big_img" style="width:auto;max-height:250px;" :src="'images/message/' + model.img">
                 </div>
                 <div class="cententC">
                     {{model.content}}
@@ -22,6 +22,7 @@
 <script>
     import {API} from '../js/api'
     import {alert2} from '../js/utils'
+    import * as D from '../js/data'
 
     export default {
 		data(){
@@ -32,15 +33,10 @@
 		route:{
 			data:function(transition){
 				var id = transition.to.params.id
-				API.MessageSingle(id).then(function(data) {
-                    if(data.isSuccess){
-                        if(!data.data)  alert2('没有数据')
-                        else
-                            transition.next({'model': data.data})
-                    } else {
-                        alert2(data.error.message)
-                    }
-				})
+                D.MessageLogic.fetchOne(id).then(d=>{
+                    transition.next({'model': d})
+                }).catch(err=>{
+                })
 			}
 		}
     }

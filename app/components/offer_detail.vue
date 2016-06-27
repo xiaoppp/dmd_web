@@ -40,7 +40,7 @@
 					<tr class="tr2">
 						<td class="cccc">{{offer.money | currency '￥'}}</td>
 						<td class="cccc">
-                            {{$parent.aboutIncome(offer) | currency '￥'}}
+                            {{aboutIncome(offer) | currency '￥'}}
                         </td>
 						<td>{{offer.the_time | datetime}}</td>
 						<td class="ccc">{{offer.state == 100 ? '已完成' : '进行中...'}}</td>
@@ -135,27 +135,20 @@
 
 	import {API} from '../js/api'
 	import {alert2} from '../js/utils'
+	import * as D from '../js/data'
 
     export default {
         data(){
             return {
                 offer : {},
-                pairs : []
+                pairs : [],
             }
         },
         route:{
             data(transition){
 				let id = transition.to.params.id
-				API.OfferDetail(id).then(function(data){
-					if(data.isSuccess){
-						console.log(data)
-						let d = data.data
-						transition.next({'offer':d.offer,'pairs':d.pairs})
-					}else{
-						alert2(data.error.message)
-					}
-				}).catch(function(err){
-					console.log(err)
+				D.OfferLogic.fetchOne(id,1).then(x=>{
+					transition.next({'offer':x.offer,'pairs':x.pairs})
 				})
             }
         },
@@ -168,9 +161,12 @@
         },
 		methods:{
 			remainTime(item){
-				let cfg12 = this.$parent.config.key12
+				let cfg12 = D.Config.key12
 				let time = item.the_time
 				return cfg12 * 60 * 60 - (Date.now() - time)
+			},
+			aboutIncome(item){
+				return D.MemberLogic.about(item)
 			}
 		}
 

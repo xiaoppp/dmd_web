@@ -154,23 +154,8 @@
         route:{
             data(transition){
 				let id = transition.to.params.id
-
-				let one = D.Member.applys.find(x=>{
-					return x.id == id
-				})
-
-				//transition.next({'apply':d.apply,'pairs':d.pairs})
-
-				API.ApplyDetail(id).then(function(data){
-					if(data.isSuccess){
-                		console.log(data.data)
-						let d = data.data
-						transition.next({'apply':d.apply,'pairs':d.pairs})					
-					}else{
-						alert2(data.error.message)
-					}
-				}).catch(function(err){
-					console.log(err)
+				D.ApplyLogic.fetchOne(id,1).then(x=>{
+					transition.next({'apply': x.apply,'pairs': x.pairs})	
 				})
             }
         },
@@ -182,8 +167,8 @@
             }
         },
         methods:{
-            remainTime(start,flag){
-				let cfg = flag  ? this.$parent.config.key12 : this.$parent.config.key13
+            remainTime(start, flag){
+				let cfg = flag  ? D.Config.key12 : D.Config.key13
 				let time = start
 				return cfg * 60 * 60 - (Date.now() - time)
 			}

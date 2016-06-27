@@ -205,13 +205,12 @@
     import Vue from 'vue'
 
     import VueValidator from 'vue-validator'
-
     import {Banks} from '../js/constants'
-    
-    import {GET_MEMBER_INFO,API,SET_MEMBER_INFO} from '../js/api'
+    import {API} from '../js/api'
     import {alert2} from '../js/utils'
     import {ValidatorRules} from  '../js/validation'
     import validationErrors from '../components/_validation_errors.vue'
+    import * as D from '../js/data'
 
     Vue.use(VueValidator)
 
@@ -226,13 +225,13 @@
                 payPwdModel :{},
                 payPwdModel2 : {},
                 validationRules: ValidatorRules.Member,
-                parent : {truename:'',mobile:''}
+                parent : { truename:'', mobile:''}
             }
         },
         route:{
             data(transition){
-                var who = GET_MEMBER_INFO()
-                console.log(who)
+
+                let who = D.Member
 
                 let m = {
                     id : who.id,
@@ -249,7 +248,7 @@
                 
                 API.ParentMember(who.parent_id).then(function(data){
                     if(data.isSuccess){
-                        transition.next({'parent':data.data,'model':m})
+                        transition.next({'parent': data.data, 'model': m})
                     } else {
                         alert2(data.error.message)
                     }
@@ -258,11 +257,10 @@
         },
         methods:{
             submit(){
-                console.log(this.model);
                 API.EditMemberInfo(this.model).then(function(data){
                     if(data.isSuccess){
                         alert2('修改资料成功！')
-                        SET_MEMBER_INFO(data.data)
+                        Object.assign(D.Member, data.data)
                     } else {
                         alert2(data.error.message)
                     }

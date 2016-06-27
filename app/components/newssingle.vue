@@ -19,22 +19,21 @@
 </template>
 <script>
 
-	import {API} from '../js/api';
-	import {htmlDecode} from 'js-htmlencode';
+	import {API} from '../js/api'
+	import {htmlDecode} from 'js-htmlencode'
+	import * as D from '../js/data'
 
     export default {
 		data(){
-			return {model:{}};
+			return { model:{} }
 		},
 		route:{
 			data:function(transition){
-				var id = transition.to.params.id;
-				API.NewsSingle(id).then(function(data){
-					var d = data.data;
-					d.content = htmlDecode(d.content);
-					transition.next({'model': d});
-					console.log(d);
-				});
+				var id = transition.to.params.id
+				D.NewsLogic.fetchOne(id).then(d=>{
+					d.content = htmlDecode(d.content)
+					transition.next({'model': d})
+				})
 			}
 		}
     }

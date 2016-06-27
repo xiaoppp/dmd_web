@@ -7,7 +7,7 @@
 				<li v-for="item in model" class="row-{{$index%2}}">
 						<a v-link="{name:'messagesingle',params:{id:item.id}}" href="">
 						<i class="{{item.state}}"></i>{{item.title}}</a>
-						<time>{{item.the_time|datetime}}</time>
+						<time>{{item.the_time | datetime}}</time>
 				</li>
 			</ul>
 		</div>
@@ -19,6 +19,7 @@
 
 import {API} from '../js/api'
 import pagination from './_pagination.vue'
+import * as D from '../js/data'
 
 export default {
 	data(){
@@ -37,22 +38,17 @@ export default {
 	methods:{
 		load(page){
 			let vm = this
-			API.Messages(page).then(function(data){
-				var d = data.data
-
-				var count = d.count
-				var rows = d.rows
-				rows.forEach(function(item,key){
+			D.MessageLogic.fetchMany(page).then(x=>{
+				let copy = Object.assign({}, D.Messages)
+				console.log(copy)
+				copy.data.forEach(item=>{
 					if(item.state==0) item.state = "w"
 					else item.state = "ed"
-				});
-				vm.$set('model',rows)
-				vm.$set('page',page)
-				vm.$set('total',count)
-
-			}).catch(function(err){
-				console.log(err)
-			});
+				})
+				vm.$set('model', copy.data)
+				vm.$set('page', copy.page)
+				vm.$set('total', copy.total)
+			})
 		}
 	},
 	events:{

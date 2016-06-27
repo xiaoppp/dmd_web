@@ -1,5 +1,5 @@
 <template>
-<div class="rmain" style="background:#26272C;">
+<div class="rmain">
 
 	<div class="nifo">
 		<ul>
