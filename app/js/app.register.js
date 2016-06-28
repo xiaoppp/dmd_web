@@ -45,7 +45,7 @@ new Vue({
             } else {
                 alert2(data.error.message)
             }
-        });
+        })
     },
     components:{validationErrors}
 });

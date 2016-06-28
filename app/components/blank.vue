@@ -1,6 +1,6 @@
 <template>
     <div style="text-align:center;color:#fff;padding:16px;">
-        <h2>Loading...</h2>
+        <h2 style="color:#fff;font-size:20px;">Loading...</h2>
     </div>
 </template>
 

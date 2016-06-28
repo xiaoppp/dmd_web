@@ -42,8 +42,8 @@
 
 <script>
 
-import router from '../js/router.config';
-import {alert2} from '../js/utils';
+import router from '../js/router.config'
+import {alert2} from '../js/utils'
 import * as D from '../js/data'
 
 export default {
@@ -54,14 +54,14 @@ export default {
 	},
 	methods:{
 		goApply(){
-			var o = this.apply;
-			if(!o) return;
-			else  router.go({name:"apply", params:{id:o.id}});
+			var o = this.apply
+			if(!o) return
+			else  router.go({name:"apply", params:{id:o.id}})
 		},
 		goOffer(){
-			var o = this.offer;
-			if(!o) return;
-			else router.go({name:"offer", params:{id:o.id}});
+			var o = this.offer
+			if(!o) return
+			else router.go({name:"offer", params:{id:o.id}})
 		}
 	}
 }

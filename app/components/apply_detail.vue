@@ -95,25 +95,22 @@
 
 					<dd class="s3" v-if="item.state == 3">
 						<em>收款剩余时间<img src="/images/time.jpg"> {{remainTime(item.pay_time,0)}}</em>
-						
                         <span class="edd">对方已打款</span>
 						<img class="show_big_img" :src="'images/payment/' + item.img">
-						<a href="javascript:;" class="apply_confirm_btn btn">确认收款</a>
-
+						<a href="javascript:;" @click="payIn(item,$event)" class="apply_confirm_btn btn">确认收款</a>
                         <span v-if="item.judge == 1">
                             <span style="color:lime;margin-left:15px;">
                                 平台处理中......
                             </span>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <a href="javascript:;" class="to_judge" data-type="no">撤销</a>
+                            <a href="javascript:;" class="to_judge" @click="cancelJudge(item)" data-type="no">撤销</a>
                         </span>
                         <span v-if="item.judge == 2">
                             <span style="color:red;">投诉被驳回</span>
                         </span>
                         <span v-if="item.judge > 2">
-                            <a href="javascript:;" class="to_judge" data-type="to" title="对方打款凭证为假图，我未收到款，需要平台介入！">我要投诉</a>
+                            <a href="javascript:;" class="to_judge" @click="judge(item)" title="对方打款凭证为假图，我未收到款，需要平台介入！">我要投诉</a>
                         </span>
-
 					</dd>
 					<dd class="s3" v-if="item.state == 4">
 						<img class="show_big_img" :src="'images/payment/' + item.img">
@@ -129,10 +126,9 @@
 	<div>
 		<h5>请给XXX的打款诚信评分</h5>
 		<ul>
-
 			<img v-for="i in 5" :class="{on: remark == i}" src="/images/xing02.png" @click="remark = i">
 		</ul>
-		<a href="javascript:;" class="btn" oaid="0">提 交</a>
+		<a href="javascript:;" class="btn" >提 交</a>
 	</div>
 </div>
 </div>
@@ -171,6 +167,26 @@
 				let cfg = flag  ? D.Config.key12 : D.Config.key13
 				let time = start
 				return cfg * 60 * 60 - (Date.now() - time)
+			},
+			payIn(item){
+				API.PayIn(item.id).then(x=>{
+					if(x.isSuccess) alert2('确认收款成功，系统正在处理...')
+					else alert2(x.error.message)
+				})
+			},
+			judge(item){
+				API.Judge(item.id, 1).then(x=>{
+					if(x.isSuccess) alert2('仲裁成功，系统正在处理...')
+					else alert2(x.error.message)
+				})
+			},
+			cancelJudge(item){
+
+			},
+			remark(item){
+				API.Remark(item.id,this.remark).then(x=>{
+					if(x.isSuccess) alert2('')
+				})
 			}
         }
     }

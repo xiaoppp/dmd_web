@@ -97,8 +97,9 @@
 				</table>
 			</div>
 			<div class="tb">
+				打款剩余时间<img src="/images/time.jpg">{{remainTime(item)}}
 					<dd class="s2" v-if="item.state == 2">
-						打款剩余时间<img src="/images/time.jpg">{{remainTime(item)}}秒
+						
 						<div>
 							<div v-if="item.img">
 								<a href="javascript:;" class="a_upload">
@@ -106,8 +107,8 @@
 									<input type="file" name="imgfile" class="uploadimgfile"/>
 								</a>
 								<input type="hidden" name="oaid" value="{{item.id}}">
-								<input type="submit" value="确认付款" class="sure">
-								<em class="deny_payment">拒绝打款</em>
+								<input type="submit" value="确认付款" class="sure" @click="payOut(item)">
+								<em class="deny_payment" @click="denyPay(item,$event)">拒绝打款</em>
 							</div>
 							<div v-else>
 								<a href="javascript:;" class="a_upload">
@@ -136,6 +137,7 @@
 	import {API} from '../js/api'
 	import {alert2} from '../js/utils'
 	import * as D from '../js/data'
+	import moment from 'moment'
 
     export default {
         data(){
@@ -162,11 +164,23 @@
 		methods:{
 			remainTime(item){
 				let cfg12 = D.Config.key12
-				let time = item.the_time
-				return cfg12 * 60 * 60 - (Date.now() - time)
+				let time =  cfg12 * 60 * 60 -  moment().diff(moment(item.the_time), 'seconds')
+				return time
 			},
 			aboutIncome(item){
 				return D.MemberLogic.about(item)
+			},
+			denyPay(item){
+				API.DenyPayment().then(x=>{
+					if(x.isSuccess)alert2('您已拒绝打款,系统正在处理...')
+					else alert2(x.error.message)
+				})
+			},
+			payOut(item){
+				API.PayOut().then(x=>{
+					if(x.isSuccess) alert2('已确认打款，系统正在处理...')
+					else alert2(x.error.message)
+				})
 			}
 		}
 

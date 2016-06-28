@@ -1,6 +1,7 @@
 import request from 'superagent'
 import Q from 'q'
 import config from './config'
+import * as D from './data'
 
 export const API = {
     News(page){
@@ -126,7 +127,54 @@ export const API = {
         let who = GET_MEMBER_LOGIN_INFO()
         let model = { applyid : id, memberid : who.memberid}
         return HTTP_POST(_Combine('apply/detail'),model)
-    }
+    },
+    Freeze(){
+        let who = D.Member.id
+        return HTTP_POST(_Combine(''))
+    },
+    DenyPay(){
+        //pair/payment/deny/:memberid
+        let who = D.Member.id
+        return HTTP_GET(_Combine('pair/payment/deny/',who))
+    },
+    PayOut(pairid){
+        //pair/payment/out
+        let who = D.Member.id
+        let model = {
+            memberid : who,
+            oaid : oaid
+        }
+        return HTTP_POST(_Combine('pair/patmeny/out'), model)
+    },
+    PayIn(pairid){
+        //pair/payment/in
+        let who = D.Member.id
+        let model = {
+            memberid : who,
+            oaid : pairid
+        }
+        return HTTP_POST(_Combine('pair/payment/in'), pairid)
+    },
+    Judge(pairid,judge){
+        //pairs/judge
+        //0为正常，1为仲裁状态，2为被驳回
+        let who = D.Member.id
+        let model = {
+            oaid  : pairid,
+            judge  :judge,
+            memberid : who
+        }
+        return HTTP_POST(_Combine('pairs/judge'), model)
+    },
+    Remark(pairid,remark){
+        //pairs/remark
+        let who = D.Member.id
+        let model = {
+            oaid : pairid,
+            remark : remark
+        }
+        return HTTP_POST(_Combine('pairs/remark'),model)
+    },
 }
 
 //** Utilities
@@ -144,7 +192,7 @@ function _Combine(...parts){
 }
 
 function _HttpErrorHandle_(err) {
-    if(err) window.location.href = '/error.html?code=' + err.status
+    //if(err) window.location.href = '/error.html?code=' + err.status
 }
 
 //*** Abstract Tools
