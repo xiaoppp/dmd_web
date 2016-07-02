@@ -252,7 +252,7 @@
                     } else {
                         alert2(data.error.message)
                     }
-                });               
+                })
             }
         },
         methods:{
@@ -271,11 +271,25 @@
             },
             changePwd(){
                 console.log(this.pwdModel)
-                alert2('change pwd')
+                if(this.pwdModel.pwd != this.pwdModel.repwd) return alert2('两次输入的密码不一致，请重新输入.')
+                API.EditPwd(this.pwdModel).then(d=>{
+                    if(d.isSuccess) alert2('密码修改成功,下次登录请使用此密码')
+                    else alert2(d.error.message)
+                }).catch(e=>{
+                    alert2('密码修改失败')
+                    console.log(e)
+                })
             },
             changePayPwd(){
                 console.log(this.payPwdModel)
-                alert2('change pay pwd')
+                if(this.payPwdModel.pay_pwd4 != this.payPwdModel.pay_repwd) return alert2('两次输入的安全密码不一致，请重新输入')
+                API.EditPayPwd(this.payPwdModel).then(d=>{
+                    if(d.isSuccess) alert2('安全密码修改成功')
+                    else alert2(d.error.message)
+                }).catch(e=>{
+                    alert2('安全密码修改失败')
+                    console.log(e)
+                })
             },
             changePayPwd2(){
                 console.log(this.payPwdModel2)

@@ -22,7 +22,7 @@ new Vue({
                     alert2("登录成功！").then(function(){
                         let url = window.location.protocol + "://" + window.location.host + '/'
                         console.log(url)
-                        //window.location.href = '/index.html'
+                        window.location.href = '/index.html'
                     })
                 } else {
                     let msg =  data.error.message

@@ -25,7 +25,8 @@ var paths = {
     html: [
         'app/index.html',
         'app/login.html',
-        'app/register.html'
+        'app/register.html',
+        'app/error.html'
     ],
     style: [
         'app/css/admin.css',
@@ -39,6 +40,7 @@ var paths = {
         'app/build/index.js',
         'app/build/login.js',
         'app/build/register.js',
+        'app/build/error.js',
         'app/build/vendor1.js'
     ],
     js: [

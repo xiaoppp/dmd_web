@@ -1,5 +1,6 @@
 import {API} from './api'
 import Q from 'q'
+import config from './config'
 
 //data fetch
 
@@ -23,7 +24,7 @@ export const ApplyLogic = {
     },
     fetchMany(){
         let deferred = Q.defer()
-        if(Applys.init) deferred.resolve(Applys)
+        if(config.useCache &&  Applys.init) deferred.resolve(Applys)
         else {
             API.DealRecords('applys',1).then(d  => {
                 if(d.isSuccess){ 
@@ -61,7 +62,7 @@ export const OfferLogic = {
     },
     fetchMany(){
         let deferred = Q.defer()
-        if(Offers.init) deferred.resolve(Offers)
+        if(config.useCache && Offers.init) deferred.resolve(Offers)
         else {
             API.DealRecords('offers',1).then(d  => {
                 if(d.isSuccess){ 
@@ -81,7 +82,7 @@ export const OfferLogic = {
 export const FailedMatchLogic = {
     fetchMany(){
         let deferred = Q.defer()
-        if(FailedMatches.init) deferred.resolve(FailedMatches)
+        if(config.useCache && FailedMatches.init) deferred.resolve(FailedMatches)
         else {
             API.DealRecords('pairs/failed',1).then(d  => {
                 if(d.isSuccess){ 
@@ -150,7 +151,7 @@ export const TeamLogic = {
 export const IncomeLogic = {
     fetchMany(type, page){
         let deferred = Q.defer()
-        if(type == Incomes.type && page == Incomes.page && Incomes.init) deferred.resolve(Incomes)
+        if(config.useCache && type == Incomes.type && page == Incomes.page && Incomes.init) deferred.resolve(Incomes)
         API.IncomeRecords(type, page).then(d=>{
             if(d.isSuccess) {
                 Incomes.init = 1
@@ -192,7 +193,7 @@ export const NewsLogic = {
     },
     fetchMany(page){
         let deferred = Q.defer()
-        if(page == News.page && News.init) deferred.resolve(News)
+        if(config.useCache && page == News.page && News.init) deferred.resolve(News)
         else {
             API.News(page).then(d=>{
                 if(d.isSuccess){
@@ -234,7 +235,7 @@ export const MessageLogic = {
     },
     fetchMany(page){
         let deferred = Q.defer()
-        if(page == Messages.page && Messages.init) deferred.resolve(Messages)
+        if(config.useCache && page == Messages.page && Messages.init) deferred.resolve(Messages)
         else {
             API.Messages(page).then(d=>{
                 if(d.isSuccess){

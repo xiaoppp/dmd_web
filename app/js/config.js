@@ -1,8 +1,13 @@
 export default {
     ajaxRequireToken: true,
     pageSize : 12,
-    //host : 'http://192.168.1.105:3000/api/',
-    host : 'http://localhost:3000/api/',
+    hosts : {
+        test : 'http://192.168.1.100:3000/api/',
+        product : 'http://192.168.1.103:3000/api/'
+    },
+    //host : 'http://localhost:3000/api/',
     loginkey : 'member.login.information',
-    tokenKey : 'DMD-Token'
+    tokenKey : 'DMD-Token',
+    opt : "test",
+    useCache : false
 }

@@ -21,13 +21,27 @@ export const API = {
         var who = GET_MEMBER_LOGIN_INFO()
         return HTTP_GET(_Combine('messages/reply/',who.memberid))
     },
-    PostMsg(model){
+    PostMsg(model,file){
         var who = GET_MEMBER_LOGIN_INFO()
-        model.member_id = who.member_id
-        model.to_member_id = 0
-        model.state = 0
-        console.log(model)
-        return HTTP_POST(_Combine('message/action/leavemsg'), model)
+        console.log('-------leave msg//',model)
+        let deferred = Q.defer()
+
+        request.post(_Combine('message/action/leavemsg/', who.memberid))
+               .attach('imgFile',file)
+               .field('member_id', who.memberid)
+               .field('to_member_id', 0)
+               .field('state', 0)
+               .field('content',model.content)
+               .field('msgtype',model.msgtype)
+               .field('title',model.title)
+               .end(function(err,res){
+                   if(err){ 
+                        deferred.reject(err)
+                    } else {
+                        deferred.resolve(res.body)
+                   }
+               })
+        return deferred.promise
     },
     Login(model){
         console.log(model)
@@ -82,10 +96,28 @@ export const API = {
         return HTTP_POST(_Combine('member/edit/info'),model)
     },
     EditPwd(model){
-        return HTTP_POST(_Combine('member/reset'), model)
+        let who = D.Member.id
+        let data = {
+            memberid : who,
+            oldpwd : model.old_pwd,
+            pwd : model.pwd,
+            repwd : model.repwd,
+            paypwd : model.pay_pwd3
+        }
+        console.log('-------EditPwd//',data)
+        return HTTP_POST(_Combine('member/pwd/reset'), data)
     },
     EditPayPwd(model,mode){
         //mode //  0 通过原始安全密码,  1 通过手机验证码
+        let who = D.Member.id
+        let data = {
+            memberid : who,
+            paypwd : model.pay_pwd4,
+            repaypwd : model.pay_repwd,
+            oldpaypwd : model.old_pay_pwd
+        }
+        console.log('-------EditPayPwd//', data)
+        return  HTTP_POST(_Combine('member/paypwd/reset'), data)
     },
     TeamTree(id){
         //member/children
@@ -137,14 +169,22 @@ export const API = {
         let who = D.Member.id
         return HTTP_GET(_Combine('pair/payment/deny/',who))
     },
-    PayOut(pairid){
+    PayOut(pairid,file){
         //pair/payment/out
         let who = D.Member.id
-        let model = {
-            memberid : who,
-            oaid : oaid
-        }
-        return HTTP_POST(_Combine('pair/patmeny/out'), model)
+        let deferred = Q.defer()
+        request.post(_Combine('pair/payment/out/', pairid))
+               .attach('imgFile',file)
+               .field('memberid', who)
+               .field('oaid', pairid)
+               .end(function(err,res){
+                   if(err){
+                        deferred.reject(err)
+                    } else {
+                        deferred.resolve(res.body)
+                   }
+               })
+        return deferred.promise
     },
     PayIn(pairid){
         //pair/payment/in
@@ -153,7 +193,7 @@ export const API = {
             memberid : who,
             oaid : pairid
         }
-        return HTTP_POST(_Combine('pair/payment/in'), pairid)
+        return HTTP_POST(_Combine('pair/payment/in'), model)
     },
     Judge(pairid,judge){
         //pairs/judge
@@ -174,7 +214,7 @@ export const API = {
             remark : remark
         }
         return HTTP_POST(_Combine('pairs/remark'),model)
-    },
+    }
 }
 
 //** Utilities
@@ -183,7 +223,7 @@ function _Combine(...parts){
     let len = parts.length;
     if(len === 0) throw 'no parts provided'
     else {
-        let raw = config.host
+        let raw =  config.hosts[config.opt]
         for(let i=0; i < len; i++){
             raw += parts[i]
         }

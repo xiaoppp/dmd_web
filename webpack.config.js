@@ -13,7 +13,7 @@ module.exports = {
         error : path.resolve(APP_PATH, 'app.error.js'),
         vendor1: [  'superagent', 'q', 'vue','vuex',
                     'vue-validator','moment','js-htmlencode',
-                    'qrcodejs','clipboard']
+                    'qrcodejs','clipboard','jquery']
     },
     output: {
         path: BUILD_PATH,

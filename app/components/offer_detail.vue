@@ -97,32 +97,31 @@
 				</table>
 			</div>
 			<div class="tb">
-				打款剩余时间<img src="/images/time.jpg">{{remainTime(item)}}
 					<dd class="s2" v-if="item.state == 2">
-						
+						打款剩余时间<img src="/images/time.jpg">{{remainTime(item)}}
 						<div>
 							<div v-if="item.img">
+								<a href="javascript:;" class="a_upload">
+									<img class="show_big_img"  @click="showBigImg(item,$event)" :src="'/images/payment/' + item.img " style="max-width:250px;height:160px;"/>
+								</a>
+							</div>
+							<div v-else>
 								<a href="javascript:;" class="a_upload">
 									<img src="/images/plusFhotoIcon.jpg" style="width:auto;height:60px;"/>
 									<input type="file" name="imgfile" class="uploadimgfile"/>
 								</a>
 								<input type="hidden" name="oaid" value="{{item.id}}">
-								<input type="submit" value="确认付款" class="sure" @click="payOut(item)">
+								<input type="submit" value="确认付款" class="sure" @click="payOut(item,$event)">
 								<em class="deny_payment" @click="denyPay(item,$event)">拒绝打款</em>
-							</div>
-							<div v-else>
-								<a href="javascript:;" class="a_upload">
-									<img class="show_big_img" :src="'/images/payment/' + item.img " style="max-width:250px;height:160px;"/>
-								</a>
 							</div>
 						</div>
 					</dd>
 					<dd class="s3" v-if="item.state == 3">
 						<span class="edd">已打款成功</span>
-						<img class="show_big_img" :src="'images/payment/' + item.img">
+						<img class="show_big_img" @click="showBigImg(item,$event)" :src="'/upload/images/payment/' + item.img">
 					</dd>
 					<dd class="s3" v-if="item.state == 4">
-						<img class="show_big_img" :src="'images/payment/' + item.img">&nbsp;&nbsp;&nbsp;
+						<img class="show_big_img" @click="showBigImg(item,$event)" :src="'/upload/images/payment/' + item.img">&nbsp;&nbsp;&nbsp;
 						<span class="edd">订单已完成</span>
 					</dd>
 			</div>
@@ -135,9 +134,10 @@
 <script>
 
 	import {API} from '../js/api'
-	import {alert2} from '../js/utils'
+	import {alert2,duration,showBigImg} from '../js/utils'
 	import * as D from '../js/data'
 	import moment from 'moment'
+	import $ from 'jquery'
 
     export default {
         data(){
@@ -164,26 +164,36 @@
 		methods:{
 			remainTime(item){
 				let cfg12 = D.Config.key12
-				let time =  cfg12 * 60 * 60 -  moment().diff(moment(item.the_time), 'seconds')
-				return time
+				let time =  cfg12 * 60 * 60 -  moment().diff(moment.unix(item.the_time),'seconds')
+				return duration(time)
 			},
 			aboutIncome(item){
 				return D.MemberLogic.about(item)
 			},
-			denyPay(item){
-				API.DenyPayment().then(x=>{
-					if(x.isSuccess)alert2('您已拒绝打款,系统正在处理...')
+			denyPay(item, e){
+				API.DenyPayment(item.id).then(x=>{
+					if(x.isSuccess) alert2('您已拒绝打款,系统正在处理...')
 					else alert2(x.error.message)
 				})
 			},
-			payOut(item){
-				API.PayOut().then(x=>{
-					if(x.isSuccess) alert2('已确认打款，系统正在处理...')
+			payOut(item, e){
+				e.preventDefault()
+				let file = $(e.currentTarget).parent().find('input[type=file]').get(0).files[0]
+				if(!file) alert2('请上传付款凭据')
+				API.PayOut(item.id, file).then(x=>{
+					if(x.isSuccess){
+						alert2('已确认打款，系统正在处理...')
+						let d = x.data
+						Object.assign(item, d)
+					} 
 					else alert2(x.error.message)
 				})
+			},
+			showBigImg(item,e){
+				let src = "https://blog.gaya.ninja/images/gaya-kessler.jpg"
+				showBigImg(src,0)
 			}
 		}
-
     }
 </script>
 

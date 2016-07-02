@@ -91,10 +91,9 @@
 				</table>
 			</div>
 			<div class="tb">
-					<dd class="s2">打款剩余时间<img src="/images/time.jpg">{{remainTime(item.the_time,1)}}</dd>
-
+					<dd class="s2" v-if="item.state == 2">打款剩余时间<img src="/images/time.jpg">{{remainTime(item.the_time, 1)}}</dd>
 					<dd class="s3" v-if="item.state == 3">
-						<em>收款剩余时间<img src="/images/time.jpg"> {{remainTime(item.pay_time,0)}}</em>
+						<em>收款剩余时间<img src="/images/time.jpg"> {{remainTime(item.pay_time, 0)}}</em>
                         <span class="edd">对方已打款</span>
 						<img class="show_big_img" :src="'images/payment/' + item.img">
 						<a href="javascript:;" @click="payIn(item,$event)" class="apply_confirm_btn btn">确认收款</a>
@@ -112,6 +111,7 @@
                             <a href="javascript:;" class="to_judge" @click="judge(item)" title="对方打款凭证为假图，我未收到款，需要平台介入！">我要投诉</a>
                         </span>
 					</dd>
+
 					<dd class="s3" v-if="item.state == 4">
 						<img class="show_big_img" :src="'images/payment/' + item.img">
                         &nbsp;&nbsp;&nbsp;
@@ -136,8 +136,9 @@
 
 <script>
 	import {API} from '../js/api'
-	import {alert2} from '../js/utils'
+	import {alert2,duration} from '../js/utils'
 	import * as D from '../js/data'
+	import moment from 'moment'
 
     export default {
         data(){
@@ -165,8 +166,8 @@
         methods:{
             remainTime(start, flag){
 				let cfg = flag  ? D.Config.key12 : D.Config.key13
-				let time = start
-				return cfg * 60 * 60 - (Date.now() - time)
+				let time =  cfg * 60 * 60  - moment().diff(moment.unix(start),'seconds')
+				return duration(time)
 			},
 			payIn(item){
 				API.PayIn(item.id).then(x=>{
@@ -181,7 +182,6 @@
 				})
 			},
 			cancelJudge(item){
-
 			},
 			remark(item){
 				API.Remark(item.id,this.remark).then(x=>{
