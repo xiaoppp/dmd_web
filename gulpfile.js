@@ -98,7 +98,7 @@ gulp.task('prejs', function () {
             base: 'app'
         })
         .pipe(replace('opt: "test"', 'opt: "product"'))
-        .pipe(uglify())
+        //.pipe(uglify())
         .pipe(rev())
         .pipe(gulp.dest(deploywebsitepath))
         .pipe(rev.manifest('js-manifest'))

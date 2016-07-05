@@ -114,13 +114,14 @@ export const TeamLogic = {
         let one = Team.data.find(x=>x.id == id)
         if(!one) throw 'member is not found'
         else {
-            if(one.children) {
+            if(one.hasChildren) {
                 let children = Team.data.filter(x=>x.parent_id == id).map(x=>{
                     return {
                                 id: x.id,
                                 sex: x.sex,
                                 truename: x.truename,
-                                mobile: x.mobile
+                                mobile: x.mobile,
+                                teamCount : x.teamCount
                             }
                 })
                 deferred.resolve(children)
@@ -133,10 +134,11 @@ export const TeamLogic = {
                                 id: x.id,
                                 sex: x.sex,
                                 truename: x.truename,
-                                mobile: x.mobile
+                                mobile: x.mobile,
+                                teamCount : x.teamCount
                             }
                         })
-                        one.children = 1
+                        one.hasChildren = 1
                         deferred.resolve(children)
                     } else {
                         deferred.reject(data.error)
@@ -329,6 +331,7 @@ export const MemberLogic = {
                         lastApply : d.lastApply,
                         lastOffer : d.lastOffer, 
                         showNews : d.showNews,
+                        teamScope : d.teamScope,
                         moneyApply : d.moneyApply || 0,
                         bonusFreeze : d.bonusFreeze || 0,
                         moneyFreeze : d.moneyFreeze || 0,

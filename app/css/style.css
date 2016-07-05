@@ -335,3 +335,4 @@ table tbody > tr.row-1{ background: rgb(49, 50, 55);}
 
 ul.errors{ width: auto !important; margin: auto; margin-top: 5px !important;}
 ul.errors>li{ margin:3px 4px; color:#FFC30D;}
+.loading{background: url(../images/loading.gif) no-repeat;width:74px;height:74px;margin: 3px auto;}

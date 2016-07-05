@@ -2,9 +2,9 @@
     <li>
         <div :class="{bold: isFolder}" class="item-self">
             <i class="{{model.sex == 1 ? 'female':'male'}}"></i>
-            <span class="item-name">{{model.truename}} - {{model.mobile}}</span>
+            <span class="item-name">{{model.truename}} - {{model.mobile}} - {{model.id}} &nbsp; &nbsp;(下级人数:{{model.teamCount}})</span>
             <span class="item-plus-minus" v-if="isFolder" @click="toggle">[{{open ? ' - ' : ' + '}}]</span>
-            <span class="item-plus-minus" v-else  @click="loadChildren(model, $event)">[ ? ]</span>
+            <span class="item-plus-minus" v-else  @click="loadChildren(model, $event)">[ + ]</span>
             <a href="javascript:;" class="item-detail" @click="viewDetail(model, $event)">详细</a>
         </div>
         <ul class="item-children" v-show="open" v-if="isFolder">
@@ -23,20 +23,19 @@
         template: '#item-template',
         props: {
             model: Object,
-            from : Number,
         },
         data: function() {
             return { open: true }
         },
         computed: {
             isFolder: function() {
-                return this.model.children
+                return !!this.model.children
             }
         },
         methods: {
             loadChildren: function(model, e) {
                 e.stopPropagation()
-                if (model.children) return
+                if (model.teamCount == 0 || model.children) return
                 Vue.set(model, 'children', [])
                 D.TeamLogic.fetchChildren(model.id).then(x=>{
                     model.children = x
@@ -51,9 +50,7 @@
             },
             viewDetail:function(model,e){
                 e.stopPropagation()
-                D.TeamLogic.fetchOne(model.id).then(x=>{
-                    this.$dispatch('on-detail-click', x)
-                })
+                this.$dispatch('on-detail-click', model)
             }
         }
     })

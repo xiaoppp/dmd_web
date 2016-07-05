@@ -8,7 +8,7 @@
 			</div>
 			<ul class="u1" v-show="tab == 1">
 				<h2>
-				<span>团队总人数：<b>{{$parent.teamScope}}人</b></span>
+				<span>团队总人数：<b>{{teamScope}}人</b></span>
 				<span>直推人数：<b>{{rootChildrenCount}}人</b></span>
 				<!--<span>有效会员人数：<b>0人</b></span>
 				<span>无效会员人数：<b>0人</b></span>-->
@@ -34,11 +34,11 @@
 							<td>{{currentModel.mobile}}</td>
 							<td :style="{color: currentModel.ok == 1?'#0f0':'#F1AF36'}">{{currentModel.nickname}}</td>
 							<td>{{currentModel.reg_time|datetime}}</td>
-							<td>{{childrenCount}}</td>
+							<td>{{currentModel.teamCount}}</td>
 							<td :style="{color: currentModel.state == 1 ? '#01CCCC':'f00'}">
 								{{currentModel.state == 1 ? "正常":"冻结"}}
 							</td>
-							<td><a href="/?act=team&id=<?php echo $val['id']; ?>" class="see">查看</a></td>
+							<td><a href="javascript:void(0);" class="see">查看</a></td>
 						</tr>
 					</tbody>
 				</table>
@@ -80,25 +80,15 @@
 					id : who.id,
 					sex : who.sex,
 					mobile : who.mobile,
+					teamCount : who.teamScope
 				}
 				transition.next({treeData: model})
 			}
 		},
 		events:{
 			'on-detail-click':function(model){
+				console.log('on-detail-click',model)
 				this.currentModel = model
-			}
-		},
-		computed:{
-			childrenCount(){
-				var n = this.currentModel.children;
-				if(!n) return '未加载下级';
-				else return n.length;
-			},
-			rootChildrenCount(){
-				let d = this.treeData
-				if(d.children) return d.children.length
-				else return 0
 			}
 		},
 		data() {
@@ -106,6 +96,7 @@
 				treeData: {},
 				tab : 1,
 				currentModel : {},
+				teamScope : D.Member.teamScope
 			}
 		}
 	}

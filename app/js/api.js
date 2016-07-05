@@ -2,6 +2,7 @@ import request from 'superagent'
 import Q from 'q'
 import config from './config'
 import * as D from './data'
+import * as util from './utils'
 
 export const API = {
     News(page){
@@ -62,12 +63,14 @@ export const API = {
     },
     Logout(model){
         var deferred = Q.defer()
-        HTTP_POST(_Combine('member/signout'),model).then(function(data){
-           window.localStorage.removeItem(config.loginkey)
-           deferred.resolve(data)
-        }).catch(function(err){
-            deferred.reject(err)
-        });
+        window.localStorage.removeItem(config.loginkey)
+        deferred.resolve('ok')
+        // HTTP_POST(_Combine('member/signout'),model).then(function(data){
+        //    window.localStorage.removeItem(config.loginkey)
+        //    deferred.resolve(data)
+        // }).catch(function(err){
+        //     deferred.reject(err)
+        // })
         return deferred.promise
     },
     Register(model){
@@ -241,11 +244,13 @@ export function HTTP_POST(url,data){
     console.log('------------post',url)
     let deferred = Q.defer()
     let token = config.ajaxRequireToken ? GET_MEMBER_LOGIN_INFO().token : 'no-token'
+    util.loading()
     request
         .post(url)
         .send(data)
-        .set(config.tokenKey, token)
+        //.set(config.tokenKey, token)
         .end(function(err,res){
+            util.loading(true)
             if(err) {
                 _HttpErrorHandle_(err)
                 deferred.reject(err)
@@ -260,12 +265,14 @@ export function HTTP_GET (url,data){
     console.log('------------get',url)
     var deferred = Q.defer()
     let token = config.ajaxRequireToken ? GET_MEMBER_LOGIN_INFO().token : 'no-token'
+    util.loading()
     request
         .get(url)
         .timeout(6000)
-        .set(config.tokenKey,token)
+        //.set(config.tokenKey,token)
         .query(data)
         .end(function(err,res){
+            util.loading(true)
             if(err){
                 _HttpErrorHandle_(err)
                 deferred.reject(err)
@@ -283,7 +290,7 @@ export function HTTP_PUT (url,data){
     request
         .put(url)
         .send(data)
-        .set(config.tokenKey,token)
+        //.set(config.tokenKey,token)
         .end(function(err,res){
             if(err){
                 _HttpErrorHandle_(err)
@@ -301,7 +308,7 @@ export function HTTP_DELETE(url,data) {
     let token = config.ajaxRequireToken ? GET_MEMBER_LOGIN_INFO().token : 'no-token'
     request
         .del(url)
-        .set(config.tokenKey,token)
+        //.set(config.tokenKey,token)
         .send(data)
         .end(function(err,res){
             if(err) {

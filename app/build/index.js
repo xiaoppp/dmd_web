@@ -40,7 +40,7 @@ webpackJsonp([1],[
 	            return "images/xin0" + i + ".png";
 	        },
 	        logout: function logout(evt) {
-	            _api.API.Logout().then(function (x) {
+	            _api.API.Logout({}).then(function (x) {
 	                (0, _utils.alert2)('已退出系统').then(function (x) {
 	                    window.location.href = '/login.html';
 	                });
@@ -69,6 +69,7 @@ webpackJsonp([1],[
 	exports.queryValue = queryValue;
 	exports.duration = duration;
 	exports.paddingLeft = paddingLeft;
+	exports.loading = loading;
 
 	var _q = __webpack_require__(4);
 
@@ -145,6 +146,24 @@ webpackJsonp([1],[
 	        prefix += m;
 	    }sn = prefix + sn;
 	    return sn;
+	}
+
+	function loading() {
+	    var close = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+	    var closeDuration = arguments.length <= 1 || arguments[1] === undefined ? 500 : arguments[1];
+
+	    if (close) return (0, _jquery2.default)('#loadingbox').fadeOut(closeDuration);
+	    if ((0, _jquery2.default)('#loadingbox').length > 0) return (0, _jquery2.default)('#loadingbox').fadeIn(100);
+	    var html = '\n    <div id="loadingbox" style="position:fixed;top:0;left:0;background-color:rgba(0,0,0,.8);z-index:999;display:none;">\n        <div style="color:#F9EA6A;font-size:16px;position:absolute;text-align:center;width:100%;">\n            <div class="loading"></div>\n            数据加载中...\n        </div>\n    </div>\n    ';
+	    var lb = (0, _jquery2.default)(html);
+	    var w = document.body.clientWidth;
+	    var h = document.body.clientHeight;
+	    lb.width(w);
+	    lb.height(h);
+	    lb.find('div').css({
+	        top: (h - 74) / 2
+	    });
+	    lb.appendTo(document.body).fadeIn(100);
 	}
 
 /***/ },
@@ -3234,7 +3253,7 @@ webpackJsonp([1],[
 	            return x.id == id;
 	        });
 	        if (!one) throw 'member is not found';else {
-	            if (one.children) {
+	            if (one.hasChildren) {
 	                var children = Team.data.filter(function (x) {
 	                    return x.parent_id == id;
 	                }).map(function (x) {
@@ -3242,7 +3261,8 @@ webpackJsonp([1],[
 	                        id: x.id,
 	                        sex: x.sex,
 	                        truename: x.truename,
-	                        mobile: x.mobile
+	                        mobile: x.mobile,
+	                        teamCount: x.teamCount
 	                    };
 	                });
 	                deferred.resolve(children);
@@ -3255,10 +3275,11 @@ webpackJsonp([1],[
 	                                id: x.id,
 	                                sex: x.sex,
 	                                truename: x.truename,
-	                                mobile: x.mobile
+	                                mobile: x.mobile,
+	                                teamCount: x.teamCount
 	                            };
 	                        });
-	                        one.children = 1;
+	                        one.hasChildren = 1;
 	                        deferred.resolve(_children);
 	                    } else {
 	                        deferred.reject(data.error);
@@ -3447,6 +3468,7 @@ webpackJsonp([1],[
 	                        lastApply: _d.lastApply,
 	                        lastOffer: _d.lastOffer,
 	                        showNews: _d.showNews,
+	                        teamScope: _d.teamScope,
 	                        moneyApply: _d.moneyApply || 0,
 	                        bonusFreeze: _d.bonusFreeze || 0,
 	                        moneyFreeze: _d.moneyFreeze || 0
@@ -3593,6 +3615,10 @@ webpackJsonp([1],[
 
 	var D = _interopRequireWildcard(_data);
 
+	var _utils = __webpack_require__(3);
+
+	var util = _interopRequireWildcard(_utils);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -3648,12 +3674,14 @@ webpackJsonp([1],[
 	    },
 	    Logout: function Logout(model) {
 	        var deferred = _q2.default.defer();
-	        HTTP_POST(_Combine('member/signout'), model).then(function (data) {
-	            window.localStorage.removeItem(_config2.default.loginkey);
-	            deferred.resolve(data);
-	        }).catch(function (err) {
-	            deferred.reject(err);
-	        });
+	        window.localStorage.removeItem(_config2.default.loginkey);
+	        deferred.resolve('ok');
+	        // HTTP_POST(_Combine('member/signout'),model).then(function(data){
+	        //    window.localStorage.removeItem(config.loginkey)
+	        //    deferred.resolve(data)
+	        // }).catch(function(err){
+	        //     deferred.reject(err)
+	        // })
 	        return deferred.promise;
 	    },
 	    Register: function Register(model) {
@@ -3826,7 +3854,11 @@ webpackJsonp([1],[
 	    console.log('------------post', url);
 	    var deferred = _q2.default.defer();
 	    var token = _config2.default.ajaxRequireToken ? GET_MEMBER_LOGIN_INFO().token : 'no-token';
-	    _superagent2.default.post(url).send(data).set(_config2.default.tokenKey, token).end(function (err, res) {
+	    util.loading();
+	    _superagent2.default.post(url).send(data)
+	    //.set(config.tokenKey, token)
+	    .end(function (err, res) {
+	        util.loading(true);
 	        if (err) {
 	            _HttpErrorHandle_(err);
 	            deferred.reject(err);
@@ -3841,7 +3873,11 @@ webpackJsonp([1],[
 	    console.log('------------get', url);
 	    var deferred = _q2.default.defer();
 	    var token = _config2.default.ajaxRequireToken ? GET_MEMBER_LOGIN_INFO().token : 'no-token';
-	    _superagent2.default.get(url).timeout(6000).set(_config2.default.tokenKey, token).query(data).end(function (err, res) {
+	    util.loading();
+	    _superagent2.default.get(url).timeout(6000)
+	    //.set(config.tokenKey,token)
+	    .query(data).end(function (err, res) {
+	        util.loading(true);
 	        if (err) {
 	            _HttpErrorHandle_(err);
 	            deferred.reject(err);
@@ -3856,7 +3892,9 @@ webpackJsonp([1],[
 	    console.log('--------------put', url);
 	    var deferred = _q2.default.defer();
 	    var token = _config2.default.ajaxRequireToken ? GET_MEMBER_LOGIN_INFO().token : 'no-token';
-	    _superagent2.default.put(url).send(data).set(_config2.default.tokenKey, token).end(function (err, res) {
+	    _superagent2.default.put(url).send(data)
+	    //.set(config.tokenKey,token)
+	    .end(function (err, res) {
 	        if (err) {
 	            _HttpErrorHandle_(err);
 	            deferred.reject(err);
@@ -3871,7 +3909,9 @@ webpackJsonp([1],[
 	    console.log('delete', url);
 	    var deferred = _q2.default.defer();
 	    var token = _config2.default.ajaxRequireToken ? GET_MEMBER_LOGIN_INFO().token : 'no-token';
-	    _superagent2.default.del(url).set(_config2.default.tokenKey, token).send(data).end(function (err, res) {
+	    _superagent2.default.del(url)
+	    //.set(config.tokenKey,token)
+	    .send(data).end(function (err, res) {
 	        if (err) {
 	            _HttpErrorHandle_(err);
 	            deferred.reject(err);
@@ -3919,8 +3959,8 @@ webpackJsonp([1],[
 	    ajaxRequireToken: true,
 	    pageSize: 12,
 	    hosts: {
-	        test: 'http://192.168.1.100:3000/api/',
-	        product: 'http://192.168.1.103:3000/api/'
+	        test: 'http://192.168.1.101:3000/api/',
+	        product: 'http://192.168.1.103/api/'
 	    },
 	    //host : 'http://localhost:3000/api/',
 	    loginkey: 'member.login.information',
@@ -5093,31 +5133,24 @@ webpackJsonp([1],[
 					truename: who.truename,
 					id: who.id,
 					sex: who.sex,
-					mobile: who.mobile
+					mobile: who.mobile,
+					teamCount: who.teamScope
 				};
 				transition.next({ treeData: model });
 			}
 		},
 		events: {
 			'on-detail-click': function onDetailClick(model) {
+				console.log('on-detail-click', model);
 				this.currentModel = model;
-			}
-		},
-		computed: {
-			childrenCount: function childrenCount() {
-				var n = this.currentModel.children;
-				if (!n) return '未加载下级';else return n.length;
-			},
-			rootChildrenCount: function rootChildrenCount() {
-				var d = this.treeData;
-				if (d.children) return d.children.length;else return 0;
 			}
 		},
 		data: function data() {
 			return {
 				treeData: {},
 				tab: 1,
-				currentModel: {}
+				currentModel: {},
+				teamScope: D.Member.teamScope
 			};
 		}
 	};
@@ -5186,7 +5219,7 @@ webpackJsonp([1],[
 
 
 	// module
-	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.item div {color: white; font-size: 16px; }\n.item-self{ color: #efefef; height: 45px;  line-height: 45px;  }\n.item-name{color:#ddd; padding:0 8px;}\n.item-plus-minus{margin:0 5px;color:#fff;cursor: pointer;}\n.item-children{ padding-left: 3em; line-height: 1.5em;  list-style-type: dot; margin-top: 2px !important;}\n.bold { font-weight: bold; }\n.bold > span {color:#fff;}\n.female,.male{display:inline-block;width:32px;height:32px;}\n.male{background: url('/images/icons/male.png')}\n.female{background: url('/images/icons/female.png')}\n.item-detail{color:#FEC107}\n", ""]);
+	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.item div {color: white; font-size: 16px; }\n.item-self{ color: #efefef; height: 45px;  line-height: 45px;  }\n.item-name{color:#ddd; padding:0 8px;}\n.item-plus-minus{margin:0 5px;color:#fff;cursor: pointer;}\n.item-children{ padding-left: 3em; line-height: 1.5em;  list-style-type: dot; margin-top: 2px !important;}\n.bold { font-weight: bold; }\n.bold > span {color:#fff;}\n.female,.male{display:inline-block;width:32px;height:32px;}\n.male{background: url('/images/icons/male.png')}\n.female{background: url('/images/icons/female.png')}\n.item-detail{color:#FEC107}\n", ""]);
 
 	// exports
 
@@ -5218,15 +5251,14 @@ webpackJsonp([1],[
 	exports.default = _vue2.default.component('item', {
 	    template: '#item-template',
 	    props: {
-	        model: Object,
-	        from: Number
+	        model: Object
 	    },
 	    data: function data() {
 	        return { open: true };
 	    },
 	    computed: {
 	        isFolder: function isFolder() {
-	            return this.model.children;
+	            return !!this.model.children;
 	        }
 	    },
 	    methods: {
@@ -5234,7 +5266,7 @@ webpackJsonp([1],[
 	            var _this = this;
 
 	            e.stopPropagation();
-	            if (model.children) return;
+	            if (model.teamCount == 0 || model.children) return;
 	            _vue2.default.set(model, 'children', []);
 	            D.TeamLogic.fetchChildren(model.id).then(function (x) {
 	                model.children = x;
@@ -5248,12 +5280,8 @@ webpackJsonp([1],[
 	            }
 	        },
 	        viewDetail: function viewDetail(model, e) {
-	            var _this2 = this;
-
 	            e.stopPropagation();
-	            D.TeamLogic.fetchOne(model.id).then(function (x) {
-	                _this2.$dispatch('on-detail-click', x);
-	            });
+	            this.$dispatch('on-detail-click', model);
 	        }
 	    }
 	});
@@ -5262,13 +5290,13 @@ webpackJsonp([1],[
 /* 61 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<li>\n    <div :class=\"{bold: isFolder}\" class=\"item-self\">\n        <i class=\"{{model.sex == 1 ? 'female':'male'}}\"></i>\n        <span class=\"item-name\">{{model.truename}} - {{model.mobile}}</span>\n        <span class=\"item-plus-minus\" v-if=\"isFolder\" @click=\"toggle\">[{{open ? ' - ' : ' + '}}]</span>\n        <span class=\"item-plus-minus\" v-else  @click=\"loadChildren(model, $event)\">[ ? ]</span>\n        <a href=\"javascript:;\" class=\"item-detail\" @click=\"viewDetail(model, $event)\">详细</a>\n    </div>\n    <ul class=\"item-children\" v-show=\"open\" v-if=\"isFolder\">\n        <item class=\"item\" v-for=\"model in model.children\" :model=\"model\">\n        </item>\n    </ul>\n</li>\n";
+	module.exports = "\n<li>\n    <div :class=\"{bold: isFolder}\" class=\"item-self\">\n        <i class=\"{{model.sex == 1 ? 'female':'male'}}\"></i>\n        <span class=\"item-name\">{{model.truename}} - {{model.mobile}} - {{model.id}} &nbsp; &nbsp;(下级人数:{{model.teamCount}})</span>\n        <span class=\"item-plus-minus\" v-if=\"isFolder\" @click=\"toggle\">[{{open ? ' - ' : ' + '}}]</span>\n        <span class=\"item-plus-minus\" v-else  @click=\"loadChildren(model, $event)\">[ + ]</span>\n        <a href=\"javascript:;\" class=\"item-detail\" @click=\"viewDetail(model, $event)\">详细</a>\n    </div>\n    <ul class=\"item-children\" v-show=\"open\" v-if=\"isFolder\">\n        <item class=\"item\" v-for=\"model in model.children\" :model=\"model\">\n        </item>\n    </ul>\n</li>\n";
 
 /***/ },
 /* 62 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"rmain\">\n\t<div class=\"teamC\">\n\t\t<h1><b>我的团队</b></h1>\n\t\t<div class=\"sad\">\n\t\t\t<a href=\"javascript:;\" :class=\"{'on':tab == 1}\" @click=\"tab = 1\">我的团队</a>\n\t\t\t<a href=\"javascript:;\" :class=\"{'on':tab == 2}\" @click=\"tab = 2\">申请升级</a>\n\t\t</div>\n\t\t<ul class=\"u1\" v-show=\"tab == 1\">\n\t\t\t<h2>\n\t\t\t<span>团队总人数：<b>{{$parent.teamScope}}人</b></span>\n\t\t\t<span>直推人数：<b>{{rootChildrenCount}}人</b></span>\n\t\t\t<!--<span>有效会员人数：<b>0人</b></span>\n\t\t\t<span>无效会员人数：<b>0人</b></span>-->\n\t\t\t<!--span>团队总挂单金额：<b>0.00元</b></span-->\n\t\t\t<!--span>团队已完成打款金额：<b>0.00元</b></span-->\n\t\t\t</h2>\n\n\t\t\t<table>\n\t\t\t\t<thead>\n\t\t\t\t\t<tr>\n\t\t\t\t\t\t<th>编号</th>\n\t\t\t\t\t\t<th>会员手机</th>\n\t\t\t\t\t\t<th>会员昵称</th>\n\t\t\t\t\t\t<th>注册时间</th>\n\t\t\t\t\t\t<th>下级人数</th>\n\t\t\t\t\t\t<th>状态</th>\n\t\t\t\t\t\t<th>操作</th>\n\t\t\t\t\t</tr>\n\t\t\t\t</thead>\n\t\t\t\t<tbody>\n\t\t\t\t\t<tr v-if=\"currentModel.id\">\n\t\t\t\t\t\t<td>DMD{{currentModel.id}}18636967</td>\n\t\t\t\t\t\t<td>{{currentModel.mobile}}</td>\n\t\t\t\t\t\t<td :style=\"{color: currentModel.ok == 1?'#0f0':'#F1AF36'}\">{{currentModel.nickname}}</td>\n\t\t\t\t\t\t<td>{{currentModel.reg_time|datetime}}</td>\n\t\t\t\t\t\t<td>{{childrenCount}}</td>\n\t\t\t\t\t\t<td :style=\"{color: currentModel.state == 1 ? '#01CCCC':'f00'}\">\n\t\t\t\t\t\t\t{{currentModel.state == 1 ? \"正常\":\"冻结\"}}\n\t\t\t\t\t\t</td>\n\t\t\t\t\t\t<td><a href=\"/?act=team&id=<?php echo $val['id']; ?>\" class=\"see\">查看</a></td>\n\t\t\t\t\t</tr>\n\t\t\t\t</tbody>\n\t\t\t</table>\n\n\t\t\t<ul style=\"padding: 8px 0 0 35px;\">\n\t\t\t\t<item class=\"item\" :model=\"treeData\">\n\t\t\t\t</item>\n\t\t\t</ul>\n\n\t\t</ul>\n\n\t\t<ul class=\"u2\" v-show=\"tab == 2\">\n\t\t\t<li>推荐1位，晋升M1（一级会员），可获1代收益</li>\n\t\t\t<li>推荐2位，晋升M2（二级会员），可获2代收益</li>\n\t\t\t<li>推荐5位，晋升M3（三级会员），可获3代收益</li>\n\t\t\t<li>推荐15位，团队100人，晋升M4（四级会员），可获4代收益</li>\n\t\t\t<li>推荐15位，团队100人，晋升高级经理，可获无限代收益</li>\n\t\t\t<li><a href=\"javascript:;\" class=\"btn\" id=\"team_apply_btn\">申请升级</a></li>\n\t\t\t<li class=\"imgli\"><br><img src=\"/images/team.png\"></li>\n\t\t</ul>\n\t</div>\n\n</div>\n";
+	module.exports = "\n<div class=\"rmain\">\n\t<div class=\"teamC\">\n\t\t<h1><b>我的团队</b></h1>\n\t\t<div class=\"sad\">\n\t\t\t<a href=\"javascript:;\" :class=\"{'on':tab == 1}\" @click=\"tab = 1\">我的团队</a>\n\t\t\t<a href=\"javascript:;\" :class=\"{'on':tab == 2}\" @click=\"tab = 2\">申请升级</a>\n\t\t</div>\n\t\t<ul class=\"u1\" v-show=\"tab == 1\">\n\t\t\t<h2>\n\t\t\t<span>团队总人数：<b>{{teamScope}}人</b></span>\n\t\t\t<span>直推人数：<b>{{rootChildrenCount}}人</b></span>\n\t\t\t<!--<span>有效会员人数：<b>0人</b></span>\n\t\t\t<span>无效会员人数：<b>0人</b></span>-->\n\t\t\t<!--span>团队总挂单金额：<b>0.00元</b></span-->\n\t\t\t<!--span>团队已完成打款金额：<b>0.00元</b></span-->\n\t\t\t</h2>\n\n\t\t\t<table>\n\t\t\t\t<thead>\n\t\t\t\t\t<tr>\n\t\t\t\t\t\t<th>编号</th>\n\t\t\t\t\t\t<th>会员手机</th>\n\t\t\t\t\t\t<th>会员昵称</th>\n\t\t\t\t\t\t<th>注册时间</th>\n\t\t\t\t\t\t<th>下级人数</th>\n\t\t\t\t\t\t<th>状态</th>\n\t\t\t\t\t\t<th>操作</th>\n\t\t\t\t\t</tr>\n\t\t\t\t</thead>\n\t\t\t\t<tbody>\n\t\t\t\t\t<tr v-if=\"currentModel.id\">\n\t\t\t\t\t\t<td>DMD{{currentModel.id}}18636967</td>\n\t\t\t\t\t\t<td>{{currentModel.mobile}}</td>\n\t\t\t\t\t\t<td :style=\"{color: currentModel.ok == 1?'#0f0':'#F1AF36'}\">{{currentModel.nickname}}</td>\n\t\t\t\t\t\t<td>{{currentModel.reg_time|datetime}}</td>\n\t\t\t\t\t\t<td>{{currentModel.teamCount}}</td>\n\t\t\t\t\t\t<td :style=\"{color: currentModel.state == 1 ? '#01CCCC':'f00'}\">\n\t\t\t\t\t\t\t{{currentModel.state == 1 ? \"正常\":\"冻结\"}}\n\t\t\t\t\t\t</td>\n\t\t\t\t\t\t<td><a href=\"javascript:void(0);\" class=\"see\">查看</a></td>\n\t\t\t\t\t</tr>\n\t\t\t\t</tbody>\n\t\t\t</table>\n\n\t\t\t<ul style=\"padding: 8px 0 0 35px;\">\n\t\t\t\t<item class=\"item\" :model=\"treeData\">\n\t\t\t\t</item>\n\t\t\t</ul>\n\n\t\t</ul>\n\n\t\t<ul class=\"u2\" v-show=\"tab == 2\">\n\t\t\t<li>推荐1位，晋升M1（一级会员），可获1代收益</li>\n\t\t\t<li>推荐2位，晋升M2（二级会员），可获2代收益</li>\n\t\t\t<li>推荐5位，晋升M3（三级会员），可获3代收益</li>\n\t\t\t<li>推荐15位，团队100人，晋升M4（四级会员），可获4代收益</li>\n\t\t\t<li>推荐15位，团队100人，晋升高级经理，可获无限代收益</li>\n\t\t\t<li><a href=\"javascript:;\" class=\"btn\" id=\"team_apply_btn\">申请升级</a></li>\n\t\t\t<li class=\"imgli\"><br><img src=\"/images/team.png\"></li>\n\t\t</ul>\n\t</div>\n\n</div>\n";
 
 /***/ },
 /* 63 */
