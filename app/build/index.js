@@ -12,7 +12,7 @@ webpackJsonp([1],[
 
 	var _router2 = _interopRequireDefault(_router);
 
-	__webpack_require__(214);
+	__webpack_require__(215);
 
 	__webpack_require__(49);
 
@@ -224,11 +224,11 @@ webpackJsonp([1],[
 
 	var _offer_detail2 = _interopRequireDefault(_offer_detail);
 
-	var _apply_detail = __webpack_require__(208);
+	var _apply_detail = __webpack_require__(209);
 
 	var _apply_detail2 = _interopRequireDefault(_apply_detail);
 
-	var _blank = __webpack_require__(211);
+	var _blank = __webpack_require__(212);
 
 	var _blank2 = _interopRequireDefault(_blank);
 
@@ -3037,7 +3037,7 @@ webpackJsonp([1],[
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app\\components\\index.vue: named exports in *.vue files are ignored.")}
+	  console.warn("[vue-loader] app/components/index.vue: named exports in *.vue files are ignored.")}
 	__vue_template__ = __webpack_require__(20)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
@@ -3048,7 +3048,7 @@ webpackJsonp([1],[
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "./index.vue"
+	  var id = "_v-9150d1e2/index.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -3919,8 +3919,8 @@ webpackJsonp([1],[
 	    ajaxRequireToken: true,
 	    pageSize: 12,
 	    hosts: {
-	        test: 'http://192.168.1.100:3000/api/',
-	        product: 'http://192.168.1.103:3000/api/'
+	        test: 'http://192.168.1.104:3000/api/',
+	        product: 'http://192.168.1.104:3000/api/'
 	    },
 	    //host : 'http://localhost:3000/api/',
 	    loginkey: 'member.login.information',
@@ -3933,7 +3933,7 @@ webpackJsonp([1],[
 /* 20 */
 /***/ function(module, exports) {
 
-	module.exports = "\r\n<div class=\"rmain\">\r\n\r\n\t<div class=\"nifo\">\r\n\t\t<ul>\r\n\t\t\t<li><b>DMD币</b><span>{{ 0 | currency '￥'}}</span></li>\r\n\t\t\t<li><b>本金总额</b><span>{{M.capital.sum | currency '￥'}}</span></li>\r\n\t\t\t<li><b>利息总额</b><span>{{M.interest | currency '￥'}}</span></li>\r\n\t\t\t<li><b>奖金总额</b><span>{{M.capital.bonus | currency '￥'}}</span></li>\r\n\t\t</ul>\r\n\t</div>\r\n\r\n\t<div class=\"anniu\">\r\n\t\t<a href=\"\" v-link=\"{name:'offer'}\"><img src=\"/images/btn_bozhong.png\"></a>\r\n\t\t<a href=\"\" v-link=\"{name:'apply'}\"><img src=\"/images/btn_shouhuo.png\"></a>\r\n\t</div>\r\n\r\n\t<div class=\"bzsh\">\r\n\t\t<a href=\"javascript:void(0);\" @click=\"goOffer\" class=\"bs bz\" title=\"查看详情\">\r\n\t\t<i>{{M.lastOffer ? \"正在\":\"等待\"}}播种</i>\r\n\t\t\t<ul v-if=\"M.lastOffer\">\r\n\t\t\t\t<li><span>金额：</span><b class=\"rd\">{{M.lastOffer.money | currency '￥'}}</b></li>\r\n\t\t\t\t<li><span>匹配人数：</span><b>{{M.lastOffer.pairs}}人</b></li>\r\n\t\t\t\t<li><span>发起时间：</span><b>{{M.lastOffer.the_time | datetime}}</b></li>\r\n\t\t\t\t<li><span>预计收益：</span><b>{{M.capital.about}}</b></li>\r\n\t\t\t\t<li><span>状态：</span><b class=\"rd\">{{M.lastOffer.state == 100 ? \"订单完成\" : \"进行中...\"}}</b></li>\r\n\t\t\t</ul>\r\n\t\t</a>\r\n\t\t<a href=\"javascript:void(0);\" @click=\"goApply\" class=\"bs sh\" title=\"查看详情\">\r\n\t\t<i class=\"i\">{{M.lastApply ? \"正在\" : \"等待\"}}收获</i>\r\n\t\t\t<ul v-if=\"apply\">\r\n\t\t\t\t<li><span>金额：</span><b class=\"rd\">{{M.lastApply.money | currency '￥'}}</b></li>\r\n\t\t\t\t<li><span>匹配人数：</span><b>{{M.lastApply.pairs}}人</b></li>\r\n\t\t\t\t<li><span>发起时间：</span><b>{{M.lastApply.the_time | datetime}}</b></li>\r\n\t\t\t\t<li><span>状态：</span><b class=\"rd\">{{M.lastApply.state == 100 ? \"订单完成\" : \"进行中...\"}}</b></li>\r\n\t\t\t</ul>\r\n\t\t</a>\r\n\t\t<!--<div style=\"color:#fff;\">{{M | json}}</div>-->\r\n\t</div>\r\n</div>\r\n";
+	module.exports = "\n<div class=\"rmain\">\n\n\t<div class=\"nifo\">\n\t\t<ul>\n\t\t\t<li><b>DMD币</b><span>{{ 0 | currency '￥'}}</span></li>\n\t\t\t<li><b>本金总额</b><span>{{M.capital.sum | currency '￥'}}</span></li>\n\t\t\t<li><b>利息总额</b><span>{{M.interest | currency '￥'}}</span></li>\n\t\t\t<li><b>奖金总额</b><span>{{M.capital.bonus | currency '￥'}}</span></li>\n\t\t</ul>\n\t</div>\n\n\t<div class=\"anniu\">\n\t\t<a href=\"\" v-link=\"{name:'offer'}\"><img src=\"/images/btn_bozhong.png\"></a>\n\t\t<a href=\"\" v-link=\"{name:'apply'}\"><img src=\"/images/btn_shouhuo.png\"></a>\n\t</div>\n\n\t<div class=\"bzsh\">\n\t\t<a href=\"javascript:void(0);\" @click=\"goOffer\" class=\"bs bz\" title=\"查看详情\">\n\t\t<i>{{M.lastOffer ? \"正在\":\"等待\"}}播种</i>\n\t\t\t<ul v-if=\"M.lastOffer\">\n\t\t\t\t<li><span>金额：</span><b class=\"rd\">{{M.lastOffer.money | currency '￥'}}</b></li>\n\t\t\t\t<li><span>匹配人数：</span><b>{{M.lastOffer.pairs}}人</b></li>\n\t\t\t\t<li><span>发起时间：</span><b>{{M.lastOffer.the_time | datetime}}</b></li>\n\t\t\t\t<li><span>预计收益：</span><b>{{M.capital.about}}</b></li>\n\t\t\t\t<li><span>状态：</span><b class=\"rd\">{{M.lastOffer.state == 100 ? \"订单完成\" : \"进行中...\"}}</b></li>\n\t\t\t</ul>\n\t\t</a>\n\t\t<a href=\"javascript:void(0);\" @click=\"goApply\" class=\"bs sh\" title=\"查看详情\">\n\t\t<i class=\"i\">{{M.lastApply ? \"正在\" : \"等待\"}}收获</i>\n\t\t\t<ul v-if=\"apply\">\n\t\t\t\t<li><span>金额：</span><b class=\"rd\">{{M.lastApply.money | currency '￥'}}</b></li>\n\t\t\t\t<li><span>匹配人数：</span><b>{{M.lastApply.pairs}}人</b></li>\n\t\t\t\t<li><span>发起时间：</span><b>{{M.lastApply.the_time | datetime}}</b></li>\n\t\t\t\t<li><span>状态：</span><b class=\"rd\">{{M.lastApply.state == 100 ? \"订单完成\" : \"进行中...\"}}</b></li>\n\t\t\t</ul>\n\t\t</a>\n\t\t<!--<div style=\"color:#fff;\">{{M | json}}</div>-->\n\t</div>\n</div>\n";
 
 /***/ },
 /* 21 */
@@ -3945,7 +3945,7 @@ webpackJsonp([1],[
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app\\components\\offer.vue: named exports in *.vue files are ignored.")}
+	  console.warn("[vue-loader] app/components/offer.vue: named exports in *.vue files are ignored.")}
 	__vue_template__ = __webpack_require__(42)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
@@ -3956,7 +3956,7 @@ webpackJsonp([1],[
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "./offer.vue"
+	  var id = "_v-5b60b399/offer.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -4614,7 +4614,7 @@ webpackJsonp([1],[
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app\\components\\apply.vue: named exports in *.vue files are ignored.")}
+	  console.warn("[vue-loader] app/components/apply.vue: named exports in *.vue files are ignored.")}
 	__vue_template__ = __webpack_require__(45)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
@@ -4625,7 +4625,7 @@ webpackJsonp([1],[
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "./apply.vue"
+	  var id = "_v-6bc143ab/apply.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -4688,7 +4688,7 @@ webpackJsonp([1],[
 /* 45 */
 /***/ function(module, exports) {
 
-	module.exports = "\r\n<div class=\"rmain\">\r\n  <div class=\"applyC\">\r\n  \t<h1><b>我要收获</b></h1>\r\n  \t<h2>请输入收获金额</h2>\r\n  \t<ul>\r\n  \t\t<li><input type=\"number\" class=\"text\" v-model=\"model\" step=\"{{Cfg.key3[1]}}\" id=\"money\"></li>\r\n  \t\t<li class=\"sm\">\r\n\t\t\t  您的账户总额：{{M.capital.total | currency '￥'}}元，\r\n\t\t\t  冻结总额：{{M.capital.frozen | currency '￥'}}元，\r\n\t\t\t  正在提现总额：{{M.moneyApply | currency '￥'}}元，\r\n\t\t\t  可提现总额：{{M.capital.available | currency '￥'}}元。\r\n\t\t</li>\r\n  \t\t<li class=\"sm\">\r\n\t\t\t  收获金额最少{{Cfg.key3[0] | currency '￥'}}元，\r\n\t\t\t  不能大于账户可用总余额，且必须是{{Cfg.key3[1]}}的整倍数。\r\n\t\t</li>\r\n  \t\t<li><input type=\"button\" class=\"btn\" @click=\"submit\" id=\"apply_help_btn\"></li>\r\n  \t</ul>\r\n  </div>\r\n</div>\r\n";
+	module.exports = "\n<div class=\"rmain\">\n  <div class=\"applyC\">\n  \t<h1><b>我要收获</b></h1>\n  \t<h2>请输入收获金额</h2>\n  \t<ul>\n  \t\t<li><input type=\"number\" class=\"text\" v-model=\"model\" step=\"{{Cfg.key3[1]}}\" id=\"money\"></li>\n  \t\t<li class=\"sm\">\n\t\t\t  您的账户总额：{{M.capital.total | currency '￥'}}元，\n\t\t\t  冻结总额：{{M.capital.frozen | currency '￥'}}元，\n\t\t\t  正在提现总额：{{M.moneyApply | currency '￥'}}元，\n\t\t\t  可提现总额：{{M.capital.available | currency '￥'}}元。\n\t\t</li>\n  \t\t<li class=\"sm\">\n\t\t\t  收获金额最少{{Cfg.key3[0] | currency '￥'}}元，\n\t\t\t  不能大于账户可用总余额，且必须是{{Cfg.key3[1]}}的整倍数。\n\t\t</li>\n  \t\t<li><input type=\"button\" class=\"btn\" @click=\"submit\" id=\"apply_help_btn\"></li>\n  \t</ul>\n  </div>\n</div>\n";
 
 /***/ },
 /* 46 */
@@ -4699,7 +4699,7 @@ webpackJsonp([1],[
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app\\components\\info.vue: named exports in *.vue files are ignored.")}
+	  console.warn("[vue-loader] app/components/info.vue: named exports in *.vue files are ignored.")}
 	__vue_template__ = __webpack_require__(54)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
@@ -4710,7 +4710,7 @@ webpackJsonp([1],[
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "./info.vue"
+	  var id = "_v-0d8819fe/info.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -4982,7 +4982,7 @@ webpackJsonp([1],[
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app\\components\\_validation_errors.vue: named exports in *.vue files are ignored.")}
+	  console.warn("[vue-loader] app/components/_validation_errors.vue: named exports in *.vue files are ignored.")}
 	__vue_template__ = __webpack_require__(53)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
@@ -4993,7 +4993,7 @@ webpackJsonp([1],[
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "./_validation_errors.vue"
+	  var id = "_v-5e9226f6/_validation_errors.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -5039,7 +5039,7 @@ webpackJsonp([1],[
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app\\components\\team.vue: named exports in *.vue files are ignored.")}
+	  console.warn("[vue-loader] app/components/team.vue: named exports in *.vue files are ignored.")}
 	__vue_template__ = __webpack_require__(62)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
@@ -5050,7 +5050,7 @@ webpackJsonp([1],[
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "./team.vue"
+	  var id = "_v-e9a73da0/team.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -5132,7 +5132,7 @@ webpackJsonp([1],[
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app\\components\\teamtree.vue: named exports in *.vue files are ignored.")}
+	  console.warn("[vue-loader] app/components/teamtree.vue: named exports in *.vue files are ignored.")}
 	__vue_template__ = __webpack_require__(61)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
@@ -5143,7 +5143,7 @@ webpackJsonp([1],[
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "./teamtree.vue"
+	  var id = "_v-310a6c64/teamtree.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -5280,7 +5280,7 @@ webpackJsonp([1],[
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app\\components\\income.vue: named exports in *.vue files are ignored.")}
+	  console.warn("[vue-loader] app/components/income.vue: named exports in *.vue files are ignored.")}
 	__vue_template__ = __webpack_require__(70)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
@@ -5291,7 +5291,7 @@ webpackJsonp([1],[
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "./income.vue"
+	  var id = "_v-664d1088/income.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -5334,7 +5334,7 @@ webpackJsonp([1],[
 
 
 	// module
-	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n.allzichan{text-align:center; position:relative; top:-23px; font-size:16px; color:#FEC107; }\r\n.allzichan i{margin-left:3%; font-size:16px; color:#fff; }\r\n#page{width:800px; margin:auto; margin-top:25px; padding-bottom:25px; text-align:center; }\r\n#page a{font-size:20px; color:#999; margin-left:50px; }\r\n#page a:hover{color:#fff; }\r\n", ""]);
+	exports.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.allzichan{text-align:center; position:relative; top:-23px; font-size:16px; color:#FEC107; }\n.allzichan i{margin-left:3%; font-size:16px; color:#fff; }\n#page{width:800px; margin:auto; margin-top:25px; padding-bottom:25px; text-align:center; }\n#page a{font-size:20px; color:#999; margin-left:50px; }\n#page a:hover{color:#fff; }\n", ""]);
 
 	// exports
 
@@ -5433,7 +5433,7 @@ webpackJsonp([1],[
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app\\components\\_pagination.vue: named exports in *.vue files are ignored.")}
+	  console.warn("[vue-loader] app/components/_pagination.vue: named exports in *.vue files are ignored.")}
 	__vue_template__ = __webpack_require__(69)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
@@ -5444,7 +5444,7 @@ webpackJsonp([1],[
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "./_pagination.vue"
+	  var id = "_v-642aa036/_pagination.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -5539,7 +5539,7 @@ webpackJsonp([1],[
 /* 70 */
 /***/ function(module, exports) {
 
-	module.exports = "\r\n<div class=\"rmain\">\r\n<div class=\"incomeC\">\r\n\t<h1><b>我的资产</b></h1>\r\n\t<h2 class=\"allzichan\">\r\n\t\t<i>账户总资产：</i> {{M.capital.total | currency '￥'}}\r\n\t\t<i>账户冻结总资产：</i>{{M.capital.frozen | currency '￥'}}\r\n\t\t<i>账户正在提现总资产：</i>{{M.moneyApply | currency '￥'}}\r\n\t\t<i>账户可提现总资产：</i>{{M.capital.available | currency '￥'}}\r\n\t</h2>\r\n\r\n\t<div class=\"sad\">\r\n\t\t<a href=\"javascript:;\" :class=\"{'on' : tab == 0}\" @click=\"tabClick(0)\">本 金</a>\r\n\t\t<a href=\"javascript:;\" :class=\"{'on' : tab == 1}\" @click=\"tabClick(1)\">利 息</a>\r\n\t\t<a href=\"javascript:;\" :class=\"{'on' : tab == 2}\" @click=\"tabClick(2)\">团队奖励</a>\r\n\r\n\t\t<span style=\"position:relative;top:90px;float:right;color:#ccc;\">提现说明：首先扣除可提团队奖，不够再扣利息，利息不够再扣可提本金。</span>\r\n\t</div>\r\n\r\n\t<ul class=\"u1\" v-show=\"tab == 0\">\r\n\r\n\t\t<h2>\r\n\t\t\t<span>本金总额：<b>{{M.capital.sum | currency '￥'}}</b></span>\r\n\t\t\t<span>本金冻结总额：<b>{{M.moneyFreeze | currency '￥'}}</b></span>\r\n\t\t\t<span>本金可提现总额：<b>{{M.money | currency '￥'}}</b></span>\r\n\t\t</h2>\r\n\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>说明</th>\r\n\t\t\t\t\t<th>时间</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody>\r\n\t\t\t\t<tr v-for=\"item in model0\" class=\"row-{{$index % 2}}\">\r\n\t\t\t\t\t<td>{{item.money | currency '￥'}}</td>\r\n\t\t\t\t\t<td>{{item.intro}}</td>\r\n\t\t\t\t\t<td>{{item.the_time | datetime}}</td>\r\n\t\t\t\t</tr>\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\t\t<pagination :page=\"pageCfg.p0\" :total=\"pageCfg.t0\" event-name=\"on-page-changed0\"></pagination>\r\n\t</ul>\r\n\r\n\t<ul class=\"u2\" v-show=\"tab == 1\">\r\n\t\t<h2>\r\n\t\t\t<span>利息总额：<b>{{M.interest | currency '￥'}}</b></span>\r\n\t\t\t<span>利息可提现总额：<b>{{M.interest | currency '￥'}}</b></span>\r\n\t\t</h2>\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>说明</th>\r\n\t\t\t\t\t<th>时间</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody>\r\n\t\t\t\t<tr v-for=\"item in model1\" class=\"row-{{$index % 2}}\">\r\n\t\t\t\t\t<td>{{item.money | currency '￥'}}</td>\r\n\t\t\t\t\t<td>{{item.intro}}</td>\r\n\t\t\t\t\t<td>{{item.the_time | datetime}}</td>\r\n\t\t\t\t</tr>\t\t\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\t\t<pagination :page=\"pageCfg.p1\" :total=\"pageCfg.t1\" event-name=\"on-page-changed1\"></pagination>\r\n\t</ul>\r\n\r\n\t<ul class=\"u3\" v-show=\"tab == 2\">\r\n\t\t<h2>\r\n\t\t\t<span>团队奖励总额：<b>{{M.capital.sum | currency '￥'}}</b></span>\r\n\t\t\t<span>团队奖励冻结总额：<b>{{M.bonusFreeze | currency '￥'}}</b></span>\r\n\t\t\t<span>团队奖励可提总额：<b>{{M.bonus | currency '￥'}}</b></span>\r\n\t\t</h2>\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>说明</th>\r\n\t\t\t\t\t<th>时间</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody id=\"bonus_tbody\">\r\n\t\t\t\t<tr v-for=\"item in model2\" class=\"row-{{$index % 2}}\">\r\n\t\t\t\t\t<td>{{item.money | currency '￥'}}</td>\r\n\t\t\t\t\t<td>{{item.intro}}</td>\r\n\t\t\t\t\t<td>{{item.the_time | datetime}}</td>\r\n\t\t\t\t</tr>\t\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\t\t<pagination :page=\"pageCfg.p2\" :total=\"pageCfg.t2\" event-name=\"on-page-changed2\"></pagination>\r\n\t</ul>\r\n</div>\r\n\r\n</div>\r\n";
+	module.exports = "\n<div class=\"rmain\">\n<div class=\"incomeC\">\n\t<h1><b>我的资产</b></h1>\n\t<h2 class=\"allzichan\">\n\t\t<i>账户总资产：</i> {{M.capital.total | currency '￥'}}\n\t\t<i>账户冻结总资产：</i>{{M.capital.frozen | currency '￥'}}\n\t\t<i>账户正在提现总资产：</i>{{M.moneyApply | currency '￥'}}\n\t\t<i>账户可提现总资产：</i>{{M.capital.available | currency '￥'}}\n\t</h2>\n\n\t<div class=\"sad\">\n\t\t<a href=\"javascript:;\" :class=\"{'on' : tab == 0}\" @click=\"tabClick(0)\">本 金</a>\n\t\t<a href=\"javascript:;\" :class=\"{'on' : tab == 1}\" @click=\"tabClick(1)\">利 息</a>\n\t\t<a href=\"javascript:;\" :class=\"{'on' : tab == 2}\" @click=\"tabClick(2)\">团队奖励</a>\n\n\t\t<span style=\"position:relative;top:90px;float:right;color:#ccc;\">提现说明：首先扣除可提团队奖，不够再扣利息，利息不够再扣可提本金。</span>\n\t</div>\n\n\t<ul class=\"u1\" v-show=\"tab == 0\">\n\n\t\t<h2>\n\t\t\t<span>本金总额：<b>{{M.capital.sum | currency '￥'}}</b></span>\n\t\t\t<span>本金冻结总额：<b>{{M.moneyFreeze | currency '￥'}}</b></span>\n\t\t\t<span>本金可提现总额：<b>{{M.money | currency '￥'}}</b></span>\n\t\t</h2>\n\n\t\t<table>\n\t\t\t<thead>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>金额</th>\n\t\t\t\t\t<th>说明</th>\n\t\t\t\t\t<th>时间</th>\n\t\t\t\t</tr>\n\t\t\t</thead>\n\t\t\t<tbody>\n\t\t\t\t<tr v-for=\"item in model0\" class=\"row-{{$index % 2}}\">\n\t\t\t\t\t<td>{{item.money | currency '￥'}}</td>\n\t\t\t\t\t<td>{{item.intro}}</td>\n\t\t\t\t\t<td>{{item.the_time | datetime}}</td>\n\t\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\t\t<pagination :page=\"pageCfg.p0\" :total=\"pageCfg.t0\" event-name=\"on-page-changed0\"></pagination>\n\t</ul>\n\n\t<ul class=\"u2\" v-show=\"tab == 1\">\n\t\t<h2>\n\t\t\t<span>利息总额：<b>{{M.interest | currency '￥'}}</b></span>\n\t\t\t<span>利息可提现总额：<b>{{M.interest | currency '￥'}}</b></span>\n\t\t</h2>\n\t\t<table>\n\t\t\t<thead>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>金额</th>\n\t\t\t\t\t<th>说明</th>\n\t\t\t\t\t<th>时间</th>\n\t\t\t\t</tr>\n\t\t\t</thead>\n\t\t\t<tbody>\n\t\t\t\t<tr v-for=\"item in model1\" class=\"row-{{$index % 2}}\">\n\t\t\t\t\t<td>{{item.money | currency '￥'}}</td>\n\t\t\t\t\t<td>{{item.intro}}</td>\n\t\t\t\t\t<td>{{item.the_time | datetime}}</td>\n\t\t\t\t</tr>\t\t\n\t\t\t</tbody>\n\t\t</table>\n\t\t<pagination :page=\"pageCfg.p1\" :total=\"pageCfg.t1\" event-name=\"on-page-changed1\"></pagination>\n\t</ul>\n\n\t<ul class=\"u3\" v-show=\"tab == 2\">\n\t\t<h2>\n\t\t\t<span>团队奖励总额：<b>{{M.capital.sum | currency '￥'}}</b></span>\n\t\t\t<span>团队奖励冻结总额：<b>{{M.bonusFreeze | currency '￥'}}</b></span>\n\t\t\t<span>团队奖励可提总额：<b>{{M.bonus | currency '￥'}}</b></span>\n\t\t</h2>\n\t\t<table>\n\t\t\t<thead>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>金额</th>\n\t\t\t\t\t<th>说明</th>\n\t\t\t\t\t<th>时间</th>\n\t\t\t\t</tr>\n\t\t\t</thead>\n\t\t\t<tbody id=\"bonus_tbody\">\n\t\t\t\t<tr v-for=\"item in model2\" class=\"row-{{$index % 2}}\">\n\t\t\t\t\t<td>{{item.money | currency '￥'}}</td>\n\t\t\t\t\t<td>{{item.intro}}</td>\n\t\t\t\t\t<td>{{item.the_time | datetime}}</td>\n\t\t\t\t</tr>\t\n\t\t\t</tbody>\n\t\t</table>\n\t\t<pagination :page=\"pageCfg.p2\" :total=\"pageCfg.t2\" event-name=\"on-page-changed2\"></pagination>\n\t</ul>\n</div>\n\n</div>\n";
 
 /***/ },
 /* 71 */
@@ -5550,7 +5550,7 @@ webpackJsonp([1],[
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app\\components\\record.vue: named exports in *.vue files are ignored.")}
+	  console.warn("[vue-loader] app/components/record.vue: named exports in *.vue files are ignored.")}
 	__vue_template__ = __webpack_require__(73)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
@@ -5561,7 +5561,7 @@ webpackJsonp([1],[
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "./record.vue"
+	  var id = "_v-3580ae64/record.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -5650,7 +5650,7 @@ webpackJsonp([1],[
 /* 73 */
 /***/ function(module, exports) {
 
-	module.exports = "\r\n<div class=\"rmain\">\r\n<div class=\"recordC\">\r\n\t<h1><b>交易记录</b></h1>\r\n\t<div class=\"sad\">\r\n\t\t<a href=\"javascript:void(0);\" :class=\"{'on': tab == 0}\" @click=\"tabClick(0)\">播种记录</a>\r\n\t\t<a href=\"javascript:void(0);\" :class=\"{'on': tab == 1}\"  @click=\"tabClick(1)\">收获记录</a>\r\n\t\t<a href=\"javascript:void(0);\" :class=\"{'on': tab == 2}\" @click=\"tabClick(2)\">失败匹配记录</a>\r\n\t</div>\r\n\t<ul class=\"u1\" v-show=\"tab == 0\">\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>编号</th>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>播种时间</th>\r\n\t\t\t\t\t<th>匹配人数</th>\r\n\t\t\t\t\t<th>完成时间</th>\r\n\t\t\t\t\t<th>状态</th>\r\n\t\t\t\t\t<th>操作</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody>\r\n\t\t\t\t<tr v-for=\"item in model0\" class=\"row-{{$index % 2}}\">\r\n\t\t\t\t\t<td>{{item.offer.code}}</td>\r\n\t\t\t\t\t<td>{{item.offer.money | currency '￥'}}</td>\r\n\t\t\t\t\t<td>{{item.offer.the_time | datetime}}</td>\r\n\t\t\t\t\t<td>{{item.pct}}人</td>\r\n\t\t\t\t\t<td>{{item.offer.end_time | datetime }}</td>\r\n\t\t\t\t\t<td :style=\"{color : item.offer.state == 100 ? '#43C328' : '#FEC107'}\">{{item.offer.state == 100 ? '已完成':'进行中...'}}</td>\r\n\t\t\t\t\t<td><a v-link=\"{name:'offerdetail',params:{id:item.offer.id}}\" href=\"\" class=\"see\">查看</a></td>\r\n\t\t\t\t</tr>\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\t\t<!--<pagination :page=\"pageCfg.p0\" :total=\"pageCfg.t0\" event-name=\"on-page-changed0\"></pagination>-->\r\n\t</ul>\r\n\t<ul class=\"u2\" v-show=\"tab == 1\">\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>编号</th>\r\n\t\t\t\t\t<th>金额</th>\r\n\t\t\t\t\t<th>收获时间</th>\r\n\t\t\t\t\t<th>匹配人数</th>\r\n\t\t\t\t\t<th>完成时间</th>\r\n\t\t\t\t\t<th>状态</th>\r\n\t\t\t\t\t<th>操作</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody>\r\n\t\t\t\t<tr v-for=\"item in model1\" class=\"row-{{$index % 2}}\">\r\n\t\t\t\t\t<td>{{item.apply.code}}</td>\r\n\t\t\t\t\t<td>{{item.apply.money | currency '￥'}}</td>\r\n\t\t\t\t\t<td>{{item.apply.the_time | datetime}}</td>\r\n\t\t\t\t\t<td>{{item.pct}}人</td>\r\n\t\t\t\t\t<td>{{item.apply.end_time | datetime }}</td>\r\n\t\t\t\t\t<td :style=\"{color : item.apply.state == 100 ? '#43C328' : '#FEC107'}\">{{item.apply.state == 100 ? '已完成':'进行中...'}}</td>\r\n\t\t\t\t\t<td><a href=\"javascript:void(0);\" v-link=\"{name:'applydetail', params:{ id: item.apply.id}}\" class=\"see\">查看</a></td>\r\n\t\t\t\t</tr>\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\t\t<!--<pagination :page=\"pageCfg.p1\" :total=\"pageCfg.t1\" event-name=\"on-page-changed1\"></pagination>-->\r\n\t</ul>\r\n\r\n\t<ul class=\"u3\" v-show=\"tab == 2\">\r\n\t\t<table>\r\n\t\t\t<thead>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th>类型</th>\r\n\t\t\t\t\t<th>编号</th>\r\n\t\t\t\t\t<th>匹配金额</th>\r\n\t\t\t\t\t<th>匹配时间</th>\r\n\t\t\t\t\t<th>对方姓名</th>\r\n\t\t\t\t\t<th>对方手机</th>\r\n\t\t\t\t\t<th>主单金额</th>\r\n\t\t\t\t\t<th>主单下单时间</th>\r\n\t\t\t\t\t<th>解除匹配时间</th>\r\n\t\t\t\t\t<th>原因</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</thead>\r\n\t\t\t<tbody>\r\n\t\t\t\t<tr v-for=\"item in model2\" class=\"row-{{$index % 2}}\">\r\n\t\t\t\t\t<td>{{M.id == item_om_id ? '播种' : '收获'}}</td>\r\n\t\t\t\t\t<td>{{item.code}}</td>\r\n\t\t\t\t\t<td>{{item.money | currency '￥'}}</td>\r\n\t\t\t\t\t<td>{{item.the_time | datetime}}</td>\r\n\t\t\t\t\t<td>{{M.id == item.om_id ? item.am.truename : item.om.truename}}</td>\r\n\t\t\t\t\t<td>{{M.id == item.om_id ? item.am.mobile : item.om.mobile}}</td>\r\n\t\t\t\t\t<td>{{item.order_money | currency '￥'}}</td>\r\n\t\t\t\t\t<td>{{item.order_the_time | datetime}}</td>\r\n\t\t\t\t\t<td>{{item.unmatch_time | datetime}}</td>\r\n\t\t\t\t\t<td>{{item.intro}}</td>\r\n\t\t\t\t</tr>\r\n\t\t\t</tbody>\r\n\t\t</table>\r\n\t\t<!--<pagination :page=\"pageCfg.p2\" :total=\"pageCfg.t2\" event-name=\"on-page-changed2\"></pagination>-->\r\n\t</ul>\r\n</div>\r\n</div>\r\n";
+	module.exports = "\n<div class=\"rmain\">\n<div class=\"recordC\">\n\t<h1><b>交易记录</b></h1>\n\t<div class=\"sad\">\n\t\t<a href=\"javascript:void(0);\" :class=\"{'on': tab == 0}\" @click=\"tabClick(0)\">播种记录</a>\n\t\t<a href=\"javascript:void(0);\" :class=\"{'on': tab == 1}\"  @click=\"tabClick(1)\">收获记录</a>\n\t\t<a href=\"javascript:void(0);\" :class=\"{'on': tab == 2}\" @click=\"tabClick(2)\">失败匹配记录</a>\n\t</div>\n\t<ul class=\"u1\" v-show=\"tab == 0\">\n\t\t<table>\n\t\t\t<thead>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>编号</th>\n\t\t\t\t\t<th>金额</th>\n\t\t\t\t\t<th>播种时间</th>\n\t\t\t\t\t<th>匹配人数</th>\n\t\t\t\t\t<th>完成时间</th>\n\t\t\t\t\t<th>状态</th>\n\t\t\t\t\t<th>操作</th>\n\t\t\t\t</tr>\n\t\t\t</thead>\n\t\t\t<tbody>\n\t\t\t\t<tr v-for=\"item in model0\" class=\"row-{{$index % 2}}\">\n\t\t\t\t\t<td>{{item.offer.code}}</td>\n\t\t\t\t\t<td>{{item.offer.money | currency '￥'}}</td>\n\t\t\t\t\t<td>{{item.offer.the_time | datetime}}</td>\n\t\t\t\t\t<td>{{item.pct}}人</td>\n\t\t\t\t\t<td>{{item.offer.end_time | datetime }}</td>\n\t\t\t\t\t<td :style=\"{color : item.offer.state == 100 ? '#43C328' : '#FEC107'}\">{{item.offer.state == 100 ? '已完成':'进行中...'}}</td>\n\t\t\t\t\t<td><a v-link=\"{name:'offerdetail',params:{id:item.offer.id}}\" href=\"\" class=\"see\">查看</a></td>\n\t\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\t\t<!--<pagination :page=\"pageCfg.p0\" :total=\"pageCfg.t0\" event-name=\"on-page-changed0\"></pagination>-->\n\t</ul>\n\t<ul class=\"u2\" v-show=\"tab == 1\">\n\t\t<table>\n\t\t\t<thead>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>编号</th>\n\t\t\t\t\t<th>金额</th>\n\t\t\t\t\t<th>收获时间</th>\n\t\t\t\t\t<th>匹配人数</th>\n\t\t\t\t\t<th>完成时间</th>\n\t\t\t\t\t<th>状态</th>\n\t\t\t\t\t<th>操作</th>\n\t\t\t\t</tr>\n\t\t\t</thead>\n\t\t\t<tbody>\n\t\t\t\t<tr v-for=\"item in model1\" class=\"row-{{$index % 2}}\">\n\t\t\t\t\t<td>{{item.apply.code}}</td>\n\t\t\t\t\t<td>{{item.apply.money | currency '￥'}}</td>\n\t\t\t\t\t<td>{{item.apply.the_time | datetime}}</td>\n\t\t\t\t\t<td>{{item.pct}}人</td>\n\t\t\t\t\t<td>{{item.apply.end_time | datetime }}</td>\n\t\t\t\t\t<td :style=\"{color : item.apply.state == 100 ? '#43C328' : '#FEC107'}\">{{item.apply.state == 100 ? '已完成':'进行中...'}}</td>\n\t\t\t\t\t<td><a href=\"javascript:void(0);\" v-link=\"{name:'applydetail', params:{ id: item.apply.id}}\" class=\"see\">查看</a></td>\n\t\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\t\t<!--<pagination :page=\"pageCfg.p1\" :total=\"pageCfg.t1\" event-name=\"on-page-changed1\"></pagination>-->\n\t</ul>\n\n\t<ul class=\"u3\" v-show=\"tab == 2\">\n\t\t<table>\n\t\t\t<thead>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>类型</th>\n\t\t\t\t\t<th>编号</th>\n\t\t\t\t\t<th>匹配金额</th>\n\t\t\t\t\t<th>匹配时间</th>\n\t\t\t\t\t<th>对方姓名</th>\n\t\t\t\t\t<th>对方手机</th>\n\t\t\t\t\t<th>主单金额</th>\n\t\t\t\t\t<th>主单下单时间</th>\n\t\t\t\t\t<th>解除匹配时间</th>\n\t\t\t\t\t<th>原因</th>\n\t\t\t\t</tr>\n\t\t\t</thead>\n\t\t\t<tbody>\n\t\t\t\t<tr v-for=\"item in model2\" class=\"row-{{$index % 2}}\">\n\t\t\t\t\t<td>{{M.id == item_om_id ? '播种' : '收获'}}</td>\n\t\t\t\t\t<td>{{item.code}}</td>\n\t\t\t\t\t<td>{{item.money | currency '￥'}}</td>\n\t\t\t\t\t<td>{{item.the_time | datetime}}</td>\n\t\t\t\t\t<td>{{M.id == item.om_id ? item.am.truename : item.om.truename}}</td>\n\t\t\t\t\t<td>{{M.id == item.om_id ? item.am.mobile : item.om.mobile}}</td>\n\t\t\t\t\t<td>{{item.order_money | currency '￥'}}</td>\n\t\t\t\t\t<td>{{item.order_the_time | datetime}}</td>\n\t\t\t\t\t<td>{{item.unmatch_time | datetime}}</td>\n\t\t\t\t\t<td>{{item.intro}}</td>\n\t\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\t\t<!--<pagination :page=\"pageCfg.p2\" :total=\"pageCfg.t2\" event-name=\"on-page-changed2\"></pagination>-->\n\t</ul>\n</div>\n</div>\n";
 
 /***/ },
 /* 74 */
@@ -5661,7 +5661,7 @@ webpackJsonp([1],[
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app\\components\\news.vue: named exports in *.vue files are ignored.")}
+	  console.warn("[vue-loader] app/components/news.vue: named exports in *.vue files are ignored.")}
 	__vue_template__ = __webpack_require__(76)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
@@ -5672,7 +5672,7 @@ webpackJsonp([1],[
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "./news.vue"
+	  var id = "_v-41c47ea6/news.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -5746,7 +5746,7 @@ webpackJsonp([1],[
 /* 76 */
 /***/ function(module, exports) {
 
-	module.exports = "\r\n<div class=\"rmain\">\r\n<div class=\"news_listC\">\r\n\t<h1><b>新闻公告</b></h1>\r\n\t<ul>\r\n\t\t<h2><span>标 题</span><b>时间</b></h2>\r\n\t\t<li v-for=\"item in model\" class=\"row-{{$index % 2}}\">\r\n\t\t\t<a v-link=\"{name:'newssingle',params:{id:item.id}}\" href=\"\">\r\n\t\t\t\t◎ {{item.title}}\r\n\t\t\t</a>\r\n\t\t\t<time>{{item.the_time|datetime}}</time>\r\n\t\t</li>\r\n\t</ul>\r\n</div>\r\n<pagination :page=\"page\" :total=\"total\"></pagination>\r\n</div>\r\n";
+	module.exports = "\n<div class=\"rmain\">\n<div class=\"news_listC\">\n\t<h1><b>新闻公告</b></h1>\n\t<ul>\n\t\t<h2><span>标 题</span><b>时间</b></h2>\n\t\t<li v-for=\"item in model\" class=\"row-{{$index % 2}}\">\n\t\t\t<a v-link=\"{name:'newssingle',params:{id:item.id}}\" href=\"\">\n\t\t\t\t◎ {{item.title}}\n\t\t\t</a>\n\t\t\t<time>{{item.the_time|datetime}}</time>\n\t\t</li>\n\t</ul>\n</div>\n<pagination :page=\"page\" :total=\"total\"></pagination>\n</div>\n";
 
 /***/ },
 /* 77 */
@@ -5757,7 +5757,7 @@ webpackJsonp([1],[
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app\\components\\newssingle.vue: named exports in *.vue files are ignored.")}
+	  console.warn("[vue-loader] app/components/newssingle.vue: named exports in *.vue files are ignored.")}
 	__vue_template__ = __webpack_require__(80)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
@@ -5768,7 +5768,7 @@ webpackJsonp([1],[
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "./newssingle.vue"
+	  var id = "_v-1e1fdc6e/newssingle.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -5828,7 +5828,7 @@ webpackJsonp([1],[
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app\\components\\messages.vue: named exports in *.vue files are ignored.")}
+	  console.warn("[vue-loader] app/components/messages.vue: named exports in *.vue files are ignored.")}
 	__vue_template__ = __webpack_require__(83)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
@@ -5839,7 +5839,7 @@ webpackJsonp([1],[
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "./messages.vue"
+	  var id = "_v-5d8e3b1f/messages.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -5928,7 +5928,7 @@ webpackJsonp([1],[
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app\\components\\messagesingle.vue: named exports in *.vue files are ignored.")}
+	  console.warn("[vue-loader] app/components/messagesingle.vue: named exports in *.vue files are ignored.")}
 	__vue_template__ = __webpack_require__(86)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
@@ -5939,7 +5939,7 @@ webpackJsonp([1],[
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "./messagesingle.vue"
+	  var id = "_v-307c9468/messagesingle.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -5999,7 +5999,7 @@ webpackJsonp([1],[
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app\\components\\leavemsg.vue: named exports in *.vue files are ignored.")}
+	  console.warn("[vue-loader] app/components/leavemsg.vue: named exports in *.vue files are ignored.")}
 	__vue_template__ = __webpack_require__(89)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
@@ -6010,7 +6010,7 @@ webpackJsonp([1],[
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "./leavemsg.vue"
+	  var id = "_v-4cb67786/leavemsg.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -6095,7 +6095,7 @@ webpackJsonp([1],[
 /* 89 */
 /***/ function(module, exports) {
 
-	module.exports = "\r\n<div class=\"rmain\">\r\n<div class=\"leavemsgC\">\r\n\t<h1><b>在线留言</b></h1>\r\n\r\n\t<div class=\"sad\">\r\n\t\t<a href=\"javascript:void(0);\" :class=\"{'on': flag}\" @click=\"flag=true\">在线留言</a>\r\n\t\t<a href=\"javascript:void(0);\" :class=\"{'on': !flag}\" @click=\"flag=false\">留言反馈</a>\r\n\t</div>\r\n\r\n\t<ul class=\"u1\" v-show=\"flag\">\r\n\t\t<div class=\"inpwp\">\r\n\t\t\t<form role=\"form\" id=\"leavemsgForm\" name=\"leavemsgForm\" enctype=\"multipart/form-data\">\r\n\t\t\t\t<li>\r\n\t\t\t\t\t<span>留言标题：</span>\r\n\t\t\t\t\t<em><input type=\"text\" class=\"text til\" v-model=\"model.title\" name=\"title\" required=\"true\" maxlength=\"32\"></em>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li>\r\n\t\t\t\t\t<span>问题类型：</span>\r\n\t\t\t\t\t<em>\r\n\t\t\t\t\t\t<select name=\"msgtype\" v-model=\"model.msgtype\" class=\"text selC\">\t\r\n\t\t\t\t\t\t\t<option v-for=\"item in MsgTypes\" value=\"{{item.value}}\">{{item.text}}</option>\r\n\t\t\t\t\t\t</select>\r\n\t\t\t\t\t</em>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li>\r\n\t\t\t\t\t<span>上传图片：</span>\r\n\t\t\t\t\t<em>\r\n\t\t\t\t\t\t<a href=\"javascript:;\" class=\"fila\">选择图片\r\n\t\t\t\t\t\t\t<input type=\"file\" name=\"imgfile\" id=\"uploadimgfile\">\r\n\t\t\t\t\t\t</a>\r\n\t\t\t\t\t\t<a href=\"javascript:;\" @click=\"preview\">预览</a>\r\n\t\t\t\t\t\t<img id=\"kknsdkjbgfkjsgdfg\">\r\n\t\t\t\t\t\t<b class=\"imgb\">\r\n\t\t\t\t\t\t\t<img class=\"show_big_img\" src=\"/images/bgblack.png\" id=\"showimg\" style=\"width:auto;max-height:40px;position:relative;top:2px;left:25px;\">\r\n\t\t\t\t\t\t</b>\r\n\t\t\t\t\t</em>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li class=\"ctd\">\r\n\t\t\t\t\t<span>留言内容：</span>\r\n\t\t\t\t\t<em><textarea class=\"ctt\" v-model=\"model.content\" name=\"content\" required=\"true\" maxlength=\"360\"></textarea></em>\r\n\t\t\t\t</li>\r\n\t\t\t\t<li>\r\n\t\t\t\t\t<span></span>\r\n\t\t\t\t\t<em><input type=\"submit\" @click=\"submit\" class=\"btn\" value=\"提交留言\"></em>\r\n\t\t\t\t</li>\r\n\t\t\t</form>\r\n\t\t</div>\r\n\t</ul>\r\n\r\n\t<ul class=\"u2\" v-show=!flag>\r\n\t\t<li class=\"mymsg\" v-for=\"item in replyModel\">\r\n\t\t\t<h4><img class=\"lgim\" v-bind:src=getSrc>\r\n\t\t\t{{item.old.title}}<i>{{item.the_time | datetime}}</i></h4>\r\n\t\t\t<div class=\"nrd\">\r\n\t\t\t\t{{item.old.content}}\r\n\t\t\t\t<hr style=\"width:100%;margin-top:10px;margin-bottom:10px;border-bottom:1px dashed #43C328;\">\r\n\t\t\t\t<div v-if=\"item.new\">\r\n\t\t\t\t\t<h4>\r\n\t\t\t\t\t\t<img class=\"lgim\" src=\"/images/logo2.png\"> \r\n\t\t\t\t\t\t\t多米多客服\r\n\t\t\t\t\t\t<i>{{item.new.the_time | datetime}}</i>\r\n\t\t\t\t\t</h4>\r\n\t\t\t\t\t<span style=\"color:#949CB3\">{{item.new.content}}</span>\r\n\t\t\t\t</div>\r\n\t\t\t\t<div v-if=\"!item.new\">\r\n\t\t\t\t\t<h4>\r\n\t\t\t\t\t\t<img class=\"lgim\" src=\"/images/logo2.png\"> \r\n\t\t\t\t\t\t\t多米多客服\r\n\t\t\t\t\t</h4>\r\n\t\t\t\t\t<span style=\"color:#949CB3\">没有回复哦</span>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</li>\r\n\t</ul>\r\n\r\n</div>\r\n\r\n</div>\r\n";
+	module.exports = "\n<div class=\"rmain\">\n<div class=\"leavemsgC\">\n\t<h1><b>在线留言</b></h1>\n\n\t<div class=\"sad\">\n\t\t<a href=\"javascript:void(0);\" :class=\"{'on': flag}\" @click=\"flag=true\">在线留言</a>\n\t\t<a href=\"javascript:void(0);\" :class=\"{'on': !flag}\" @click=\"flag=false\">留言反馈</a>\n\t</div>\n\n\t<ul class=\"u1\" v-show=\"flag\">\n\t\t<div class=\"inpwp\">\n\t\t\t<form role=\"form\" id=\"leavemsgForm\" name=\"leavemsgForm\" enctype=\"multipart/form-data\">\n\t\t\t\t<li>\n\t\t\t\t\t<span>留言标题：</span>\n\t\t\t\t\t<em><input type=\"text\" class=\"text til\" v-model=\"model.title\" name=\"title\" required=\"true\" maxlength=\"32\"></em>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<span>问题类型：</span>\n\t\t\t\t\t<em>\n\t\t\t\t\t\t<select name=\"msgtype\" v-model=\"model.msgtype\" class=\"text selC\">\t\n\t\t\t\t\t\t\t<option v-for=\"item in MsgTypes\" value=\"{{item.value}}\">{{item.text}}</option>\n\t\t\t\t\t\t</select>\n\t\t\t\t\t</em>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<span>上传图片：</span>\n\t\t\t\t\t<em>\n\t\t\t\t\t\t<a href=\"javascript:;\" class=\"fila\">选择图片\n\t\t\t\t\t\t\t<input type=\"file\" name=\"imgfile\" id=\"uploadimgfile\">\n\t\t\t\t\t\t</a>\n\t\t\t\t\t\t<a href=\"javascript:;\" @click=\"preview\">预览</a>\n\t\t\t\t\t\t<img id=\"kknsdkjbgfkjsgdfg\">\n\t\t\t\t\t\t<b class=\"imgb\">\n\t\t\t\t\t\t\t<img class=\"show_big_img\" src=\"/images/bgblack.png\" id=\"showimg\" style=\"width:auto;max-height:40px;position:relative;top:2px;left:25px;\">\n\t\t\t\t\t\t</b>\n\t\t\t\t\t</em>\n\t\t\t\t</li>\n\t\t\t\t<li class=\"ctd\">\n\t\t\t\t\t<span>留言内容：</span>\n\t\t\t\t\t<em><textarea class=\"ctt\" v-model=\"model.content\" name=\"content\" required=\"true\" maxlength=\"360\"></textarea></em>\n\t\t\t\t</li>\n\t\t\t\t<li>\n\t\t\t\t\t<span></span>\n\t\t\t\t\t<em><input type=\"submit\" @click=\"submit\" class=\"btn\" value=\"提交留言\"></em>\n\t\t\t\t</li>\n\t\t\t</form>\n\t\t</div>\n\t</ul>\n\n\t<ul class=\"u2\" v-show=!flag>\n\t\t<li class=\"mymsg\" v-for=\"item in replyModel\">\n\t\t\t<h4><img class=\"lgim\" v-bind:src=getSrc>\n\t\t\t{{item.old.title}}<i>{{item.the_time | datetime}}</i></h4>\n\t\t\t<div class=\"nrd\">\n\t\t\t\t{{item.old.content}}\n\t\t\t\t<hr style=\"width:100%;margin-top:10px;margin-bottom:10px;border-bottom:1px dashed #43C328;\">\n\t\t\t\t<div v-if=\"item.new\">\n\t\t\t\t\t<h4>\n\t\t\t\t\t\t<img class=\"lgim\" src=\"/images/logo2.png\"> \n\t\t\t\t\t\t\t多米多客服\n\t\t\t\t\t\t<i>{{item.new.the_time | datetime}}</i>\n\t\t\t\t\t</h4>\n\t\t\t\t\t<span style=\"color:#949CB3\">{{item.new.content}}</span>\n\t\t\t\t</div>\n\t\t\t\t<div v-if=\"!item.new\">\n\t\t\t\t\t<h4>\n\t\t\t\t\t\t<img class=\"lgim\" src=\"/images/logo2.png\"> \n\t\t\t\t\t\t\t多米多客服\n\t\t\t\t\t</h4>\n\t\t\t\t\t<span style=\"color:#949CB3\">没有回复哦</span>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</li>\n\t</ul>\n\n</div>\n\n</div>\n";
 
 /***/ },
 /* 90 */
@@ -6106,7 +6106,7 @@ webpackJsonp([1],[
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app\\components\\share.vue: named exports in *.vue files are ignored.")}
+	  console.warn("[vue-loader] app/components/share.vue: named exports in *.vue files are ignored.")}
 	__vue_template__ = __webpack_require__(101)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
@@ -6117,7 +6117,7 @@ webpackJsonp([1],[
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "./share.vue"
+	  var id = "_v-eda520c8/share.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -6184,7 +6184,7 @@ webpackJsonp([1],[
 /* 101 */
 /***/ function(module, exports) {
 
-	module.exports = "\r\n<div class=\"rmain\">\r\n  <div class=\"shareC\">\r\n  \t<h1><b>分享注册</b></h1>\r\n  \t<ul>\r\n  \t\t<li>\r\n\t\t\t <div id=\"qrcode\" style=\"width:300px;height:300px;margin:auto;padding:20px 5px 0 5px;background:#fff;\">\r\n\t\t\t\t <img v-bind:src=qrcodeUrl style=\"width:256px;height:256px;\"/>\r\n\t\t\t </div>\r\n\t\t\t</li>\r\n  \t\t<li>\r\n  \t\t\t<em id=\"link\" class=\"copye\">{{regUrl}}</em>\r\n  \t\t\t<br><br><br>\r\n  \t\t\t<a href=\"javascript:void(0);\" id=\"copy_link\" class=\"btn copy_link\" data-clipboard-target=\"#link\" aria-label=\"复制成功！\">[点击复制]</a>\r\n  \t\t</li>\r\n  \t\t<li></li>\r\n  \t</ul>\r\n  </div>\r\n</div>\r\n";
+	module.exports = "\n<div class=\"rmain\">\n  <div class=\"shareC\">\n  \t<h1><b>分享注册</b></h1>\n  \t<ul>\n  \t\t<li>\n\t\t\t <div id=\"qrcode\" style=\"width:300px;height:300px;margin:auto;padding:20px 5px 0 5px;background:#fff;\">\n\t\t\t\t <img v-bind:src=qrcodeUrl style=\"width:256px;height:256px;\"/>\n\t\t\t </div>\n\t\t\t</li>\n  \t\t<li>\n  \t\t\t<em id=\"link\" class=\"copye\">{{regUrl}}</em>\n  \t\t\t<br><br><br>\n  \t\t\t<a href=\"javascript:void(0);\" id=\"copy_link\" class=\"btn copy_link\" data-clipboard-target=\"#link\" aria-label=\"复制成功！\">[点击复制]</a>\n  \t\t</li>\n  \t\t<li></li>\n  \t</ul>\n  </div>\n</div>\n";
 
 /***/ },
 /* 102 */
@@ -6195,8 +6195,8 @@ webpackJsonp([1],[
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app\\components\\offer_detail.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(207)
+	  console.warn("[vue-loader] app/components/offer_detail.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(208)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -6206,7 +6206,7 @@ webpackJsonp([1],[
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "./offer_detail.vue"
+	  var id = "_v-ece6c832/offer_detail.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -6407,22 +6407,23 @@ webpackJsonp([1],[
 /* 204 */,
 /* 205 */,
 /* 206 */,
-/* 207 */
+/* 207 */,
+/* 208 */
 /***/ function(module, exports) {
 
-	module.exports = "\r\n<div class=\"offer_logC\">\r\n\t<h1><b>播种记录</b></h1>\r\n\t<h2>\r\n        {{offer.state == 1 ? '等待匹配' : (offer.state == 100 ? '订单已完成' : '已匹配成功')}}\r\n    </h2>\r\n\t<ul>\r\n\t\t<div class=\"main\">\r\n\t\t\t<div class=\"hd\">\r\n\t\t\t\t<span>{{offer.state < 100 ? '正在播种' : '播种完成'}}</span>\r\n\t\t\t\t<li>\r\n                    <font>播种进度</font>\r\n                    <i :style=\"{left : (progress - 1) + '%'}\">\r\n                        {{progress}}\r\n                    </i>\r\n                    <em>\r\n                        <b :style=\"{width : progress + '%'}\"></b>\r\n                    </em>\r\n                </li>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"tb\">\r\n\t\t\t\t<table>\r\n\t\t\t\t\t<tr class=\"tr1\">\r\n\t\t\t\t\t\t<td>金额</td>\r\n\t\t\t\t\t\t<td>预计收益</td>\r\n\t\t\t\t\t\t<td>发起时间</td>\r\n\t\t\t\t\t\t<td>状态</td>\r\n\t\t\t\t\t\t<td style=\"position:relative;\">\r\n                            匹配人数\r\n                            <i  v-if=\"offer.state == 1\" \r\n                                class=\"del_order\" \r\n                                style=\"position:absolute;top:-80px;right:10px;color:#ddd;cursor:pointer;\"\r\n                                @click=\"\"\r\n                                >\r\n                                删除\r\n                            </i>\r\n\r\n                        </td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t<tr class=\"tr2\">\r\n\t\t\t\t\t\t<td class=\"cccc\">{{offer.money | currency '￥'}}</td>\r\n\t\t\t\t\t\t<td class=\"cccc\">\r\n                            {{aboutIncome(offer) | currency '￥'}}\r\n                        </td>\r\n\t\t\t\t\t\t<td>{{offer.the_time | datetime}}</td>\r\n\t\t\t\t\t\t<td class=\"ccc\">{{offer.state == 100 ? '已完成' : '进行中...'}}</td>\r\n\t\t\t\t\t\t<td class=\"ccc\">{{pairs.length}}</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t</table>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\r\n\t\t<div class=\"main lm\" v-for=\"item in pairs\">\r\n\t\t\t<div class=\"tb\">\r\n\t\t\t\t<span class=\"ppz\">匹配者{{$index}}</span>\r\n\t\t\t\t<li class=\"bt\">\r\n\t\t\t\t\t<table>\r\n\t\t\t\t\t\t<tr class=\"tr1\">\r\n\t\t\t\t\t\t\t<td>金额</td>\r\n\t\t\t\t\t\t\t<td>状态</td>\r\n\t\t\t\t\t\t\t<td>匹配时间</td>\r\n\t\t\t\t\t\t\t<td>打款时间</td>\r\n\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t<tr class=\"tr2\">\r\n\t\t\t\t\t\t\t<td class=\"cccc\">{{item.money | currency '￥'}}</td>\r\n\t\t\t\t\t\t\t<td class=\"ccc\">{{item.state | orderstate}}</td>\r\n\t\t\t\t\t\t\t<td>{{item.the_time | datetime}}</td>\r\n\t\t\t\t\t\t\t<td>{{item.pay_time | datetime}}</td>\r\n\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t</table>\r\n\t\t\t\t</li>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"tb\">\r\n\t\t\t\t<table>\r\n\t\t\t\t\t<tr class=\"tr1\">\r\n\t\t\t\t\t\t<td>推荐人</td>\r\n\t\t\t\t\t\t<td>推荐人手机</td>\r\n\t\t\t\t\t\t<td>真实姓名</td>\r\n\t\t\t\t\t\t<td>会员手机</td>\r\n\t\t\t\t\t\t<td>支付宝</td>\r\n\t\t\t\t\t\t<td>微信号</td>\r\n\t\t\t\t\t\t<td>银行信息</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t<tr class=\"tr2\">\r\n\t\t\t\t\t\t<td>{{item.applyMemberParent.nickname}}</td>\r\n\t\t\t\t\t\t<td>{{item.applyMemberParent.mobile}}</td>\r\n\t\t\t\t\t\t<td>{{item.applyMember.truename}}</td>\r\n\t\t\t\t\t\t<td>{{item.applyMember.mobile}}</td>\r\n\t\t\t\t\t\t<td>{{item.applyMember.alipay}}</td>\r\n\t\t\t\t\t\t<td>{{item.applyMember.weixin}}</td>\r\n\t\t\t\t\t\t<td>\r\n\t\t\t\t\t\t\t<li>银行名称：{{item.applyMember.bank | bank}}</li>\r\n\t\t\t\t\t\t\t<li>开户分行：{{item.applyMember.bank_addr}}</li>\r\n\t\t\t\t\t\t\t<li>银行账号：{{item.applyMember.bank_num}}</li>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t</table>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"tb\">\r\n\t\t\t\t\t<dd class=\"s2\" v-if=\"item.state == 2\">\r\n\t\t\t\t\t\t打款剩余时间<img src=\"/images/time.jpg\">{{remainTime(item)}}\r\n\t\t\t\t\t\t<div>\r\n\t\t\t\t\t\t\t<div v-if=\"item.img\">\r\n\t\t\t\t\t\t\t\t<a href=\"javascript:;\" class=\"a_upload\">\r\n\t\t\t\t\t\t\t\t\t<img class=\"show_big_img\"  @click=\"showBigImg(item,$event)\" :src=\"'/images/payment/' + item.img \" style=\"max-width:250px;height:160px;\"/>\r\n\t\t\t\t\t\t\t\t</a>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t\t<div v-else>\r\n\t\t\t\t\t\t\t\t<a href=\"javascript:;\" class=\"a_upload\">\r\n\t\t\t\t\t\t\t\t\t<img src=\"/images/plusFhotoIcon.jpg\" style=\"width:auto;height:60px;\"/>\r\n\t\t\t\t\t\t\t\t\t<input type=\"file\" name=\"imgfile\" class=\"uploadimgfile\"/>\r\n\t\t\t\t\t\t\t\t</a>\r\n\t\t\t\t\t\t\t\t<input type=\"hidden\" name=\"oaid\" value=\"{{item.id}}\">\r\n\t\t\t\t\t\t\t\t<input type=\"submit\" value=\"确认付款\" class=\"sure\" @click=\"payOut(item,$event)\">\r\n\t\t\t\t\t\t\t\t<em class=\"deny_payment\" @click=\"denyPay(item,$event)\">拒绝打款</em>\r\n\t\t\t\t\t\t\t</div>\r\n\t\t\t\t\t\t</div>\r\n\t\t\t\t\t</dd>\r\n\t\t\t\t\t<dd class=\"s3\" v-if=\"item.state == 3\">\r\n\t\t\t\t\t\t<span class=\"edd\">已打款成功</span>\r\n\t\t\t\t\t\t<img class=\"show_big_img\" @click=\"showBigImg(item,$event)\" :src=\"'/upload/images/payment/' + item.img\">\r\n\t\t\t\t\t</dd>\r\n\t\t\t\t\t<dd class=\"s3\" v-if=\"item.state == 4\">\r\n\t\t\t\t\t\t<img class=\"show_big_img\" @click=\"showBigImg(item,$event)\" :src=\"'/upload/images/payment/' + item.img\">&nbsp;&nbsp;&nbsp;\r\n\t\t\t\t\t\t<span class=\"edd\">订单已完成</span>\r\n\t\t\t\t\t</dd>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</ul>\r\n</div>\r\n\r\n";
+	module.exports = "\n<div class=\"offer_logC\">\n\t<h1><b>播种记录</b></h1>\n\t<h2>\n        {{offer.state == 1 ? '等待匹配' : (offer.state == 100 ? '订单已完成' : '已匹配成功')}}\n    </h2>\n\t<ul>\n\t\t<div class=\"main\">\n\t\t\t<div class=\"hd\">\n\t\t\t\t<span>{{offer.state < 100 ? '正在播种' : '播种完成'}}</span>\n\t\t\t\t<li>\n                    <font>播种进度</font>\n                    <i :style=\"{left : (progress - 1) + '%'}\">\n                        {{progress}}\n                    </i>\n                    <em>\n                        <b :style=\"{width : progress + '%'}\"></b>\n                    </em>\n                </li>\n\t\t\t</div>\n\t\t\t<div class=\"tb\">\n\t\t\t\t<table>\n\t\t\t\t\t<tr class=\"tr1\">\n\t\t\t\t\t\t<td>金额</td>\n\t\t\t\t\t\t<td>预计收益</td>\n\t\t\t\t\t\t<td>发起时间</td>\n\t\t\t\t\t\t<td>状态</td>\n\t\t\t\t\t\t<td style=\"position:relative;\">\n                            匹配人数\n                            <i  v-if=\"offer.state == 1\" \n                                class=\"del_order\" \n                                style=\"position:absolute;top:-80px;right:10px;color:#ddd;cursor:pointer;\"\n                                @click=\"\"\n                                >\n                                删除\n                            </i>\n\n                        </td>\n\t\t\t\t\t</tr>\n\t\t\t\t\t<tr class=\"tr2\">\n\t\t\t\t\t\t<td class=\"cccc\">{{offer.money | currency '￥'}}</td>\n\t\t\t\t\t\t<td class=\"cccc\">\n                            {{aboutIncome(offer) | currency '￥'}}\n                        </td>\n\t\t\t\t\t\t<td>{{offer.the_time | datetime}}</td>\n\t\t\t\t\t\t<td class=\"ccc\">{{offer.state == 100 ? '已完成' : '进行中...'}}</td>\n\t\t\t\t\t\t<td class=\"ccc\">{{pairs.length}}</td>\n\t\t\t\t\t</tr>\n\t\t\t\t</table>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"main lm\" v-for=\"item in pairs\">\n\t\t\t<div class=\"tb\">\n\t\t\t\t<span class=\"ppz\">匹配者{{$index}}</span>\n\t\t\t\t<li class=\"bt\">\n\t\t\t\t\t<table>\n\t\t\t\t\t\t<tr class=\"tr1\">\n\t\t\t\t\t\t\t<td>金额</td>\n\t\t\t\t\t\t\t<td>状态</td>\n\t\t\t\t\t\t\t<td>匹配时间</td>\n\t\t\t\t\t\t\t<td>打款时间</td>\n\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t<tr class=\"tr2\">\n\t\t\t\t\t\t\t<td class=\"cccc\">{{item.money | currency '￥'}}</td>\n\t\t\t\t\t\t\t<td class=\"ccc\">{{item.state | orderstate}}</td>\n\t\t\t\t\t\t\t<td>{{item.the_time | datetime}}</td>\n\t\t\t\t\t\t\t<td>{{item.pay_time | datetime}}</td>\n\t\t\t\t\t\t</tr>\n\t\t\t\t\t</table>\n\t\t\t\t</li>\n\t\t\t</div>\n\t\t\t<div class=\"tb\">\n\t\t\t\t<table>\n\t\t\t\t\t<tr class=\"tr1\">\n\t\t\t\t\t\t<td>推荐人</td>\n\t\t\t\t\t\t<td>推荐人手机</td>\n\t\t\t\t\t\t<td>真实姓名</td>\n\t\t\t\t\t\t<td>会员手机</td>\n\t\t\t\t\t\t<td>支付宝</td>\n\t\t\t\t\t\t<td>微信号</td>\n\t\t\t\t\t\t<td>银行信息</td>\n\t\t\t\t\t</tr>\n\t\t\t\t\t<tr class=\"tr2\">\n\t\t\t\t\t\t<td>{{item.applyMemberParent.nickname}}</td>\n\t\t\t\t\t\t<td>{{item.applyMemberParent.mobile}}</td>\n\t\t\t\t\t\t<td>{{item.applyMember.truename}}</td>\n\t\t\t\t\t\t<td>{{item.applyMember.mobile}}</td>\n\t\t\t\t\t\t<td>{{item.applyMember.alipay}}</td>\n\t\t\t\t\t\t<td>{{item.applyMember.weixin}}</td>\n\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t<li>银行名称：{{item.applyMember.bank | bank}}</li>\n\t\t\t\t\t\t\t<li>开户分行：{{item.applyMember.bank_addr}}</li>\n\t\t\t\t\t\t\t<li>银行账号：{{item.applyMember.bank_num}}</li>\n\t\t\t\t\t\t</td>\n\t\t\t\t\t</tr>\n\t\t\t\t</table>\n\t\t\t</div>\n\t\t\t<div class=\"tb\">\n\t\t\t\t\t<dd class=\"s2\" v-if=\"item.state == 2\">\n\t\t\t\t\t\t打款剩余时间<img src=\"/images/time.jpg\">{{remainTime(item)}}\n\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t<div v-if=\"item.img\">\n\t\t\t\t\t\t\t\t<a href=\"javascript:;\" class=\"a_upload\">\n\t\t\t\t\t\t\t\t\t<img class=\"show_big_img\"  @click=\"showBigImg(item,$event)\" :src=\"'/images/payment/' + item.img \" style=\"max-width:250px;height:160px;\"/>\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<div v-else>\n\t\t\t\t\t\t\t\t<a href=\"javascript:;\" class=\"a_upload\">\n\t\t\t\t\t\t\t\t\t<img src=\"/images/plusFhotoIcon.jpg\" style=\"width:auto;height:60px;\"/>\n\t\t\t\t\t\t\t\t\t<input type=\"file\" name=\"imgfile\" class=\"uploadimgfile\"/>\n\t\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t\t<input type=\"hidden\" name=\"oaid\" value=\"{{item.id}}\">\n\t\t\t\t\t\t\t\t<input type=\"submit\" value=\"确认付款\" class=\"sure\" @click=\"payOut(item,$event)\">\n\t\t\t\t\t\t\t\t<em class=\"deny_payment\" @click=\"denyPay(item,$event)\">拒绝打款</em>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t</dd>\n\t\t\t\t\t<dd class=\"s3\" v-if=\"item.state == 3\">\n\t\t\t\t\t\t<span class=\"edd\">已打款成功</span>\n\t\t\t\t\t\t<img class=\"show_big_img\" @click=\"showBigImg(item,$event)\" :src=\"'/upload/images/payment/' + item.img\">\n\t\t\t\t\t</dd>\n\t\t\t\t\t<dd class=\"s3\" v-if=\"item.state == 4\">\n\t\t\t\t\t\t<img class=\"show_big_img\" @click=\"showBigImg(item,$event)\" :src=\"'/upload/images/payment/' + item.img\">&nbsp;&nbsp;&nbsp;\n\t\t\t\t\t\t<span class=\"edd\">订单已完成</span>\n\t\t\t\t\t</dd>\n\t\t\t</div>\n\t\t</div>\n\t</ul>\n</div>\n\n";
 
 /***/ },
-/* 208 */
+/* 209 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(209)
+	__vue_script__ = __webpack_require__(210)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app\\components\\apply_detail.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(210)
+	  console.warn("[vue-loader] app/components/apply_detail.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(211)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -6432,7 +6433,7 @@ webpackJsonp([1],[
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "./apply_detail.vue"
+	  var id = "_v-443f3395/apply_detail.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -6441,7 +6442,7 @@ webpackJsonp([1],[
 	})()}
 
 /***/ },
-/* 209 */
+/* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6515,22 +6516,22 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 210 */
+/* 211 */
 /***/ function(module, exports) {
 
-	module.exports = "\r\n<div>\r\n<div class=\"apply_logC\">\r\n\t<h1><b>收获记录</b></h1>\r\n\t<h2>\r\n        {{apply.state == 1 ? '等待匹配' : (apply.state == 100 ? '订单已完成' : '已匹配成功')}}\r\n    </h2>\r\n\t<ul>\r\n\t\t<div class=\"main\">\r\n\t\t\t<div class=\"hd\">\r\n\t\t\t\t<span>{{apply.state < 100 ? '正在收获' : '收获完成'}}</span>\r\n\t\t\t\t<li>\r\n                    <font>收获进度</font>\r\n                    <i :style=\"{left : (progress - 1) + '%'}\">\r\n                        {{progress}}\r\n                    </i>\r\n                    <em>\r\n                        <b :style=\"{width : progress + '%'}\"></b>\r\n                    </em>    \r\n                </li>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"tb\">\r\n\t\t\t\t<table>\r\n\t\t\t\t\t<tr class=\"tr1\">\r\n\t\t\t\t\t\t<td>金额</td>\r\n\t\t\t\t\t\t<td>发起时间</td>\r\n\t\t\t\t\t\t<td>状态</td>\r\n\t\t\t\t\t\t<td style=\"position:relative;\">\r\n                            匹配人数\r\n                            <i  v-if=\"apply.state == 1\"\r\n                                class=\"del_order\"\r\n                                data-type=\"apply\" \r\n                                style=\"position:absolute;top:-80px;right:10px;color:#ddd;cursor:pointer;\">\r\n                                删除\r\n                            </i>\r\n                        </td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t<tr class=\"tr2\">\r\n\t\t\t\t\t\t<td class=\"cccc\">{{apply.money | currency '￥'}}</td>\r\n\t\t\t\t\t\t<td>{{apply.the_time | datetime}}</td>\r\n\t\t\t\t\t\t<td class=\"ccc\">{{apply.state == 100 ? '已完成' : '进行中...'}}</td>\r\n\t\t\t\t\t\t<td class=\"ccc\">{{pairs.length}}</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t</table>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t\t<div v-for=\"item in pairs\" class=\"main lm\">\r\n\t\t\t<div class=\"tb\">\r\n\t\t\t\t<span class=\"ppz\">匹配者{{$index}}</span>\r\n\t\t\t\t<li class=\"bt\">\r\n\t\t\t\t\t<table>\r\n\t\t\t\t\t\t<tr class=\"tr1\">\r\n\t\t\t\t\t\t\t<td>金额</td>\r\n\t\t\t\t\t\t\t<td>状态</td>\r\n\t\t\t\t\t\t\t<td>匹配时间</td>\r\n\t\t\t\t\t\t\t<td>打款时间</td>\r\n\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t\t<tr class=\"tr2\">\r\n\t\t\t\t\t\t\t<td class=\"cccc\">{{item.money | currency '￥'}}</td>\r\n\t\t\t\t\t\t\t<td class=\"ccc\">{{item.state | orderstate}}</td>\r\n\t\t\t\t\t\t\t<td>{{item.the_time | datetime}}</td>\r\n\t\t\t\t\t\t\t<td>{{item.pay_time | datetime}}</td>\r\n\t\t\t\t\t\t</tr>\r\n\t\t\t\t\t</table>\r\n\t\t\t\t</li>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"tb\">\r\n\t\t\t\t<table>\r\n\t\t\t\t\t<tr class=\"tr1\">\r\n\t\t\t\t\t\t<td>推荐人</td>\r\n\t\t\t\t\t\t<td>推荐人手机</td>\r\n\t\t\t\t\t\t<td>真实姓名</td>\r\n\t\t\t\t\t\t<td>会员手机</td>\r\n\t\t\t\t\t\t<td>支付宝</td>\r\n\t\t\t\t\t\t<td>微信号</td>\r\n\t\t\t\t\t\t<td>银行信息</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t\t<tr class=\"tr2\">\r\n\t\t\t\t\t\t<td>{{item.offerMemberParent.nickname}}</td>\r\n\t\t\t\t\t\t<td>{{item.offerMemberParent.mobile}}</td>\r\n\t\t\t\t\t\t<td>{{item.offerMember.truename}}</td>\r\n\t\t\t\t\t\t<td>{{item.offerMember.mobile}}</td>\r\n\t\t\t\t\t\t<td>{{item.offerMember.alipay}}</td>\r\n\t\t\t\t\t\t<td>{{item.offerMember.weixin}}</td>\r\n\t\t\t\t\t\t<td>\r\n\t\t\t\t\t\t\t<li>银行名称：{{item.offerMember.bank | bank}}</li>\r\n\t\t\t\t\t\t\t<li>开户分行：{{item.offerMember.bank_addr}}</li>\r\n\t\t\t\t\t\t\t<li>银行账号：{{item.offerMember.bank_num}}</li>\r\n\t\t\t\t\t\t</td>\r\n\t\t\t\t\t</tr>\r\n\t\t\t\t</table>\r\n\t\t\t</div>\r\n\t\t\t<div class=\"tb\">\r\n\t\t\t\t\t<dd class=\"s2\" v-if=\"item.state == 2\">打款剩余时间<img src=\"/images/time.jpg\">{{remainTime(item.the_time, 1)}}</dd>\r\n\t\t\t\t\t<dd class=\"s3\" v-if=\"item.state == 3\">\r\n\t\t\t\t\t\t<em>收款剩余时间<img src=\"/images/time.jpg\"> {{remainTime(item.pay_time, 0)}}</em>\r\n                        <span class=\"edd\">对方已打款</span>\r\n\t\t\t\t\t\t<img class=\"show_big_img\" :src=\"'images/payment/' + item.img\">\r\n\t\t\t\t\t\t<a href=\"javascript:;\" @click=\"payIn(item,$event)\" class=\"apply_confirm_btn btn\">确认收款</a>\r\n                        <span v-if=\"item.judge == 1\">\r\n                            <span style=\"color:lime;margin-left:15px;\">\r\n                                平台处理中......\r\n                            </span>\r\n                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\r\n                            <a href=\"javascript:;\" class=\"to_judge\" @click=\"cancelJudge(item)\" data-type=\"no\">撤销</a>\r\n                        </span>\r\n                        <span v-if=\"item.judge == 2\">\r\n                            <span style=\"color:red;\">投诉被驳回</span>\r\n                        </span>\r\n                        <span v-if=\"item.judge > 2\">\r\n                            <a href=\"javascript:;\" class=\"to_judge\" @click=\"judge(item)\" title=\"对方打款凭证为假图，我未收到款，需要平台介入！\">我要投诉</a>\r\n                        </span>\r\n\t\t\t\t\t</dd>\r\n\r\n\t\t\t\t\t<dd class=\"s3\" v-if=\"item.state == 4\">\r\n\t\t\t\t\t\t<img class=\"show_big_img\" :src=\"'images/payment/' + item.img\">\r\n                        &nbsp;&nbsp;&nbsp;\r\n\t\t\t\t\t\t<span class=\"edd\">订单已完成</span>\r\n\t\t\t\t\t</dd>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</ul>\r\n</div>\r\n\r\n<div id=\"remark\">\r\n\t<div>\r\n\t\t<h5>请给XXX的打款诚信评分</h5>\r\n\t\t<ul>\r\n\t\t\t<img v-for=\"i in 5\" :class=\"{on: remark == i}\" src=\"/images/xing02.png\" @click=\"remark = i\">\r\n\t\t</ul>\r\n\t\t<a href=\"javascript:;\" class=\"btn\" >提 交</a>\r\n\t</div>\r\n</div>\r\n</div>\r\n";
+	module.exports = "\n<div>\n<div class=\"apply_logC\">\n\t<h1><b>收获记录</b></h1>\n\t<h2>\n        {{apply.state == 1 ? '等待匹配' : (apply.state == 100 ? '订单已完成' : '已匹配成功')}}\n    </h2>\n\t<ul>\n\t\t<div class=\"main\">\n\t\t\t<div class=\"hd\">\n\t\t\t\t<span>{{apply.state < 100 ? '正在收获' : '收获完成'}}</span>\n\t\t\t\t<li>\n                    <font>收获进度</font>\n                    <i :style=\"{left : (progress - 1) + '%'}\">\n                        {{progress}}\n                    </i>\n                    <em>\n                        <b :style=\"{width : progress + '%'}\"></b>\n                    </em>    \n                </li>\n\t\t\t</div>\n\t\t\t<div class=\"tb\">\n\t\t\t\t<table>\n\t\t\t\t\t<tr class=\"tr1\">\n\t\t\t\t\t\t<td>金额</td>\n\t\t\t\t\t\t<td>发起时间</td>\n\t\t\t\t\t\t<td>状态</td>\n\t\t\t\t\t\t<td style=\"position:relative;\">\n                            匹配人数\n                            <i  v-if=\"apply.state == 1\"\n                                class=\"del_order\"\n                                data-type=\"apply\" \n                                style=\"position:absolute;top:-80px;right:10px;color:#ddd;cursor:pointer;\">\n                                删除\n                            </i>\n                        </td>\n\t\t\t\t\t</tr>\n\t\t\t\t\t<tr class=\"tr2\">\n\t\t\t\t\t\t<td class=\"cccc\">{{apply.money | currency '￥'}}</td>\n\t\t\t\t\t\t<td>{{apply.the_time | datetime}}</td>\n\t\t\t\t\t\t<td class=\"ccc\">{{apply.state == 100 ? '已完成' : '进行中...'}}</td>\n\t\t\t\t\t\t<td class=\"ccc\">{{pairs.length}}</td>\n\t\t\t\t\t</tr>\n\t\t\t\t</table>\n\t\t\t</div>\n\t\t</div>\n\t\t<div v-for=\"item in pairs\" class=\"main lm\">\n\t\t\t<div class=\"tb\">\n\t\t\t\t<span class=\"ppz\">匹配者{{$index}}</span>\n\t\t\t\t<li class=\"bt\">\n\t\t\t\t\t<table>\n\t\t\t\t\t\t<tr class=\"tr1\">\n\t\t\t\t\t\t\t<td>金额</td>\n\t\t\t\t\t\t\t<td>状态</td>\n\t\t\t\t\t\t\t<td>匹配时间</td>\n\t\t\t\t\t\t\t<td>打款时间</td>\n\t\t\t\t\t\t</tr>\n\t\t\t\t\t\t<tr class=\"tr2\">\n\t\t\t\t\t\t\t<td class=\"cccc\">{{item.money | currency '￥'}}</td>\n\t\t\t\t\t\t\t<td class=\"ccc\">{{item.state | orderstate}}</td>\n\t\t\t\t\t\t\t<td>{{item.the_time | datetime}}</td>\n\t\t\t\t\t\t\t<td>{{item.pay_time | datetime}}</td>\n\t\t\t\t\t\t</tr>\n\t\t\t\t\t</table>\n\t\t\t\t</li>\n\t\t\t</div>\n\t\t\t<div class=\"tb\">\n\t\t\t\t<table>\n\t\t\t\t\t<tr class=\"tr1\">\n\t\t\t\t\t\t<td>推荐人</td>\n\t\t\t\t\t\t<td>推荐人手机</td>\n\t\t\t\t\t\t<td>真实姓名</td>\n\t\t\t\t\t\t<td>会员手机</td>\n\t\t\t\t\t\t<td>支付宝</td>\n\t\t\t\t\t\t<td>微信号</td>\n\t\t\t\t\t\t<td>银行信息</td>\n\t\t\t\t\t</tr>\n\t\t\t\t\t<tr class=\"tr2\">\n\t\t\t\t\t\t<td>{{item.offerMemberParent.nickname}}</td>\n\t\t\t\t\t\t<td>{{item.offerMemberParent.mobile}}</td>\n\t\t\t\t\t\t<td>{{item.offerMember.truename}}</td>\n\t\t\t\t\t\t<td>{{item.offerMember.mobile}}</td>\n\t\t\t\t\t\t<td>{{item.offerMember.alipay}}</td>\n\t\t\t\t\t\t<td>{{item.offerMember.weixin}}</td>\n\t\t\t\t\t\t<td>\n\t\t\t\t\t\t\t<li>银行名称：{{item.offerMember.bank | bank}}</li>\n\t\t\t\t\t\t\t<li>开户分行：{{item.offerMember.bank_addr}}</li>\n\t\t\t\t\t\t\t<li>银行账号：{{item.offerMember.bank_num}}</li>\n\t\t\t\t\t\t</td>\n\t\t\t\t\t</tr>\n\t\t\t\t</table>\n\t\t\t</div>\n\t\t\t<div class=\"tb\">\n\t\t\t\t\t<dd class=\"s2\" v-if=\"item.state == 2\">打款剩余时间<img src=\"/images/time.jpg\">{{remainTime(item.the_time, 1)}}</dd>\n\t\t\t\t\t<dd class=\"s3\" v-if=\"item.state == 3\">\n\t\t\t\t\t\t<em>收款剩余时间<img src=\"/images/time.jpg\"> {{remainTime(item.pay_time, 0)}}</em>\n                        <span class=\"edd\">对方已打款</span>\n\t\t\t\t\t\t<img class=\"show_big_img\" :src=\"'images/payment/' + item.img\">\n\t\t\t\t\t\t<a href=\"javascript:;\" @click=\"payIn(item,$event)\" class=\"apply_confirm_btn btn\">确认收款</a>\n                        <span v-if=\"item.judge == 1\">\n                            <span style=\"color:lime;margin-left:15px;\">\n                                平台处理中......\n                            </span>\n                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n                            <a href=\"javascript:;\" class=\"to_judge\" @click=\"cancelJudge(item)\" data-type=\"no\">撤销</a>\n                        </span>\n                        <span v-if=\"item.judge == 2\">\n                            <span style=\"color:red;\">投诉被驳回</span>\n                        </span>\n                        <span v-if=\"item.judge > 2\">\n                            <a href=\"javascript:;\" class=\"to_judge\" @click=\"judge(item)\" title=\"对方打款凭证为假图，我未收到款，需要平台介入！\">我要投诉</a>\n                        </span>\n\t\t\t\t\t</dd>\n\n\t\t\t\t\t<dd class=\"s3\" v-if=\"item.state == 4\">\n\t\t\t\t\t\t<img class=\"show_big_img\" :src=\"'images/payment/' + item.img\">\n                        &nbsp;&nbsp;&nbsp;\n\t\t\t\t\t\t<span class=\"edd\">订单已完成</span>\n\t\t\t\t\t</dd>\n\t\t\t</div>\n\t\t</div>\n\t</ul>\n</div>\n\n<div id=\"remark\">\n\t<div>\n\t\t<h5>请给XXX的打款诚信评分</h5>\n\t\t<ul>\n\t\t\t<img v-for=\"i in 5\" :class=\"{on: remark == i}\" src=\"/images/xing02.png\" @click=\"remark = i\">\n\t\t</ul>\n\t\t<a href=\"javascript:;\" class=\"btn\" >提 交</a>\n\t</div>\n</div>\n</div>\n";
 
 /***/ },
-/* 211 */
+/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(212)
+	__vue_script__ = __webpack_require__(213)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app\\components\\blank.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(213)
+	  console.warn("[vue-loader] app/components/blank.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(214)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -6540,7 +6541,7 @@ webpackJsonp([1],[
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "./blank.vue"
+	  var id = "_v-49a7ee91/blank.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -6549,7 +6550,7 @@ webpackJsonp([1],[
 	})()}
 
 /***/ },
-/* 212 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6581,13 +6582,13 @@ webpackJsonp([1],[
 	};
 
 /***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<div style=\"text-align:center;color:#fff;padding:16px;\">\n    <h2 style=\"color:#fff;font-size:20px;\">Loading...</h2>\n</div>\n";
 
 /***/ },
-/* 214 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
