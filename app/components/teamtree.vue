@@ -2,7 +2,7 @@
     <li>
         <div :class="{bold: isFolder}" class="item-self">
             <i class="{{model.sex == 1 ? 'female':'male'}}"></i>
-            <span class="item-name">{{model.truename}} - {{model.mobile}} - {{model.id}} &nbsp; &nbsp;(下级人数:{{model.teamCount}})</span>
+            <span class="item-name">{{model.truename}} - {{model.mobile}} &nbsp; &nbsp;(下级人数:{{model.teamCount}})</span>
             <span class="item-plus-minus" v-if="isFolder" @click="toggle">[{{open ? ' - ' : ' + '}}]</span>
             <span class="item-plus-minus" v-else  @click="loadChildren(model, $event)">[ + ]</span>
             <a href="javascript:;" class="item-detail" @click="viewDetail(model, $event)">详细</a>
