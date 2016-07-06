@@ -24,10 +24,10 @@ const App = Vue.extend({
                 return "images/xin0"+ i +".png"
             },
             logout(evt){
-                API.Logout().then(x=>{
+                API.Logout({}).then(x=>{
                     alert2('已退出系统').then(x=>{
                         window.location.href = '/login.html'
-                    })                    
+                    })
                 })
             }
         },

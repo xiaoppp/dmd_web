@@ -84,3 +84,25 @@ export function paddingLeft(n,m,l){
     sn = prefix + sn
     return sn
 }
+
+export function loading(close = false,closeDuration = 500){
+    if(close) return $('#loadingbox').fadeOut(closeDuration)
+    if($('#loadingbox').length > 0) return $('#loadingbox').fadeIn(100)
+    let html = `
+    <div id="loadingbox" style="position:fixed;top:0;left:0;background-color:rgba(0,0,0,.8);z-index:999;display:none;">
+        <div style="color:#F9EA6A;font-size:16px;position:absolute;text-align:center;width:100%;">
+            <div class="loading"></div>
+            数据加载中...
+        </div>
+    </div>
+    `
+    let lb = $(html)
+    let w = document.body.clientWidth
+    let h = document.body.clientHeight
+    lb.width(w)
+    lb.height(h)
+    lb.find('div').css({
+        top : (h - 74) / 2
+    })
+    lb.appendTo(document.body).fadeIn(100)
+}

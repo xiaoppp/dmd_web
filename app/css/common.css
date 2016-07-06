@@ -37,7 +37,7 @@ body{background:#26272C; }
 /* 顶部开始 end */
 
 /* 左侧菜单 start */
-.imain{ min-height:860px; background: #26272C url(../images/bg.jpg) repeat-y center top; padding-bottom: 20px;overflow: hidden;}
+.imain{ min-height:860px; padding-bottom: 20px;overflow: hidden;}
 .imain .imi{display:inline-block; }
 .imain .ilft{width:17%; height:800px; background-color: #26272C}
 .imain .irit{width:82.5%; float:right; vertical-align:top; }
